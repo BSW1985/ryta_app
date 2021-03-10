@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Center(
-        child: MyHomePage(title: 'Ryta the first'),
+        child: MyHomePage(title: 'Ryta the first MVP'),
         )
     );
   }
