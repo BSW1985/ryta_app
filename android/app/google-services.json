@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1070726912429",
+    "project_id": "ryta-app",
+    "storage_bucket": "ryta-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070726912429:android:0a78f0711b0114fb95e924",
+        "android_client_info": {
+          "package_name": "eu.ryta.ryta_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070726912429-bbt1vcvsjr11ain7sn1t5h4l93224g2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRS_Eq_RfbIgzyAT8gdrYmqAL5AjI_yw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070726912429-bbt1vcvsjr11ain7sn1t5h4l93224g2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
