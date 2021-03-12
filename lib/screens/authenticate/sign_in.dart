@@ -77,6 +77,13 @@ class _SignInState extends State<SignIn> {
                     //style: TextStyle(color: Colors.white),
                     ),
                   onPressed: () async {
+                    // dynamic result = await _auth.signInAnon();
+                    // if (result==null) {
+                    //   print('error signing in');
+                    // } else {
+                    //   print('signed in');
+                    //   print(result)
+                    // }
                     print(email);
                     print(password);
           
