@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ryta_app/services/auth.dart';
 
 class SignIn extends StatefulWidget {
+
+  final Function toggleView;
+  SignIn({ this.toggleView });
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -9,10 +13,12 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   // text field state
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,7 @@ class _SignInState extends State<SignIn> {
           Image.asset("assets/ryta_logo.png"),
 
           Form(
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 10.0),
@@ -46,6 +53,7 @@ class _SignInState extends State<SignIn> {
                     hintText: 'Email',
                     contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                   ),
+                  validator: (val) => val.isEmpty ? 'Enter an Email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
                   }
@@ -63,6 +71,7 @@ class _SignInState extends State<SignIn> {
                     hintText: 'Password',
                     contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                   ),
+                  validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                   onChanged: (val) {
                     setState(() => password = val);
                   }
@@ -70,24 +79,42 @@ class _SignInState extends State<SignIn> {
                 SizedBox(height: 20.0),
                 ElevatedButton(
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0)),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0)),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow[800]) ),
                   child: Text(
-                    'Sign in',
+                    'LOG IN',
                     //style: TextStyle(color: Colors.white),
                     ),
                   onPressed: () async {
-                    // dynamic result = await _auth.signInAnon();
-                    // if (result==null) {
-                    //   print('error signing in');
-                    // } else {
-                    //   print('signed in');
-                    //   print(result);
-                    // }
-                    print(email);
-                    print(password);
+                    if (_formKey.currentState.validate()) {
+                      dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                      if (result==null){
+                        setState(() => error = 'could not sign in with those credentials');
+                      }
+                    }
           
                   }
+                  ),
+                SizedBox(height: 2.0),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all<double>(0),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+                    ),
+                  child: Text(
+                    'REGISTER',
+                    //style: TextStyle(color: Colors.white),
+                    ),
+                  onPressed: () {
+                    widget.toggleView();
+                  }
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red, fontSize:14.0),
                   ),
               ],
             ),
