@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ryta_app/services/auth.dart';
 
 class Register extends StatefulWidget {
+
+  final Function toggleView;
+  Register({ this.toggleView });
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -9,10 +13,12 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   // text field state
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +38,11 @@ class _RegisterState extends State<Register> {
           Image.asset("assets/ryta_logo.png"),
 
           Form(
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 10.0),
-                Text('Register'),
+                Text('Ready to reach your targets?'),
                 SizedBox(height: 30.0),
                 TextFormField(
                   decoration: InputDecoration(
@@ -48,6 +55,7 @@ class _RegisterState extends State<Register> {
                     hintText: 'Email',
                     contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                   ),
+                  validator: (val) => val.isEmpty ? 'Enter an Email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
                   }
@@ -65,6 +73,7 @@ class _RegisterState extends State<Register> {
                     hintText: 'Password',
                     contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                   ),
+                  validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                   onChanged: (val) {
                     setState(() => password = val);
                   }
@@ -72,18 +81,53 @@ class _RegisterState extends State<Register> {
                 SizedBox(height: 20.0),
                 ElevatedButton(
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0)),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0)),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow[800]) ),
                   child: Text(
-                    'Register',
+                    'REGISTER',
                     //style: TextStyle(color: Colors.white),
                     ),
                   onPressed: () async {
-                    print(email);
-                    print(password);
-          
+                    // dynamic result = await _auth.signInAnon();
+                    // if (result==null) {
+                    //   print('error signing in');
+                    // } else {
+                    //   print('signed in');
+                    //   print(result);
+                    // }
+                    // print(email);
+                    // print(password);
+                    if (_formKey.currentState.validate()) {
+                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                      if (result==null){
+                        setState(() => error = 'please supply a valid email');
+                      }
+                      // print(email);
+                      // print(password);
+                    }
                   }
                   ),
+                SizedBox(height: 2.0),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all<double>(0),
+                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+                    ),
+                  child: Text(
+                    'BACK TO LOGIN',
+                    //style: TextStyle(color: Colors.white),
+                    ),
+                  onPressed: () {
+                    widget.toggleView();
+                  }
+                  ),
+                SizedBox(height: 10.0),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red, fontSize:14.0),
+                ),
               ],
             ),
           ),
