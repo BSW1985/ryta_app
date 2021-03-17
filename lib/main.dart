@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Provider listens to changes in AuthService(). The data is streamed to the wrapper.
     return  StreamProvider<RytaUser>.value(
       initialData: null, //???
       value: AuthService().user,
