@@ -1,6 +1,6 @@
-# ryta_app
+# Ryta
 
-This repository is intended for working and collaborating with the flutter application called "Ryta". Ryta is an open source tracking App for pursuing and achieving personal goals which is currently still in development.
+This repository is intended for working and collaborating with the flutter application called "Ryta". Ryta is an open-source tracking App for pursuing and achieving personal goals which is currently still in development.
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ This repository is intended for working and collaborating with the flutter appli
 2. Install Flutter https://flutter.dev/docs/get-started/install
 3. Finally you need an IDE. We recommend Android Studio and VS Code here. But any other IDE would fit as well.
 
-If you have issues setting up your enviroment, you can check https://flutter.dev/docs for additional information.
+If you have issues setting up your environment, you can check https://flutter.dev/docs for additional information.
 
 ## Run Ryta
 
