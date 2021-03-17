@@ -1,16 +1,24 @@
 # ryta_app
 
-A new Flutter application.
+This repository is intended for working and collaborating with the flutter application called "Ryta". Ryta is an open source tracking App for pursuing and achieving personal goals which is currently still in development.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Setup your environment
 
-A few resources to get you started if this is your first Flutter project:
+1. Git has to be installed https://git-scm.com/downloads
+2. Install Flutter https://flutter.dev/docs/get-started/install
+3. Finally you need an IDE. We recommend Android Studio and VS Code here. But any other IDE would fit as well.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+If you have issues setting up your enviroment, you can check https://flutter.dev/docs for additional information.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Run Ryta
+
+First of all, you have to clone the git repository.
+```
+git clone https://github.com/Ryta-App/ryta_app
+```
+For starting the application you just have to select your personal device using the AVD manager (if you haven't done it yet) and then run the code.
+As I mentioned, our application is still in development, so you could just register for a new account and look at the home screen.
+
+If you have any ideas or problems concerning our repository, feel free to contact us. 
