@@ -7,6 +7,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* EDIT: Set up the home screen */
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -14,6 +15,7 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0.0,
         actions: <Widget>[
+            // Enable to log out from the Home screen. Placed in upper right corner.
             TextButton.icon( 
               icon: Icon(Icons.person), 
               label: Text('logout'),
