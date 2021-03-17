@@ -43,6 +43,7 @@ class _RegisterState extends State<Register> {
               children: <Widget>[
                 SizedBox(height: 10.0),
                 Text('Ready to reach your targets?'),
+                // Input email (panel)
                 SizedBox(height: 30.0),
                 TextFormField(
                   decoration: InputDecoration(
@@ -60,6 +61,7 @@ class _RegisterState extends State<Register> {
                     setState(() => email = val);
                   }
                 ),
+                // Input password (panel)
                 SizedBox(height: 10.0),
                 TextFormField(
                   obscureText: true,
@@ -78,6 +80,7 @@ class _RegisterState extends State<Register> {
                     setState(() => password = val);
                   }
                 ),
+                // Register button
                 SizedBox(height: 20.0),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -107,6 +110,7 @@ class _RegisterState extends State<Register> {
                     }
                   }
                   ),
+                // Get back to the log in page (button)
                 SizedBox(height: 2.0),
                 ElevatedButton(
                   style: ButtonStyle(
