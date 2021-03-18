@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ryta_app/services/auth.dart';
+import 'package:ryta_app/shared/constants.dart';
+import 'package:ryta_app/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -14,6 +16,7 @@ class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // text field state
   String email = '';
@@ -22,7 +25,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       // appBar: AppBar(
       //   backgroundColor: Colors.blue,
@@ -44,16 +47,7 @@ class _SignInState extends State<SignIn> {
                 // Input email (panel)
                 SizedBox(height: 10.0),
                 TextFormField(
-                  decoration: InputDecoration(
-                    border:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow[800], width: 3.0),
-                    ),
-                    hintText: 'Email',
-                    contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                  ),
+                  decoration: textInputDecoration.copyWith(hintText: 'Email'),
                   validator: (val) => val.isEmpty ? 'Enter an Email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
@@ -63,16 +57,7 @@ class _SignInState extends State<SignIn> {
                 SizedBox(height: 10.0),
                 TextFormField(
                   obscureText: true,
-                  decoration: InputDecoration(
-                    border:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow[800], width: 3.0),
-                    ),
-                    hintText: 'Password',
-                    contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                  ),
+                  decoration: textInputDecoration.copyWith(hintText: 'Password'),
                   validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                   onChanged: (val) {
                     setState(() => password = val);
@@ -81,18 +66,19 @@ class _SignInState extends State<SignIn> {
                 // Implementation of the log in button.
                 SizedBox(height: 20.0),
                 ElevatedButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0)),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow[800]) ),
                   child: Text(
                     'LOG IN',
                     //style: TextStyle(color: Colors.white),
                     ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
+                      setState(() => loading=true);
                       dynamic result = await _auth.signInWithEmailAndPassword(email, password);
                       if (result==null){
-                        setState(() => error = 'could not sign in with those credentials');
+                        setState(() {
+                          error = 'could not sign in with those credentials';
+                          loading=false;
+                        });
                       }
                     }
           
