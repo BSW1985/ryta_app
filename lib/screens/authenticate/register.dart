@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ryta_app/services/auth.dart';
+import 'package:ryta_app/shared/constants.dart';
+import 'package:ryta_app/shared/loading.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 
 class Register extends StatefulWidget {
 
@@ -14,15 +17,19 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
+
+  // final String rytaLogo = 'assets/ryta_logo.svg';
 
   // text field state
   String email = '';
   String password = '';
   String error = '';
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.white,
       // appBar: AppBar(
       //   backgroundColor: Colors.blue,
@@ -31,11 +38,18 @@ class _RegisterState extends State<Register> {
       body: 
       
       ListView(
-        padding: EdgeInsets.symmetric(horizontal: 70.0),
+        padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 150.0),
         children: [
-          SizedBox(height: 150.0),
+          // SizedBox(height: 150.0),
 
           Image.asset("assets/ryta_logo.png"),
+
+          // Implementation of .svg logo - not necessary for the MVP?
+          // SvgPicture.asset(
+          //   rytaLogo,
+          //   placeholderBuilder: (context) => CircularProgressIndicator(),
+          //   height: 30.0,
+          // ),
 
           Form(
             key: _formKey,
@@ -46,16 +60,7 @@ class _RegisterState extends State<Register> {
                 // Input email (panel)
                 SizedBox(height: 30.0),
                 TextFormField(
-                  decoration: InputDecoration(
-                    border:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow[800], width: 3.0),
-                    ),
-                    hintText: 'Email',
-                    contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                  ),
+                  decoration: textInputDecoration.copyWith(hintText: 'Email'),
                   validator: (val) => val.isEmpty ? 'Enter an Email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
@@ -65,16 +70,7 @@ class _RegisterState extends State<Register> {
                 SizedBox(height: 10.0),
                 TextFormField(
                   obscureText: true,
-                  decoration: InputDecoration(
-                    border:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow[800], width: 3.0),
-                    ),
-                    hintText: 'Password',
-                    contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                  ),
+                  decoration: textInputDecoration.copyWith(hintText: 'Password'),
                   validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                   onChanged: (val) {
                     setState(() => password = val);
@@ -83,9 +79,6 @@ class _RegisterState extends State<Register> {
                 // Register button
                 SizedBox(height: 20.0),
                 ElevatedButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0)),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow[800]) ),
                   child: Text(
                     'REGISTER',
                     //style: TextStyle(color: Colors.white),
@@ -101,9 +94,13 @@ class _RegisterState extends State<Register> {
                     // print(email);
                     // print(password);
                     if (_formKey.currentState.validate()) {
+                      setState(() => loading=true);
                       dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                       if (result==null){
-                        setState(() => error = 'please supply a valid email');
+                        setState(() {
+                          error = 'please supply a valid email';
+                          loading=false;
+                        });
                       }
                       // print(email);
                       // print(password);

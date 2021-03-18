@@ -29,6 +29,14 @@ class MyApp extends StatelessWidget {
               primary: Colors.black,
             ),
           ),
+          // ElevatedButtonTheme
+          elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            onPrimary: Colors.white, // Text color
+            primary: Color(0xFF995C75), // background color
+            padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+            ),
+          ),
         ),
       ),
     );  
