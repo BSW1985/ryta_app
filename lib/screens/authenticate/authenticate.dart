@@ -10,6 +10,7 @@ class Authenticate extends StatefulWidget {
 class _AuthenticateState extends State<Authenticate> {
 
   bool showSignIn = true;
+  // Method for switching between the register and sign in page
   void toggleView() {
     setState(() => showSignIn = !showSignIn);
   }

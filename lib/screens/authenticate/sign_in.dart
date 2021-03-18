@@ -41,6 +41,7 @@ class _SignInState extends State<SignIn> {
             key: _formKey,
             child: Column(
               children: <Widget>[
+                // Input email (panel)
                 SizedBox(height: 10.0),
                 TextFormField(
                   decoration: InputDecoration(
@@ -58,6 +59,7 @@ class _SignInState extends State<SignIn> {
                     setState(() => email = val);
                   }
                 ),
+                // Input password (panel)
                 SizedBox(height: 10.0),
                 TextFormField(
                   obscureText: true,
@@ -76,6 +78,7 @@ class _SignInState extends State<SignIn> {
                     setState(() => password = val);
                   }
                 ),
+                // Implementation of the log in button.
                 SizedBox(height: 20.0),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -95,6 +98,7 @@ class _SignInState extends State<SignIn> {
           
                   }
                   ),
+                // Implementation of the register button.
                 SizedBox(height: 2.0),
                 ElevatedButton(
                   style: ButtonStyle(
