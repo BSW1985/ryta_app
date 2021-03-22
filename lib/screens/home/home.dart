@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/screens/home/settings_form.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/screens/home/goals_list.dart';
@@ -19,9 +20,8 @@ class _Home extends State<Home> {
 
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    Container(),
-    Container(),
     GoalsList(),
+    SettingsForm(),
   ];
 
   void _onItemTapped(int index) {
@@ -56,37 +56,23 @@ class _Home extends State<Home> {
           centerTitle: true,
           title: SizedBox(
               height: 70,
-              child: Image.asset("assets/ryta_logo.png"),
-          actions: <Widget>[
-              // Enable to log out from the Home screen. Placed in upper right corner.
-              TextButton.icon( 
-                icon: Icon(Icons.person), 
-                label: Text('logout'),
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-              ),
+              child: Image.asset("assets/ryta_logo.png"),),
+          // actions: <Widget>[
+          //     // Enable to log out from the Home screen. Placed in upper right corner.
+          //     TextButton.icon( 
+          //       icon: Icon(Icons.person), 
+          //       label: Text('logout'),
+          //       onPressed: () async {
+          //         await _auth.signOut();
+          //       },
+          //     ),
 
-//             ],
-//           ),
-//           body: GoalsList(),
-        
-//           floatingActionButton: FloatingActionButton(
-//             onPressed: () async {
-//               DatabaseService(uid: user.uid).addUserGoals('new goal 4', 'IMAGE_URL'); 
-//             },
-//             child: Icon(Icons.add),
-//             backgroundColor: Color(0xFF995C75),
-//           ),
-//           ),
-//       );
-
-             /* TextButton.icon(
-                icon: Icon(Icons.settings),
-                label: Text('settings'),
-                onPressed: () => _showSettingsPanel(),
-              ) */
-            ],
+          //    /* TextButton.icon(
+          //       icon: Icon(Icons.settings),
+          //       label: Text('settings'),
+          //       onPressed: () => _showSettingsPanel(),
+          //     ) */
+          //   ],
           ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -95,15 +81,15 @@ class _Home extends State<Home> {
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.home_filled),
               label: '',
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.home_filled),
+            //   label: ''
+            // ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled),
-              label: ''
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.view_list),
+              icon: Icon(Icons.person),
               label: '',
             ),
           ],
@@ -111,6 +97,17 @@ class _Home extends State<Home> {
           selectedItemColor: Colors.amber[800],
           onTap: _onItemTapped,
         ),
+
+        // add goal to Firebase
+        // floatingActionButton: FloatingActionButton(
+        //       onPressed: () async {
+        //         DatabaseService(uid: user.uid).addUserGoals('new goal 4', 'IMAGE_URL'); 
+        //       },
+        //       child: Icon(Icons.add),
+        //       backgroundColor: Color(0xFF995C75),
+        //     ),
+        // floatingActionButtonLocation:    
+        //   FloatingActionButtonLocation.centerFloat,
     )
     );
   }
