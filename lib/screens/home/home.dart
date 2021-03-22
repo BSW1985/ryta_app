@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
@@ -42,18 +40,10 @@ class Home extends StatelessWidget {
             ],
           ),
           body: GoalsList(),
-          // ListView(
-          // padding: EdgeInsets.symmetric(vertical: 230.0, horizontal: 30.0),
-          // children: [
-          //     Text('All Your Goals',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(fontSize: 30),
-          //     ),
-          //   ],
-          // ),
+        
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              DatabaseService(uid: user.uid).updateUserGoals('new goal 4', 'IMAGE_URL'); 
+              DatabaseService(uid: user.uid).addUserGoals('new goal 4', 'IMAGE_URL'); 
             },
             child: Icon(Icons.add),
             backgroundColor: Color(0xFF995C75),
@@ -62,21 +52,3 @@ class Home extends StatelessWidget {
       );
   }
 }
-
-      // return StreamBuilder<QuerySnapshot>(
-      //   // <2> Pass `Stream<QuerySnapshot>` to stream
-      //   stream: DatabaseService(uid: user.uid).goals,
-      //   // ignore: missing_return
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       // <3> Retrieve `List<DocumentSnapshot>` from snapshot
-      //       final List<DocumentSnapshot> documents = snapshot.data.docs;
-      //       return ListView(
-      //           children: documents
-      //               .map((doc) => Card(
-      //                     child: ListTile(
-      //                       title: Text(doc['goal']),
-      //                       subtitle: Text(doc['imageUrl']),
-      //                     ),
-      //                   ))
-      //               .toList
