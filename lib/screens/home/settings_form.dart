@@ -117,8 +117,8 @@ class _SettingsFormState extends State<SettingsForm> {
                 children: <Widget>[
                   // Implementation of the log in button.
                   SizedBox(height: 20.0),
-                  Text('Your User UID:'),
-                  Text(user.uid.toString()),
+                  Text('Your Email:'),
+                  Text(user.email.toString()),
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     child: Text(

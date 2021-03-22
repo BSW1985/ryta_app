@@ -1,7 +1,8 @@
 class RytaUser{
 
   final String uid;
+  final String email;
 
-  RytaUser({ this.uid });
+  RytaUser({ this.uid, this.email });
 
 }
