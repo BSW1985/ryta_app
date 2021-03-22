@@ -44,9 +44,11 @@ class _Home extends State<Home> {
 
     final user = Provider.of<RytaUser>(context);
 
+    /* EDIT: Set up the home screen */
     return StreamProvider<List<Goal>>.value(
-      value: DatabaseService(uid: user.uid).goals,
-      child: Scaffold(
+        value: DatabaseService(uid: user.uid).goals,
+        initialData: null,
+        child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -55,16 +57,30 @@ class _Home extends State<Home> {
           title: SizedBox(
               height: 70,
               child: Image.asset("assets/ryta_logo.png"),
-          ),
           actions: <Widget>[
               // Enable to log out from the Home screen. Placed in upper right corner.
-              TextButton.icon(
-                icon: Icon(Icons.person),
+              TextButton.icon( 
+                icon: Icon(Icons.person), 
                 label: Text('logout'),
                 onPressed: () async {
                   await _auth.signOut();
                 },
               ),
+
+//             ],
+//           ),
+//           body: GoalsList(),
+        
+//           floatingActionButton: FloatingActionButton(
+//             onPressed: () async {
+//               DatabaseService(uid: user.uid).addUserGoals('new goal 4', 'IMAGE_URL'); 
+//             },
+//             child: Icon(Icons.add),
+//             backgroundColor: Color(0xFF995C75),
+//           ),
+//           ),
+//       );
+
              /* TextButton.icon(
                 icon: Icon(Icons.settings),
                 label: Text('settings'),
