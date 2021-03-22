@@ -8,7 +8,7 @@ class AuthService {
 
   // create user object based on firebase user
   RytaUser _userFromFirebaseUser(User user) {
-    return user != null ? RytaUser(uid: user.uid) : null;
+    return user != null ? RytaUser(uid: user.uid, email: user.email) : null;
   }
 
   // Gets called when Auth changes occurs.
