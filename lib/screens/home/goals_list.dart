@@ -4,7 +4,6 @@ import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/screens/home/goal_tile.dart';
 
 class GoalsList extends StatefulWidget {
-
   @override
   _GoalsListState createState() => _GoalsListState();
 }

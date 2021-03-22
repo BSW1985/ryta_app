@@ -24,6 +24,7 @@ class _RegisterState extends State<Register> {
   // text field state
   String email = '';
   String password = '';
+  String password2 = '';
   String error = '';
   
 
@@ -71,9 +72,35 @@ class _RegisterState extends State<Register> {
                 TextFormField(
                   obscureText: true,
                   decoration: textInputDecoration.copyWith(hintText: 'Password'),
-                  validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                  validator: (val) {
+                    if (val.length < 8) {
+                      return "Enter a password 8+ characters long";
+                    }
+                    else if (!val.contains(new RegExp(r'[A-Z]'))) {
+                      return "Use an upper case letter";
+                    }
+                    else if (!val.contains(new RegExp(r'[0-9]'))) {
+                      return "Use at least one digit";
+                    }
+                    else if (!val.contains(new RegExp(r'[a-z]'))) {
+                      return "Use a lower case letter";
+                    }
+                    else if (!val.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                      return "Use a special character";
+                    }
+                    return null;
+                  },
                   onChanged: (val) {
                     setState(() => password = val);
+                  }
+                ),
+                SizedBox(height: 10.0),
+                TextFormField(
+                  obscureText: true,
+                  decoration: textInputDecoration.copyWith(hintText: 'Confirm password'),
+                  validator: (val) => val != password ? 'Passwords are not the same' : null,
+                  onChanged: (val) {
+                    setState(() => password2 = val);
                   }
                 ),
                 // Register button
