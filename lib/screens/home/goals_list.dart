@@ -4,6 +4,7 @@ import 'package:ryta_app/config/keys.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/screens/home/goal_definition.dart';
+import 'package:ryta_app/screens/home/goal_image_search.dart';
 import 'package:ryta_app/screens/home/goal_tile.dart';
 import 'package:ryta_app/services/database.dart';
 
