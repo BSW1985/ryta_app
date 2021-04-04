@@ -1,3 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/services/auth.dart';
+
+///Showing a personal settings and info
+class SettingsForm extends StatefulWidget {
+  @override
+  _SettingsFormState createState() => _SettingsFormState();
+}
+
+class _SettingsFormState extends State<SettingsForm> {
+
+    final AuthService _auth = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+
+    final user = Provider.of<RytaUser>(context);
+
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: 
+
+      Center(
+              child: Form(
+              child: Column(
+                children: <Widget>[
+                  // Implementation of the log in button.
+                  SizedBox(height: 20.0),
+                  Text('Your Email:'),
+                  Text(user.email.toString()),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    child: Text(
+                      'LOGOUT',
+                      ),
+                    onPressed: () async {
+  
+                    await _auth.signOut();
+
+                        }
+                    ),
+                ],
+              ),
+            ),
+      ),
+    );
+  }
+}
+
+//// Alternative Settings
 /*
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
@@ -87,53 +140,3 @@ class _SettingsFormState extends State<SettingsForm> {
   }
 }
 */
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:ryta_app/models/user.dart';
-import 'package:ryta_app/services/auth.dart';
-
-class SettingsForm extends StatefulWidget {
-  @override
-  _SettingsFormState createState() => _SettingsFormState();
-}
-
-class _SettingsFormState extends State<SettingsForm> {
-
-    final AuthService _auth = AuthService();
-
-  @override
-  Widget build(BuildContext context) {
-
-    final user = Provider.of<RytaUser>(context);
-
-
-    return Scaffold(
-      body: 
-
-      Center(
-              child: Form(
-              child: Column(
-                children: <Widget>[
-                  // Implementation of the log in button.
-                  SizedBox(height: 20.0),
-                  Text('Your Email:'),
-                  Text(user.email.toString()),
-                  SizedBox(height: 20.0),
-                  ElevatedButton(
-                    child: Text(
-                      'LOGOUT',
-                      ),
-                    onPressed: () async {
-  
-                    await _auth.signOut();
-
-                        }
-                    ),
-                ],
-              ),
-            ),
-      ),
-    );
-  }
-}

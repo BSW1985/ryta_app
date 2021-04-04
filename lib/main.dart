@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,23 +22,26 @@ class MyApp extends StatelessWidget {
     return  StreamProvider<RytaUser>.value(
       initialData: null, //???
       value: AuthService().user,
-      child: MaterialApp(
-        home: Wrapper(),
-        theme: ThemeData(
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              primary: Colors.black,
-            ),
-          ),
-          // ElevatedButtonTheme
-          elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            onPrimary: Colors.white, // Text color
-            primary: Color(0xFF995C75), // background color
-            padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
-            ),
-          ),
-        ),
+      child: Provider<Goal>( // Provider listens for changes in goal definition and the data stream into all screens.
+              create: (_) => Goal(),
+              child: MaterialApp(
+                  home: Wrapper(),
+                  theme: ThemeData(
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        primary: Colors.black,
+                      ),
+                    ),
+                    // ElevatedButtonTheme
+                    elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.white, // Text color
+                      primary: Color(0xFF995C75), // background color
+                      padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+                      ),
+                    ),
+                  ),
+                ),
       ),
     );  
   }
