@@ -28,70 +28,77 @@ class _GoalsListState extends State<GoalsList> {
 
       return Scaffold(
           backgroundColor: Colors.white,
-          body: ListView.builder(
-          // controller: _controller,
-          itemCount: goals == null ? 0 : goals.length,
-          itemBuilder: (BuildContext context, int index) {
-            return FutureBuilder<UnsplashImage>(
-              future: UnsplashImageProvider.loadImage(goals[index].imageID),
-              builder: (BuildContext context, AsyncSnapshot<UnsplashImage> snapshot) {
-                  if (snapshot.hasData == false) return Center(child: Loading(Colors.white));
+          body:NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
+            // ignore: missing_return
+            onNotification: (overscroll) {
+              overscroll.disallowGlow();
+            },
+            child:ListView.builder(
+                // controller: _controller,
+                itemCount: goals == null ? 0 : goals.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return FutureBuilder<UnsplashImage>(
+                    future: UnsplashImageProvider.loadImage(goals[index].imageID),
+                    builder: (BuildContext context, AsyncSnapshot<UnsplashImage> snapshot) {
+                        if (snapshot.hasData == false) return Center(child: Loading(Colors.white));
 
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        onTap: () async {
-                          Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                // open [ImagePage] with the given image
-                                GoalPage(goals[index].imageID, goals[index].imageUrl),
-                            ),
-                            );
-                          },
-                        onLongPress: () {
-                        _onBackPressed(context, user, goals[index]);
-                        },
-                        child: ParallaxImage(
-                            image: Image.network(
-                              snapshot.data.getSmallUrl(),
-                              frameBuilder: (BuildContext context, Widget child, int frame, bool wasSynchronouslyLoaded) {
-                                return Padding(padding: EdgeInsets.all(8.0), child: child);
-                              },
-                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                        : null,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: InkWell(
+                              onTap: () async {
+                                Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      // open [ImagePage] with the given image
+                                      GoalPage(goals[index].imageID, goals[index].imageUrl),
                                   ),
-                                );
+                                  );
+                                },
+                              onLongPress: () {
+                              _onBackPressed(context, user, goals[index]);
                               },
-                            ).image,
-                            extent: 120.0,
-                            child: Center(
-                              child: Padding(
-                                   padding: EdgeInsets.only(left:15.0, right: 15.0),
-                                      child: Text(
-                                        goals[index].goalname,
-                                        style: Theme.of(context).textTheme.headline4.copyWith(color: Colors.white),
-                                        textAlign: TextAlign.center,
+                              child: ParallaxImage(
+                                  image: Image.network(
+                                    snapshot.data.getSmallUrl(),
+                                    frameBuilder: (BuildContext context, Widget child, int frame, bool wasSynchronouslyLoaded) {
+                                      return Padding(padding: EdgeInsets.all(8.0), child: child);
+                                    },
+                                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                              : null,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                        ),
+                                      );
+                                    },
+                                  ).image,
+                                  extent: 120.0,
+                                  child: Center(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(left:15.0, right: 15.0),
+                                            child: Text(
+                                              goals[index].goalname,
+                                              style: Theme.of(context).textTheme.headline4.copyWith(color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                  // controller: _controller,
                                 ),
-                              ),
                             ),
-                            // controller: _controller,
                           ),
-                      ),
-                    ),
+                        );
+                    },
                   );
-              },
-            );
-          },
-        ),
+                },
+              ),
+          ),
+
         );
   }
 
