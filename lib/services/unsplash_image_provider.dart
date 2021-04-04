@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:ryta_app/config/keys.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 

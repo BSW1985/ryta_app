@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/screens/home/image_preview.dart';
 
-// import '../screens/image_page.dart';
-// import '../models/models.dart';
-
 /// ImageTile displayed in StaggeredGridView.
 class ImageTile extends StatelessWidget {
   final UnsplashImage image;

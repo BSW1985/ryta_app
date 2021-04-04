@@ -6,7 +6,9 @@ import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
 import 'package:ryta_app/widgets/image_tile.dart';
 
+// second screen of the goal definition process - unsplash image search
 class GoalImageSearch extends StatefulWidget {
+
   @override
   _GoalImageSearchState createState() => _GoalImageSearchState();
 }
@@ -25,7 +27,6 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   String keyword;
 
   TextEditingController nameHolder = TextEditingController();
-
 
 @override
   initState() {
@@ -103,18 +104,6 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: () async {
@@ -131,10 +120,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                       icon: new Icon(Icons.arrow_back),
                       color: Colors.black,
                       onPressed: () {
-                        Navigator.pop(
-                          context,
-                          // MaterialPageRoute(builder: (context) => Home()),
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                 backgroundColor: Colors.white,
@@ -143,22 +129,6 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                 title: SizedBox(
                     height: 70,
                     child: Image.asset("assets/ryta_logo.png"),),
-          // actions: <Widget>[
-          //     // Enable to log out from the Home screen. Placed in upper right corner.
-          //     TextButton.icon( 
-          //       icon: Icon(Icons.person), 
-          //       label: Text('logout'),
-          //       onPressed: () async {
-          //         await _auth.signOut();
-          //       },
-          //     ),
-
-          //    /* TextButton.icon(
-          //       icon: Icon(Icons.settings),
-          //       label: Text('settings'),
-          //       onPressed: () => _showSettingsPanel(),
-          //     ) */
-          //   ],
           ),
           body: 
 
@@ -177,7 +147,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                 _buildImageGrid(orientation: orientation),
 
                 // loading indicator at the bottom of the list
-                loadingImages ? SliverToBoxAdapter(child: Loading()) : null,
+                loadingImages ? SliverToBoxAdapter(child: Loading(Colors.white)) : null,
 
                 // filter null views
               ].where((w) => w != null).toList(),
@@ -188,7 +158,6 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
 
   );
   
-
   Widget _buildTitle() => SliverPadding(
     padding: const EdgeInsets.all(16.0),
     sliver: SliverToBoxAdapter(
@@ -201,14 +170,6 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
     ),
   );
   
-
-
-
-
-
-
-
-
   Widget _buildSearchAppBar() => SliverAppBar(
       backgroundColor: Colors.white,
       //Appbar Title
@@ -233,41 +194,8 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
       //Appbar actions
       // leading: new Container(),
       automaticallyImplyLeading: false,
-      // actions: <Widget>[
-      //   //Search
-      //   // either search oder clear button
-      //   keyword != null
-      //       ? IconButton(
-      //           icon: Icon(Icons.clear),
-      //           color: Colors.black87,
-      //           onPressed: () {
-      //             // reset the state
-      //             _resetImages();
-      //           },
-      //         )
-      //       : IconButton(
-      //           icon: Icon(Icons.search),
-      //           color: Colors.black87,
-      //           onPressed: () =>
-      //               // go into searching state
-      //               setState(() => keyword = ""),
-      //         ),
-
-        //Collections
-        // keyword == null
-        //     //Only show this button when no keyword is searched for
-        //     ? IconButton(
-        //         icon: Icon(Icons.collections),
-        //         color: Colors.black87,
-        //         onPressed: () {}
-        //             //Open the collections page
-        //             // Navigator.push(context, MaterialPageRoute(builder: (context) => CollectionsScreen())),
-        //       )
-        //     : Container(),
-      // ],
-
-      //Color
     );
+
   /// Returns the grid that displays images.
   /// [orientation] can be used to adjust the grid column count.
   Widget _buildImageGrid({orientation = Orientation.portrait}) {
@@ -321,5 +249,3 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   }
 
 }
-
-

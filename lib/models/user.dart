@@ -1,3 +1,4 @@
+// Model for Ryta user
 class RytaUser{
 
   final String uid;
