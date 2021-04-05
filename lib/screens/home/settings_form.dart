@@ -47,7 +47,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     ),
                   SizedBox(height: 70.0),
                   Text(
-                  "Unlash Ryta's full potential:",
+                  "Unleash Ryta's full potential:",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                   ),
                   SizedBox(height: 25.0),
