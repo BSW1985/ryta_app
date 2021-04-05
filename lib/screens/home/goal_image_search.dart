@@ -113,47 +113,53 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
           }
           return true;
         },
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-                leading: new IconButton(
-                      icon: new Icon(Icons.arrow_back),
-                      color: Colors.black,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+          child: NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
+            // ignore: missing_return
+            onNotification: (overscroll) {
+              overscroll.disallowGlow();
+            },
+                      child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                  leading: new IconButton(
+                        icon: new Icon(Icons.arrow_back),
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                  backgroundColor: Colors.white,
+                  elevation: 0.0,
+                  centerTitle: true,
+                  title: SizedBox(
+                      height: 70,
+                      child: Image.asset("assets/ryta_logo.png"),),
+            ),
+            body: 
+
+            OrientationBuilder(
+              builder: (context, orientation) => CustomScrollView(
+                // put AppBar in NestedScrollView to have it sliver off on scrolling
+                slivers: <Widget>[
+
+                  // Title
+                  _buildTitle(),
+
+                  //App bar
+                  _buildSearchAppBar(),
+
+                  //Grid view with all the images
+                  _buildImageGrid(orientation: orientation),
+
+                  // loading indicator at the bottom of the list
+                  loadingImages ? SliverToBoxAdapter(child: Loading(Colors.white)) : null,
+
+                  // filter null views
+                ].where((w) => w != null).toList(),
                     ),
-                backgroundColor: Colors.white,
-                elevation: 0.0,
-                centerTitle: true,
-                title: SizedBox(
-                    height: 70,
-                    child: Image.asset("assets/ryta_logo.png"),),
-          ),
-          body: 
+                   ),
 
-          OrientationBuilder(
-            builder: (context, orientation) => CustomScrollView(
-              // put AppBar in NestedScrollView to have it sliver off on scrolling
-              slivers: <Widget>[
-
-                // Title
-                _buildTitle(),
-
-                //App bar
-                _buildSearchAppBar(),
-
-                //Grid view with all the images
-                _buildImageGrid(orientation: orientation),
-
-                // loading indicator at the bottom of the list
-                loadingImages ? SliverToBoxAdapter(child: Loading(Colors.white)) : null,
-
-                // filter null views
-              ].where((w) => w != null).toList(),
-                  ),
-                 ),
-
+            ),
           ),
 
   );
