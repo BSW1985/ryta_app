@@ -16,9 +16,27 @@ class DatabaseService {
     });
   }
 
-  Future addUserGoals(String goal, String imageUrl) async {
+  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
-        'goal': goal,
+        'goalname': goalname,
+        'goalmotivation': goalmotivation,
+        'imageUrl': imageUrl,
+        'imageID': imageID,
+    });
+  }
+
+    // Currenty unused
+    Future updateUserWillingnessToPay(bool willToPay) async {
+    return await rytaUsersCollection.doc(uid).update({
+        'willToPay': willToPay,
+    });
+  }
+
+  // Currenty unused
+    Future updateUserGoals(String goalname, String goalmotivation, String imageUrl) async {
+    return await rytaUsersCollection.doc(uid).collection('goals').doc().update({
+        'goalname': goalname,
+        'goalmotivation': goalmotivation,
         'imageUrl': imageUrl,
     });
   }
@@ -32,8 +50,10 @@ class DatabaseService {
     return snapshot.docs.map((doc){
       return Goal(
         goalID: doc.id,
-        goal: doc.data()['goal'] ?? '',
+        goalname: doc.data()['goalname'] ?? '',
+        goalmotivation: doc.data()['goalmotivation'] ?? '',
         imageUrl: doc.data()['imageUrl'] ?? '',
+        imageID: doc.data()['imageID'] ?? '',
       );
     }).toList();
   }

@@ -40,12 +40,19 @@ dependencies:
   cached_network_image: ^2.5.0
   photo_view: ^0.10.3
   date_format: ^1.0.9
+  parallax_image: 0.3.1+1
 
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.8.0"
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/ryta_logo.png"
+  image_path_android: "assets/ryta_logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

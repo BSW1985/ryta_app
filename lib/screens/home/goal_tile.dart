@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/screens/home/goal_view.dart';
 import 'package:ryta_app/services/database.dart';
 
+// currently unused GoalTile
 class GoalTile extends StatelessWidget {
 
   final Goal goal;
@@ -17,14 +19,23 @@ class GoalTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top:8.0),
       child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  // open [ImagePage] with the given image
+                  GoalPage(goal, goal.imageID, goal.imageUrl),
+              ),
+              );
+            },
           onLongPress: () {
            _onBackPressed(context, user);
           },
           child: Card(
           margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: ListTile(
-            title: Text(goal.goal),
-            subtitle: Text(goal.imageUrl),
+            title: Text(goal.goalname),
+            subtitle: Text(goal.goalmotivation),
           ),
         ),
       ),

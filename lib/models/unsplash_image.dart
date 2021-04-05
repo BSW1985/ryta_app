@@ -1,7 +1,7 @@
 import 'package:date_format/date_format.dart';
+import 'package:ryta_app/models/image_location.dart';
+import 'package:ryta_app/models/unsplash_user.dart';
 
-// import 'location.dart';
-// import 'unsplash_user.dart';
 
 /// Model for Unsplash Image
 class UnsplashImage {
@@ -10,7 +10,6 @@ class UnsplashImage {
   UnsplashImage(this.data);
 
   // Getter
-
   String getId() {
     return data['id'];
   }
@@ -27,13 +26,9 @@ class UnsplashImage {
     return data['updated_at'];
   }
 
-  // Location getLocation() {
-  //   return data['location'] != null ? Location(data['location']) : null;
-  // }
-
-  // Exif getExif() {
-  //   return data['exif'] != null ? Exif(data['exif']) : null;
-  // }
+  Location getLocation() {
+    return data['location'] != null ? Location(data['location']) : null;
+  }
 
   int getWidth() {
     return data['width'];
@@ -63,9 +58,9 @@ class UnsplashImage {
     return data['alt_description'];
   }
 
-  // UnsplashUser getUser() {
-  //   return UnsplashUser(data['user']);
-  // }
+  UnsplashUser getUser() {
+    return UnsplashUser(data['user']);
+  }
 
   getUrls() {
     return data['urls'];
