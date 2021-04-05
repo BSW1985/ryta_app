@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 import 'package:provider/provider.dart';
+import 'package:ryta_app/config/keys.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
@@ -25,6 +26,21 @@ class _GoalsListState extends State<GoalsList> {
     
       final goals = Provider.of<List<Goal>>(context);
       final user = Provider.of<RytaUser>(context);
+
+      // keys for Unsplash are confidential
+                if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
+                    return AlertDialog(
+                      title: Text('Ask Marek for Unsplash keys'),
+                      content: Text('Othewise it will not work'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Mach ich!'),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          }
+                        ),
+                      ],
+                    );
 
       return Scaffold(
           backgroundColor: Colors.white,

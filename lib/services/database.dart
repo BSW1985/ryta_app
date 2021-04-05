@@ -25,6 +25,13 @@ class DatabaseService {
     });
   }
 
+    // Currenty unused
+    Future updateUserWillingnessToPay(bool willToPay) async {
+    return await rytaUsersCollection.doc(uid).update({
+        'willToPay': willToPay,
+    });
+  }
+
   // Currenty unused
     Future updateUserGoals(String goalname, String goalmotivation, String imageUrl) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().update({
