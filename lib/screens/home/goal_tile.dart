@@ -24,7 +24,7 @@ class GoalTile extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) =>
                   // open [ImagePage] with the given image
-                  GoalPage(goal.imageID, goal.imageUrl),
+                  GoalPage(goal, goal.imageID, goal.imageUrl),
               ),
               );
             },

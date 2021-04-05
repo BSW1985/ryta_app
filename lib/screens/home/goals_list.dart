@@ -12,6 +12,7 @@ import 'package:ryta_app/shared/loading.dart';
 
 /// Screen for showing a list of all the goals from [User].
 class GoalsList extends StatefulWidget {
+
   @override
   _GoalsListState createState() => _GoalsListState();
 }
@@ -31,7 +32,7 @@ class _GoalsListState extends State<GoalsList> {
                 if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
                     return AlertDialog(
                       title: Text('Ask Marek for Unsplash keys'),
-                      content: Text('Othewise it will not work'),
+                      content: Text('Otherwise it will not work'),
                       actions: <Widget>[
                         TextButton(
                           child: Text('Mach ich!'),
@@ -68,7 +69,7 @@ class _GoalsListState extends State<GoalsList> {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       // open [ImagePage] with the given image
-                                      GoalPage(goals[index].imageID, goals[index].imageUrl),
+                                      GoalPage(goals[index], goals[index].imageID, goals[index].imageUrl),
                                   ),
                                   );
                                 },
