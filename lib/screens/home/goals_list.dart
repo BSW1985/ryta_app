@@ -42,8 +42,30 @@ class _GoalsListState extends State<GoalsList> {
                         ),
                       ],
                     );
-
-      return Scaffold(
+      
+      
+      if (goals==null || goals.length == 0)
+      return 
+        Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Welcome, #### !',
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 28.0),
+                    ), 
+              SizedBox(height: 20.0),
+              Text("Let's define your first goal.",
+                      style: TextStyle(color: Colors.black, fontSize: 17.0),
+                    ),
+              SizedBox(height: 20.0),
+              Icon(Icons.arrow_downward),
+              Icon(Icons.arrow_downward),
+            ],
+          ),
+        );
+      else
+      return 
+        Scaffold(
           backgroundColor: Colors.white,
           body:NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
             // ignore: missing_return
