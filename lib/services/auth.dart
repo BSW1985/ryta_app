@@ -46,13 +46,13 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
 
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData('new ryta user', 0); //pass the name from registration form
+      await DatabaseService(uid: user.uid).updateUserData(username, email); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());

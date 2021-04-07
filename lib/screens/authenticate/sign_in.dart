@@ -34,11 +34,14 @@ class _SignInState extends State<SignIn> {
       body: 
       
       ListView(
-        padding: EdgeInsets.symmetric(horizontal: 70.0),
+        padding: EdgeInsets.symmetric(horizontal: 45.0),
         children: [
-          SizedBox(height: 150.0),
+          SizedBox(height: 120.0),
 
-          Image.asset("assets/ryta_logo.png"),
+          Image.asset("assets/ryta_logo.png",
+                height: 150,
+                // width: 100,
+            ),
 
           Form(
             key: _formKey,

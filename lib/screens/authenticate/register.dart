@@ -22,6 +22,7 @@ class _RegisterState extends State<Register> {
   // final String rytaLogo = 'assets/ryta_logo.svg';
 
   // text field state
+  String username = '';
   String email = '';
   String password = '';
   String password2 = '';
@@ -39,11 +40,14 @@ class _RegisterState extends State<Register> {
       body: 
       
       ListView(
-        padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 150.0),
+        padding: EdgeInsets.symmetric(horizontal: 45.0),
         children: [
-          // SizedBox(height: 150.0),
+          SizedBox(height: 60.0),
 
-          Image.asset("assets/ryta_logo.png"),
+          Image.asset("assets/ryta_logo.png",
+                height: 150,
+                // width: 100,
+            ),
 
           // Implementation of .svg logo - not necessary for the MVP?
           // SvgPicture.asset(
@@ -56,10 +60,21 @@ class _RegisterState extends State<Register> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 10.0),
-                Text('Ready to reach your targets?'),
+                // SizedBox(height: 10.0),
+                Text('Ready to reach your targets?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+                ),
                 // Input email (panel)
                 SizedBox(height: 30.0),
+                TextFormField(
+                  decoration: textInputDecoration.copyWith(hintText: 'Firstname/Nickname'),
+                  validator: (val) => val.isEmpty ? 'Enter your name or nickname' : null,
+                  onChanged: (val) {
+                    setState(() => username = val);
+                  }
+                ),
+                // Input password (panel)
+                SizedBox(height: 10.0),
                 TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: 'Email'),
                   validator: (val) => val.isEmpty ? 'Enter an Email' : null,
@@ -122,7 +137,7 @@ class _RegisterState extends State<Register> {
                     // print(password);
                     if (_formKey.currentState.validate()) {
                       setState(() => loading=true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                      dynamic result = await _auth.registerWithEmailAndPassword(email, password, username);
                       if (result==null){
                         setState(() {
                           error = 'please supply a valid email';

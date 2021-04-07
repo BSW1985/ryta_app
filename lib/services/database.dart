@@ -9,10 +9,10 @@ class DatabaseService {
   // collection reference
   final CollectionReference rytaUsersCollection = FirebaseFirestore.instance.collection('ryta_users');
 
-  Future updateUserData(String name, int numberOfGoals) async {
+  Future updateUserData(String name, String email) async {
     return await rytaUsersCollection.doc(uid).set({
       'name': name,
-      'numberOfGoals': numberOfGoals,
+      'email': email,
     });
   }
 
@@ -25,8 +25,8 @@ class DatabaseService {
     });
   }
 
-    // Currenty unused
-    Future updateUserWillingnessToPay(bool willToPay) async {
+  // Testing button
+  Future updateUserWillingnessToPay(bool willToPay) async {
     return await rytaUsersCollection.doc(uid).update({
         'willToPay': willToPay,
     });
