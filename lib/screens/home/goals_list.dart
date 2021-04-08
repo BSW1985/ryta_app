@@ -43,8 +43,11 @@ class _GoalsListState extends State<GoalsList> {
                       ],
                     );
       
-      
-      if (goals==null || goals.length == 0)
+      if (goals==null)
+      return 
+        Container();
+      else
+      if (goals.length == 0)
       return 
         Container(
           child: Column(
@@ -73,6 +76,7 @@ class _GoalsListState extends State<GoalsList> {
               overscroll.disallowGlow();
             },
             child:ListView.builder(
+          // body: ListView.builder(
                 // controller: _controller,
                 itemCount: goals == null ? 0 : goals.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -135,7 +139,7 @@ class _GoalsListState extends State<GoalsList> {
                     },
                   );
                 },
-              ),
+             ),
           ),
 
         );

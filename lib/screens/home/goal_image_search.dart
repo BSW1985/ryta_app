@@ -129,7 +129,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                         },
                       ),
                   backgroundColor: Colors.white,
-                  elevation: 0.0,
+                  elevation: 1.0,
                   centerTitle: true,
                   title: SizedBox(
                       height: 70,
@@ -169,7 +169,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
     sliver: SliverToBoxAdapter(
       child: Center(
           child: Text(
-          "Let's find the best image for this goal:",
+          "Let's find the best image for your target",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
       ),

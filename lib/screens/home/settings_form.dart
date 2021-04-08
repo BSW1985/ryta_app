@@ -99,7 +99,7 @@ class _SettingsFormState extends State<SettingsForm> {
                           text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "We appreciate your interest! If like our vision, have other ideas or would like to give us personla feedback, please contact us at ",
+                                  text: "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 

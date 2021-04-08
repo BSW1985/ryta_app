@@ -50,7 +50,7 @@ class _Home extends State<Home> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          elevation: 0.0,
+          elevation: 1.0,
           centerTitle: true,
           title: SizedBox(
               height: 70,
@@ -86,7 +86,7 @@ class _Home extends State<Home> {
               ),
             ],
             currentIndex: _selectedIndex,
-            elevation: 0.0,
+            elevation: 10.0,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             unselectedItemColor: Colors.grey[400],

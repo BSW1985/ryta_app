@@ -107,7 +107,8 @@ class _ImagePageState extends State<ImagePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Add a new goal'),
+        icon: Icon(Icons.check),
+        label: Text('FINISH'),
           onPressed: () async {
               DatabaseService(uid: user.uid).addUserGoals(goal.goalname.toString(), goal.goalmotivation.toString(), widget.imageUrl, widget.imageId);
               Navigator.push(
@@ -116,7 +117,6 @@ class _ImagePageState extends State<ImagePage> {
                           ),
                  );
           },
-          icon: Icon(Icons.add),
           backgroundColor: Color(0xFF995C75),
       ),
 

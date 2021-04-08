@@ -155,7 +155,7 @@ class _RegisterState extends State<Register> {
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0),
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
                     ),
                   child: Text(
