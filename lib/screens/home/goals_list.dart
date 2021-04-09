@@ -83,7 +83,20 @@ class _GoalsListState extends State<GoalsList> {
                   return FutureBuilder<UnsplashImage>(
                     future: UnsplashImageProvider.loadImage(goals[index].imageID),
                     builder: (BuildContext context, AsyncSnapshot<UnsplashImage> snapshot) {
-                        if (snapshot.hasData == false) return Center(child: Loading(Colors.white));
+                        if (snapshot.hasData == false) 
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  height: 120.0,
+                                  child: Center(
+                                    child: Loading(Colors.grey[100]),
+                                    )
+                                ),
+                            ),
+                          );
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -108,17 +121,17 @@ class _GoalsListState extends State<GoalsList> {
                                     frameBuilder: (BuildContext context, Widget child, int frame, bool wasSynchronouslyLoaded) {
                                       return Padding(padding: EdgeInsets.all(8.0), child: child);
                                     },
-                                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                              : null,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                                        ),
-                                      );
-                                    },
+                                    // loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                                    //   if (loadingProgress == null) return child;
+                                    //   return Center(
+                                    //     child: CircularProgressIndicator(
+                                    //       value: loadingProgress.expectedTotalBytes != null
+                                    //           ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                    //           : null,
+                                    //       valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                    //     ),
+                                    //   );
+                                    // },
                                   ).image,
                                   extent: 120.0,
                                   child: Center(
