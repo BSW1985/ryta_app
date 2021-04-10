@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
@@ -36,7 +37,7 @@ class _SignInState extends State<SignIn> {
       ListView(
         padding: EdgeInsets.symmetric(horizontal: 45.0),
         children: [
-          SizedBox(height: 120.0),
+          SizedBox(height: 100.0),
 
           Image.asset("assets/ryta_logo.png",
                 height: 150,
@@ -88,13 +89,16 @@ class _SignInState extends State<SignIn> {
                   }
                   ),
                 // Implementation of the register button.
-                SizedBox(height: 2.0),
+                SizedBox(height: 8.0),
                 ElevatedButton(
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0),
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+                    foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                            borderRadius: BorderRadius.circular(15.0))),
                     ),
                   child: Text(
                     'REGISTER',
@@ -104,6 +108,38 @@ class _SignInState extends State<SignIn> {
                     widget.toggleView();
                   }
                   ),
+                  Row(children: <Widget>[
+                    Expanded(
+                      child: new Container(
+                          margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                          child: Divider(
+                            color: Colors.black,
+                            height: 50,
+                          )),
+                    ),
+        
+                    Text("OR"),
+        
+                    Expanded(
+                      child: new Container(
+                          margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                          child: Divider(
+                            color: Colors.black,
+                            height: 50,
+                          )),
+                    ),
+                  ]),
+                  SignInButton(
+                      Buttons.Google,
+                      elevation: 0.0,
+                      shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(color: Colors.grey)
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+                      text: "SIGN UP WITH GOOGLE",
+                      onPressed: () {},
+                    ),
                   SizedBox(height: 10.0),
                   Text(
                     error,

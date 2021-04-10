@@ -157,6 +157,9 @@ class _RegisterState extends State<Register> {
                     padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
+                    // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    //         side: BorderSide(color: Colors.grey, width: 1.0),
+                    //         borderRadius: BorderRadius.circular(15.0))),
                     ),
                   child: Text(
                     'BACK TO LOGIN',
