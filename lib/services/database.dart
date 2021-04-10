@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ryta_app/models/goal.dart';
 
 class DatabaseService {
@@ -16,12 +17,13 @@ class DatabaseService {
     });
   }
 
-  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID) async {
+  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID, String maincolor) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
         'goalname': goalname,
         'goalmotivation': goalmotivation,
         'imageUrl': imageUrl,
         'imageID': imageID,
+        'maincolor': maincolor,
     });
   }
 
@@ -54,6 +56,7 @@ class DatabaseService {
         goalmotivation: doc.data()['goalmotivation'] ?? '',
         imageUrl: doc.data()['imageUrl'] ?? '',
         imageID: doc.data()['imageID'] ?? '',
+        maincolor: doc.data()['maincolor'] ?? '',
       );
     }).toList();
   }

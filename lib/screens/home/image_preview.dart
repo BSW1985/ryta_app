@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
@@ -32,11 +33,15 @@ class _ImagePageState extends State<ImagePage> {
   /// Displayed image.
   UnsplashImage image;
 
+  String maincolor;
+  Brightness brightness;
+
   @override
   void initState() {
     super.initState();
     // load image
     _loadImage();
+    _getColor();
   }
 
   /// Reloads the image from unsplash to get extra data, like: exif, location, ...
@@ -47,6 +52,14 @@ class _ImagePageState extends State<ImagePage> {
       // reload bottom sheet if open
       if (infoBottomSheetController != null) _showInfoBottomSheet();
     });
+  }
+
+  _getColor() async {
+    Color color = await getImagePalette(NetworkImage(widget.imageUrl));
+    maincolor='#${color.value.toRadixString(16)}';
+    setState(() {
+      this.maincolor = maincolor;
+    }); 
   }
 
   /// Returns AppBar.
@@ -110,7 +123,13 @@ class _ImagePageState extends State<ImagePage> {
         icon: Icon(Icons.check),
         label: Text('FINISH'),
           onPressed: () async {
-              DatabaseService(uid: user.uid).addUserGoals(goal.goalname.toString(), goal.goalmotivation.toString(), widget.imageUrl, widget.imageId);
+              print(maincolor);
+              DatabaseService(uid: user.uid).addUserGoals(
+                goal.goalname.toString(), 
+                goal.goalmotivation.toString(), 
+                widget.imageUrl, 
+                widget.imageId, 
+                maincolor);
               Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Home(),
@@ -127,5 +146,24 @@ class _ImagePageState extends State<ImagePage> {
   /// Shows a BottomSheet containing image info.
   PersistentBottomSheetController _showInfoBottomSheet() {
     return _scaffoldKey.currentState.showBottomSheet((context) => InfoSheet(image));
+  }
+    Future<Color> getImagePalette (ImageProvider imageProvider) async {
+    final PaletteGenerator paletteGenerator = await PaletteGenerator
+        .fromImageProvider(imageProvider);
+    return paletteGenerator.dominantColor.color;
+  }
+  static Brightness estimateBrightnessForColor(Color color) {
+  final double relativeLuminance = color.computeLuminance();
+
+  // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
+  // The spec says to use kThreshold=0.0525, but Material Design appears to bias
+  // more towards using light text than WCAG20 recommends. Material Design spec
+  // doesn't say what value to use, but 0.15 seemed close to what the Material
+  // Design spec shows for its color palette on
+  // <https://material.io/go/design-theming#color-color-palette>.
+  const double kThreshold = 0.15;
+  if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
+    return Brightness.light;
+  return Brightness.dark;
   }
 }
