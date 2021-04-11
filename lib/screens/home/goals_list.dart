@@ -184,11 +184,22 @@ class _GoalsListState extends State<GoalsList> {
     context: context,
     builder: (context) => new AlertDialog(
       title: new Text('Delete this goal?'),
-      // content: new Text('Do you want to delete the goal?'),
+      shape: RoundedRectangleBorder(
+        // side: BorderSide(color: goalFont, width: 1.0),
+        borderRadius: BorderRadius.circular(15.0)),
       actions: <Widget>[
         TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text("No"),
+          style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(0),
+          padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
+          backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                  borderRadius: BorderRadius.circular(15.0))),
+          ),
           ),
         SizedBox(height: 16),
         TextButton(
@@ -196,6 +207,15 @@ class _GoalsListState extends State<GoalsList> {
             Navigator.of(context).pop();
             DatabaseService(uid: user.uid).deleteUserGoals(goal.goalID);
           },
+          style: ButtonStyle(
+          elevation: MaterialStateProperty.all<double>(0),
+          padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+          foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                  borderRadius: BorderRadius.circular(15.0))),
+          ),
           child: Text("Yes"),
         ),
       ],

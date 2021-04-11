@@ -167,87 +167,11 @@ class _GoalPageState extends State<GoalPage> {
                       backgroundColor: goalBackgound.withOpacity(0.8),
                       title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
                       content: Text(widget.goal.goalmotivation, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalFont)),
-                      // actions: <Widget>[
-                      //   TextButton(
-                      //     child: Text('Mach ich!'),
-                      //     onPressed: (){
-                      //       Navigator.of(context).pop();
-                      //     }
-                      //   ),
-                      // ],
                     ),
                     );
                   },
                 );
-// showGeneralDialog(
-//   context: context,
-//   pageBuilder: (BuildContext buildContext,
-//       Animation<double> animation,
-//       Animation<double> secondaryAnimation) {
-//     return SafeArea(
-//       child: Builder(builder: (context) {
-//         return Material(
-//             color: Colors.transparent,
-//             child: Align(
-//                 alignment: Alignment.center,
-//                 child: Container(
-//                     height: 200.0,
-//                     width: 250.0,
-//                     color: Colors.transparent,
-//                     child:
-//                         Center(child: Text(widget.goal.goalmotivation, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalFont))))));
-//       }),
-//     );
-//   },
-//   barrierDismissible: true,
-//   barrierLabel: MaterialLocalizations.of(context)
-//       .modalBarrierDismissLabel,
-//   barrierColor: null,
-//   transitionDuration: const Duration(milliseconds: 150));
-
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (context) =>
-                  // AlertDialog(
-                  //   elevation:0.0,
-                  //     title: Text('Ask Marek for Unsplash keys'),
-                  //     content: Text('Otherwise it will not work'),
-                  //     // actions: <Widget>[
-                  //     //   TextButton(
-                  //     //     child: Text('Mach ich!'),
-                  //     //     onPressed: (){
-                  //     //       Navigator.of(context).pop();
-                  //     //     }
-                  //     //   ),
-                  //     // ],
-                  //   ),
-                  // );
-
-                  // infoBottomSheetController = _showInfoBottomSheet();
-
-          //       showModalBottomSheet<void>(
-          //   context: context,
-          //   builder: (BuildContext context) {
-          //     return Container(
-          //       height: 200,
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: <Widget>[
-          //             const Text('Modal BottomSheet'),
-          //             // ElevatedButton(
-          //             //   child: const Text('Close BottomSheet'),
-          //             //   onPressed: () => Navigator.pop(context),
-          //             // )
-          //           ],
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // );
-                  },
+                },
 
                 backgroundColor: Colors.transparent,
       ),
@@ -267,32 +191,6 @@ class _GoalPageState extends State<GoalPage> {
   /// Shows a BottomSheet containing image info.
   PersistentBottomSheetController _showInfoBottomSheet() {
     return _scaffoldKey.currentState.showBottomSheet((context) => Text('ahoj'),
-    
-    // Card(
-    //   margin: const EdgeInsets.all(0.0),
-    //   elevation: 0.0,
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.only(topLeft: const Radius.circular(15.0), topRight: const Radius.circular(15.0)),
-    //     side: BorderSide(color: goalBackgound, width: 1.0), 
-    //     ),
-    //   color: goalBackgound.withOpacity(0.8),
-    //             child: Padding(
-    //               padding: const EdgeInsets.all(20.0),
-    //               child: Column(
-    //                 crossAxisAlignment: CrossAxisAlignment.end,
-    //                 mainAxisSize: MainAxisSize.min,
-    //                 children: <Widget>[ InkWell(
-    //                                       child: Text(
-    //                     widget.goal.goalname,
-    //                     softWrap: true,
-    //                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont),
-    //                     textAlign: TextAlign.center,
-    //                   ),
-    //                 ),
-    //                 ],
-    //               ),
-    //             ),
-    // )
     );
   }
   
@@ -320,13 +218,3 @@ class _GoalPageState extends State<GoalPage> {
   }
 }
 }
-
-// Why button
-          //  IconButton(
-          //   icon: Icon(
-          //     Icons.info_outline,
-          //     color: Colors.white,
-          //   ),
-          //   tooltip: 'Image Info',
-          //   onPressed: () => infoBottomSheetController = _showInfoBottomSheet(),
-          // ),

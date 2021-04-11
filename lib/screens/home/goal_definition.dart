@@ -91,7 +91,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                     if (_formKey.currentState.validate()) {
                         goal.goalname = goalname; 
                         goal.goalmotivation = goalmotivation;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => GoalImageSearch()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => GoalImageSearch(goalname)));
                       }
                   }
                   ),

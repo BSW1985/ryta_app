@@ -26,6 +26,10 @@ class MyApp extends StatelessWidget {
               create: (_) => Goal(),
               child: MaterialApp(
                   home: Wrapper(),
+
+                  //Hide the debug banner
+                  debugShowCheckedModeBanner: false,
+
                   theme: ThemeData(
 
                     // fontFamily: 'Georgia',
