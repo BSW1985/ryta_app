@@ -30,7 +30,8 @@ class _GoalPageState extends State<GoalPage> {
   /// Displayed image.
   UnsplashImage image;
 
-  Color imagemaincolor;
+  Color goalBackgound;
+  Color goalFont;
 
 
   @override
@@ -51,11 +52,11 @@ class _GoalPageState extends State<GoalPage> {
   }
 
   _getColor() async {
-    Color imagemaincolor = _getColorFromHex(widget.goal.maincolor);
-    Brightness brightness = estimateBrightnessForColor(imagemaincolor);
+    Color goalBackgound = _getColorFromHex(widget.goal.goalBackgoundColor);
+    Color goalFont = _getColorFromHex(widget.goal.goalFontColor);
     setState(() {
-      this.brightness = brightness;
-      this.imagemaincolor = imagemaincolor;
+      this.goalBackgound = goalBackgound;
+      this.goalFont = goalFont;
     });
   }
 
@@ -104,7 +105,7 @@ class _GoalPageState extends State<GoalPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                color: brightness == Brightness.dark ? Colors.white54 : Colors.black54,
+                color: goalBackgound,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SizedBox(
@@ -112,7 +113,7 @@ class _GoalPageState extends State<GoalPage> {
                     child: Text(
                       widget.goal.goalname,
                       softWrap: true,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: imagemaincolor),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: goalFont),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -17,13 +17,14 @@ class DatabaseService {
     });
   }
 
-  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID, String maincolor) async {
+  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID, String goalBackgoundColor, String goalFontColor) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
         'goalname': goalname,
         'goalmotivation': goalmotivation,
         'imageUrl': imageUrl,
         'imageID': imageID,
-        'maincolor': maincolor,
+        'goalBackgoundColor': goalBackgoundColor,
+        'goalFontColor': goalFontColor,
     });
   }
 
@@ -55,8 +56,8 @@ class DatabaseService {
         goalname: doc.data()['goalname'] ?? '',
         goalmotivation: doc.data()['goalmotivation'] ?? '',
         imageUrl: doc.data()['imageUrl'] ?? '',
-        imageID: doc.data()['imageID'] ?? '',
-        maincolor: doc.data()['maincolor'] ?? '',
+        goalBackgoundColor: doc.data()['goalBackgoundColor'] ?? '',
+        goalFontColor: doc.data()['goalFontColor'] ?? '',
       );
     }).toList();
   }

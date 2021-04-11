@@ -8,7 +8,8 @@ class Goal {
   String goalmotivation;
   String imageUrl;
   String imageID;
-  String maincolor;
+  String goalBackgoundColor;
+  String goalFontColor;
 
-  Goal({ this.goalID, this.goalname, this.goalmotivation, this.imageUrl, this.imageID, this.maincolor });
+  Goal({ this.goalID, this.goalname, this.goalmotivation, this.imageUrl, this.imageID, this.goalBackgoundColor, this.goalFontColor });
 }

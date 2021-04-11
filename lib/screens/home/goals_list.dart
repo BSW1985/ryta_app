@@ -98,6 +98,27 @@ class _GoalsListState extends State<GoalsList> {
                             ),
                           );
 
+                        
+                          try {
+                            snapshot.data.getSmallUrl();
+                            } catch(e){
+                              print(e.toString());
+                              print('Unable to acces Unsplash');
+                              return AlertDialog(
+                                elevation: 5.0,
+                                title: Text('001: Unable to acces Unsplash'),
+                                content: Text('Please report the issue to Ryta team'),
+                                // actions: <Widget>[
+                                //   TextButton(
+                                //     child: Text('Mach ich!'),
+                                //     onPressed: (){
+                                //       Navigator.of(context).pop();
+                                //     }
+                                //   ),
+                                // ],
+                              );
+                          }
+
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ClipRRect(
