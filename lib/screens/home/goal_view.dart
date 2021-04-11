@@ -24,6 +24,9 @@ class _GoalPageState extends State<GoalPage> {
   /// create global key to show info bottom sheet
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  /// Bottomsheet controller
+  PersistentBottomSheetController infoBottomSheetController;
+
   // Color maincolor;
   Brightness brightness;
 
@@ -33,6 +36,7 @@ class _GoalPageState extends State<GoalPage> {
   Color goalBackgound;
   Color goalFont;
 
+  bool _motivationOn=false;
 
   @override
   Future<void> initState() {
@@ -101,11 +105,14 @@ class _GoalPageState extends State<GoalPage> {
           // wrap in Positioned to not use entire screen
           
           Positioned(top: 0.0, left: 0.0, right: 0.0, child: _buildAppBar()),
-          Positioned(bottom: 20.0, right: 20.0, 
+          
+          if (_motivationOn==false)
+          Positioned(bottom: 75.0, left: 20.0, 
+          // _selectedIndex == 0 ? Color(0xFF995C75) : Colors.grey[400]
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
               child: Container(
-                color: goalBackgound,
+                color: goalBackgound.withOpacity(0.8),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SizedBox(
@@ -113,7 +120,7 @@ class _GoalPageState extends State<GoalPage> {
                     child: Text(
                       widget.goal.goalname,
                       softWrap: true,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: goalFont),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -121,8 +128,171 @@ class _GoalPageState extends State<GoalPage> {
               ),
             ),
           ),
-        ],
+        if (_motivationOn==false)
+        Align(
+          alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FloatingActionButton.extended(
+                // icon: Icon(Icons.check),
+                shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: goalBackgound, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15.0)),
+                elevation: 0.0,
+                label: Text(
+                    'Why?',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalBackgound)
+                    ),
+                tooltip: 'See the motivation!',
+                onPressed: () {
+                  setState(() {
+                    _motivationOn=true;
+                  });
+                  showDialog(
+                  barrierColor: Colors.white.withOpacity(0),
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return WillPopScope(
+                          onWillPop: () {
+                            Navigator.of(context).pop();     
+                            setState(() {
+                              _motivationOn=false;
+                            });},
+                      child: AlertDialog(
+                      elevation:0.0,
+                      shape: RoundedRectangleBorder(
+                                    // side: BorderSide(color: goalFont, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15.0)),
+                      backgroundColor: goalBackgound.withOpacity(0.8),
+                      title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
+                      content: Text(widget.goal.goalmotivation, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalFont)),
+                      // actions: <Widget>[
+                      //   TextButton(
+                      //     child: Text('Mach ich!'),
+                      //     onPressed: (){
+                      //       Navigator.of(context).pop();
+                      //     }
+                      //   ),
+                      // ],
+                    ),
+                    );
+                  },
+                );
+// showGeneralDialog(
+//   context: context,
+//   pageBuilder: (BuildContext buildContext,
+//       Animation<double> animation,
+//       Animation<double> secondaryAnimation) {
+//     return SafeArea(
+//       child: Builder(builder: (context) {
+//         return Material(
+//             color: Colors.transparent,
+//             child: Align(
+//                 alignment: Alignment.center,
+//                 child: Container(
+//                     height: 200.0,
+//                     width: 250.0,
+//                     color: Colors.transparent,
+//                     child:
+//                         Center(child: Text(widget.goal.goalmotivation, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalFont))))));
+//       }),
+//     );
+//   },
+//   barrierDismissible: true,
+//   barrierLabel: MaterialLocalizations.of(context)
+//       .modalBarrierDismissLabel,
+//   barrierColor: null,
+//   transitionDuration: const Duration(milliseconds: 150));
+
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) =>
+                  // AlertDialog(
+                  //   elevation:0.0,
+                  //     title: Text('Ask Marek for Unsplash keys'),
+                  //     content: Text('Otherwise it will not work'),
+                  //     // actions: <Widget>[
+                  //     //   TextButton(
+                  //     //     child: Text('Mach ich!'),
+                  //     //     onPressed: (){
+                  //     //       Navigator.of(context).pop();
+                  //     //     }
+                  //     //   ),
+                  //     // ],
+                  //   ),
+                  // );
+
+                  // infoBottomSheetController = _showInfoBottomSheet();
+
+          //       showModalBottomSheet<void>(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return Container(
+          //       height: 200,
+          //       color: Colors.transparent,
+          //       child: Center(
+          //         child: Column(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: <Widget>[
+          //             const Text('Modal BottomSheet'),
+          //             // ElevatedButton(
+          //             //   child: const Text('Close BottomSheet'),
+          //             //   onPressed: () => Navigator.pop(context),
+          //             // )
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
+                  },
+
+                backgroundColor: Colors.transparent,
       ),
+            ),
+        ),
+
+      
+        ],
+        
+      ),
+
+      
+
+    // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
+  }
+  /// Shows a BottomSheet containing image info.
+  PersistentBottomSheetController _showInfoBottomSheet() {
+    return _scaffoldKey.currentState.showBottomSheet((context) => Text('ahoj'),
+    
+    // Card(
+    //   margin: const EdgeInsets.all(0.0),
+    //   elevation: 0.0,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.only(topLeft: const Radius.circular(15.0), topRight: const Radius.circular(15.0)),
+    //     side: BorderSide(color: goalBackgound, width: 1.0), 
+    //     ),
+    //   color: goalBackgound.withOpacity(0.8),
+    //             child: Padding(
+    //               padding: const EdgeInsets.all(20.0),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.end,
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 children: <Widget>[ InkWell(
+    //                                       child: Text(
+    //                     widget.goal.goalname,
+    //                     softWrap: true,
+    //                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont),
+    //                     textAlign: TextAlign.center,
+    //                   ),
+    //                 ),
+    //                 ],
+    //               ),
+    //             ),
+    // )
     );
   }
   

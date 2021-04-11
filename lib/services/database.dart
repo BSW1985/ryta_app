@@ -56,6 +56,7 @@ class DatabaseService {
         goalname: doc.data()['goalname'] ?? '',
         goalmotivation: doc.data()['goalmotivation'] ?? '',
         imageUrl: doc.data()['imageUrl'] ?? '',
+        imageID: doc.data()['imageID'] ?? '',
         goalBackgoundColor: doc.data()['goalBackgoundColor'] ?? '',
         goalFontColor: doc.data()['goalFontColor'] ?? '',
       );

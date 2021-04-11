@@ -20,8 +20,6 @@ class GoalsList extends StatefulWidget {
 /// Provide a state for [GoalsList].
 class _GoalsListState extends State<GoalsList> {
 
-  // final _controller = new ScrollController();
-
   @override
   Widget build(BuildContext context) { 
     
@@ -160,7 +158,7 @@ class _GoalsListState extends State<GoalsList> {
                                         padding: EdgeInsets.only(left:15.0, right: 15.0),
                                             child: Text(
                                               goals[index].goalname,
-                                              style: Theme.of(context).textTheme.headline4.copyWith(color: Colors.white),
+                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: Colors.white), // _getColorFromHex(goals[index].goalFontColor)
                                               textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -203,6 +201,15 @@ class _GoalsListState extends State<GoalsList> {
       ],
     ),
   );
+  }
+    Color _getColorFromHex(String hexColor) {
+    hexColor = hexColor.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse("0x$hexColor"));
+    }
   }
 }
 

@@ -28,7 +28,7 @@ class _ImagePageState extends State<ImagePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   /// Bottomsheet controller
-  PersistentBottomSheetController infoBottomSheetController, collectionsBottomSheetController;
+  PersistentBottomSheetController infoBottomSheetController;
 
   /// Displayed image.
   UnsplashImage image;
@@ -37,7 +37,9 @@ class _ImagePageState extends State<ImagePage> {
   String goalBackgoundColor;
   String goalFontColor;
   PaletteGenerator paletteGenerator;
-  bool paletteVisualization = false;
+
+  // visualize the color palette
+  bool paletteVisualization = true;
 
 
   @override
@@ -49,10 +51,12 @@ class _ImagePageState extends State<ImagePage> {
 
     // get the colors
     _getColor();
+
   }
 
   /// Reloads the image from unsplash to get extra data, like: exif, location, ...
   _loadImage() async {
+
     UnsplashImage image = await UnsplashImageProvider.loadImage(widget.imageId);
     // NetworkImage imageasset = NetworkImage(widget.imageUrl);
     setState(() {
@@ -309,7 +313,7 @@ if(paletteGenerator != null && paletteVisualization == true)
   // Design spec shows for its color palette on
   // <https://material.io/go/design-theming#color-color-palette>.
   // const double kThreshold = 0.05;
-  if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > 0.4)
+  if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > 0.35)
     return Brightness.light;
   if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) < 0.05)
     return Brightness.dark;

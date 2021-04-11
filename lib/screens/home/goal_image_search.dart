@@ -169,7 +169,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
     sliver: SliverToBoxAdapter(
       child: Center(
           child: Text(
-          "Let's find the best image for your target",
+          "Let's find an image for your target",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
       ),
