@@ -10,6 +10,7 @@ class Goal {
   String imageID;
   String goalBackgoundColor;
   String goalFontColor;
+  String goalCategory;
 
-  Goal({ this.goalID, this.goalname, this.goalmotivation, this.imageUrl, this.imageID, this.goalBackgoundColor, this.goalFontColor });
+  Goal({ this.goalID, this.goalname, this.goalmotivation, this.imageUrl, this.imageID, this.goalBackgoundColor, this.goalFontColor, this.goalCategory });
 }

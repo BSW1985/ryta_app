@@ -35,6 +35,10 @@ class MyApp extends StatelessWidget {
                     // fontFamily: 'Georgia',
                     fontFamily: 'CenturyGothic',
                     // fontFamily: 'Hind',
+                    
+                    // Bottom Sheet Theme
+                    bottomSheetTheme: BottomSheetThemeData(
+                      backgroundColor: Colors.black.withOpacity(0)),
 
                     // Default theme of text buttons
                     textButtonTheme: TextButtonThemeData(

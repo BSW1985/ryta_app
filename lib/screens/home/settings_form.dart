@@ -75,6 +75,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   SizedBox(height: 25.0),
                   ElevatedButton(
                     style: ButtonStyle(
+                      elevation: MaterialStateProperty.all<double>(0),
                       backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFF9A825)),
                     ),
                     child: Text(

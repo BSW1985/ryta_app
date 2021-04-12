@@ -9,6 +9,7 @@ import 'package:ryta_app/screens/home/home.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
+import 'package:ryta_app/widgets/goal_category_selection.dart';
 import 'package:ryta_app/widgets/info_sheet.dart';
 
 /// Screen for showing an individual [UnsplashImage].
@@ -32,14 +33,13 @@ class _ImagePageState extends State<ImagePage> {
 
   /// Displayed image.
   UnsplashImage image;
-  NetworkImage imageasset;
 
   String goalBackgoundColor;
   String goalFontColor;
   PaletteGenerator paletteGenerator;
 
   // visualize the color palette
-  bool paletteVisualization = true;
+  bool paletteVisualization = false;
 
 
   @override
@@ -50,7 +50,7 @@ class _ImagePageState extends State<ImagePage> {
     _loadImage();
 
     // get the colors
-    _getColor();
+    // _getColor();
 
   }
 
@@ -262,31 +262,9 @@ if(paletteGenerator != null && paletteVisualization == true)
 
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.check),
-        label: Text('FINISH'),
-          onPressed: () async {
-              // Navigator.push(
-              // context,
-              // MaterialPageRoute(builder: (context) => Home(),
-              // ),
-              //    );
-              DatabaseService(uid: user.uid).addUserGoals(
-                goal.goalname.toString(), 
-                goal.goalmotivation.toString(), 
-                widget.imageUrl, 
-                widget.imageId, 
-                goalBackgoundColor,
-                goalFontColor,
-                );
-              Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home(),
-                          ),
-                 );
-          },
-          backgroundColor: Color(0xFF995C75),
-      ),
+      floatingActionButton: FinishFloatingActionButton(widget.imageId, widget.imageUrl),
+
+      
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

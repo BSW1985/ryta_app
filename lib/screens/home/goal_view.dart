@@ -116,7 +116,7 @@ class _GoalPageState extends State<GoalPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SizedBox(
-                    width: 180.0,
+                    width: 220.0,
                     child: Text(
                       widget.goal.goalname,
                       softWrap: true,
@@ -166,7 +166,7 @@ class _GoalPageState extends State<GoalPage> {
                                     borderRadius: BorderRadius.circular(15.0)),
                       backgroundColor: goalBackgound.withOpacity(0.8),
                       title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
-                      content: Text(widget.goal.goalmotivation, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalFont)),
+                      content: Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
                     ),
                     );
                   },
