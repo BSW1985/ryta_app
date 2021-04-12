@@ -242,22 +242,22 @@ class _SheetButtonState extends State<SheetButton> {
     // get brightness of each color
     if (paletteGenerator.dominantColor?.color!=null)
     brightnessDominant = estimateBrightnessForDominantColor(paletteGenerator.dominantColor?.color);
-    print(brightnessDominant);
+    // print(brightnessDominant);
     if (paletteGenerator.vibrantColor?.color!=null)
     brightnessVibrant = estimateBrightnessForColor(paletteGenerator.vibrantColor?.color);
-    print(brightnessVibrant);
+    // print(brightnessVibrant);
     if (paletteGenerator.mutedColor?.color!=null)
     brightnessMuted = estimateBrightnessForColor(paletteGenerator.mutedColor?.color);
-    print(brightnessMuted);
+    // print(brightnessMuted);
     if (paletteGenerator.darkVibrantColor?.color!=null)
     brightnessDarkVibrant = estimateBrightnessForColor(paletteGenerator.darkVibrantColor?.color);
-    print(brightnessDarkVibrant);
+    // print(brightnessDarkVibrant);
     if (paletteGenerator.lightVibrantColor?.color!=null)
     brightnessLightVibrant = estimateBrightnessForColor(paletteGenerator.lightVibrantColor?.color);
-    print(brightnessLightVibrant);
+    // print(brightnessLightVibrant);
     if (paletteGenerator.lightMutedColor?.color!=null)
     brightnessLightMuted = estimateBrightnessForColor(paletteGenerator.lightMutedColor?.color);
-    print(brightnessLightMuted);
+    // print(brightnessLightMuted);
     
     
     // color picker algorithm
@@ -343,7 +343,7 @@ class _SheetButtonState extends State<SheetButton> {
 
     // convert to hex string
     goalBackgoundColor='#${paletteGenerator.dominantColor.color.value.toRadixString(16)}';
-    print('FERTIG');
+    // print('FERTIG');
     setState(() {
       goal.goalBackgoundColor = goalBackgoundColor;
       this.paletteGenerator = paletteGenerator;

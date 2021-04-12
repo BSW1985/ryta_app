@@ -160,12 +160,34 @@ class _GoalPageState extends State<GoalPage> {
                               _motivationOn=false;
                             });},
                       child: AlertDialog(
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius:
+                        //     BorderRadius.all(
+                        //       Radius.circular(15.0))),
+                        //   content: Builder(
+                        //     builder: (context) {
+                        //       // Get available height and width of the build area of this widget. Make a choice depending on the size.                              
+                        //       // var height = MediaQuery.of(context).size.height;
+                        //       var width = MediaQuery.of(context).size.width;
+
+                        //       return Container(
+                        //         // height: height - 400,
+                        //         // width: width - 800,
+                        //         child: Column(
+                        //           children: <Widget>[
+                        //           Text (widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
+                        //           Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
+                        //           ],
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
                       elevation:0.0,
                       shape: RoundedRectangleBorder(
                                     // side: BorderSide(color: goalFont, width: 1.0),
                                     borderRadius: BorderRadius.circular(15.0)),
                       backgroundColor: goalBackgound.withOpacity(0.8),
-                      title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
+                      title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont)), //, textAlign: TextAlign.center,
                       content: Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
                     ),
                     );

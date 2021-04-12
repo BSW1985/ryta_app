@@ -50,7 +50,8 @@ class _ImagePageState extends State<ImagePage> {
     _loadImage();
 
     // get the colors
-    // _getColor();
+  if (paletteVisualization == true)
+    _getColor();
 
   }
 
