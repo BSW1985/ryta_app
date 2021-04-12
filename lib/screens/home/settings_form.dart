@@ -75,6 +75,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   SizedBox(height: 25.0),
                   ElevatedButton(
                     style: ButtonStyle(
+                      elevation: MaterialStateProperty.all<double>(0),
                       backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFF9A825)),
                     ),
                     child: Text(
@@ -99,7 +100,7 @@ class _SettingsFormState extends State<SettingsForm> {
                           text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: "We appreciate your interest! If like our vision, have other ideas or would like to give us personla feedback, please contact us at ",
+                                  text: "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 

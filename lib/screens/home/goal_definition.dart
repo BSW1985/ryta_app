@@ -53,7 +53,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                 // Input goal name
                 SizedBox(height: 50.0),
                 Text(
-                  "What is your goal/target?",
+                  "What is your target?",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
                 ),
                 SizedBox(height: 15.0),
@@ -67,7 +67,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                 // Input goal motivation
                 SizedBox(height: 30.0),
                 Text(
-                  "Why do you want to achieve/reach it?",
+                  "Why do you want to reach it?",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
                 ),
                 SizedBox(height: 15.0),
@@ -91,7 +91,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                     if (_formKey.currentState.validate()) {
                         goal.goalname = goalname; 
                         goal.goalmotivation = goalmotivation;
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => GoalImageSearch()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => GoalImageSearch(goalname)));
                       }
                   }
                   ),

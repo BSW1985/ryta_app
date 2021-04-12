@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
@@ -11,6 +12,7 @@ import 'package:parallax_image/parallax_image.dart';
 /// Screen for showing an individual goal ---> Visualization
 class GoalPage extends StatefulWidget {
   final String imageId, imageUrl;
+
   final Goal goal;
   // GoalPage(this.imageId, this.imageUrl, {Key key}) : super(key: key);
   GoalPage(this.goal, this.imageId, this.imageUrl, {Key key}) : super(key: key);
@@ -25,21 +27,43 @@ class _GoalPageState extends State<GoalPage> {
   /// create global key to show info bottom sheet
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  /// Bottomsheet controller
+  PersistentBottomSheetController infoBottomSheetController;
+
+  // Color maincolor;
+  Brightness brightness;
+
   /// Displayed image.
   UnsplashImage image;
 
+  Color goalBackgound;
+  Color goalFont;
+
+  bool _motivationOn=false;
+
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
     // load image
     _loadImage();
+    _getColor();
   }
+  
 
   /// Reloads the image from unsplash to get extra data, like: exif, location, ...
   _loadImage() async {
     UnsplashImage image = await UnsplashImageProvider.loadImage(widget.imageId);
     setState(() {
       this.image = image;
+    });
+  }
+
+  _getColor() async {
+    Color goalBackgound = _getColorFromHex(widget.goal.goalBackgoundColor);
+    Color goalFont = _getColorFromHex(widget.goal.goalFontColor);
+    setState(() {
+      this.goalBackgound = goalBackgound;
+      this.goalFont = goalFont;
     });
   }
 
@@ -82,81 +106,223 @@ class _GoalPageState extends State<GoalPage> {
     final goal = Provider.of<Goal>(context);
 
     return Scaffold(
-        key: _formKey,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back),
-            color: Colors.black,
-            onPressed: () {
-              Navigator.pop(context);
-            },
+
+      // set the global key
+      key: _scaffoldKey,
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: <Widget>[
+          _buildPhotoView(widget.imageId, widget.imageUrl),
+          // wrap in Positioned to not use entire screen
+          
+          Positioned(top: 0.0, left: 0.0, right: 0.0, child: _buildAppBar()),
+          
+          if (_motivationOn==false)
+          Positioned(bottom: 75.0, left: 20.0, 
+          // _selectedIndex == 0 ? Color(0xFF995C75) : Colors.grey[400]
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                color: goalBackgound.withOpacity(0.8),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SizedBox(
+                    width: 220.0,
+                    child: Text(
+                      widget.goal.goalname,
+                      softWrap: true,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          centerTitle: true,
-          title: SizedBox(
-            height: 70,
-            child: Image.asset("assets/ryta_logo.png"),),
+        if (_motivationOn==false)
+        Align(
+          alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FloatingActionButton.extended(
+                // icon: Icon(Icons.check),
+                shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: goalBackgound, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15.0)),
+                elevation: 0.0,
+                label: Text(
+                    'Why?',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0, color: goalBackgound)
+                    ),
+                tooltip: 'See the motivation!',
+                onPressed: () {
+                  setState(() {
+                    _motivationOn=true;
+                  });
+                  showDialog(
+                  barrierColor: Colors.white.withOpacity(0),
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return WillPopScope(
+                          onWillPop: () {
+                            Navigator.of(context).pop();     
+                            setState(() {
+                              _motivationOn=false;
+                            });},
+                      child: AlertDialog(
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius:
+                        //     BorderRadius.all(
+                        //       Radius.circular(15.0))),
+                        //   content: Builder(
+                        //     builder: (context) {
+                        //       // Get available height and width of the build area of this widget. Make a choice depending on the size.                              
+                        //       // var height = MediaQuery.of(context).size.height;
+                        //       var width = MediaQuery.of(context).size.width;
+
+                        //       return Container(
+                        //         // height: height - 400,
+                        //         // width: width - 800,
+                        //         child: Column(
+                        //           children: <Widget>[
+                        //           Text (widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
+                        //           Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
+                        //           ],
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                      elevation:0.0,
+                      shape: RoundedRectangleBorder(
+                                    // side: BorderSide(color: goalFont, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15.0)),
+                      backgroundColor: goalBackgound.withOpacity(0.8),
+                      title: Text(widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont)), //, textAlign: TextAlign.center,
+                      content: Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
+                    ),
+                    );
+                  },
+                );
+                },
+
+                backgroundColor: Colors.transparent,
+      ),
+            ),
         ),
-        body: ListView (
-            padding: EdgeInsets.symmetric(horizontal: 25.0),
-            children: [
-              Form(
-                key: _scaffoldKey,
-                child: Column(
-                  children: <Widget>[
-                    // Input goal name
-                  SizedBox(height: 40.0),
-                  SizedBox(height: 50.0),
-                  Text(
-                    "What is your goal/target?",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-                  ),
-                  SizedBox(height: 15.0),
-                  TextFormField(
-                    initialValue: widget.goal.goalname,
-                    decoration: textInputDecoration.copyWith(hintText: 'The target'),
-                    validator: (val) => val.isEmpty ? 'Enter the target title' : null,
-                    onChanged: (val) {
-                      setState(() => goalname = val);
-                    }
-                  ),
-                  SizedBox(height: 30.0),
-                  Text(
-                    "Why do you want to achieve/reach it?",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-                  ),
-                  SizedBox(height: 15.0),
-                  TextFormField(
-                    initialValue: widget.goal.goalmotivation,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 3,
-                    decoration: textInputDecoration.copyWith(hintText: 'Your motivation'),
-                    validator: (val) => val.isEmpty ? 'Your motivation is important part of the definition!' : null,
-                    onChanged: (val) {
-                      setState(() => goalmotivation = val);
-                    }
-                  ),
-                  SizedBox(height: 20.0),
-                  ElevatedButton(
-                      child: Text(
-                        "SAVE",
-                        //style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          goal.goalname = goalname;
-                          goal.goalmotivation = goalmotivation;
-                          Navigator.pop(context);
-                        }
-                      }
-                  ),
-                ]
-              ),
-              ),
-          ]
-        ),
+
+      
+        ],
+        
+      ),
+
+      
+
+    // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
+  /// Shows a BottomSheet containing image info.
+  PersistentBottomSheetController _showInfoBottomSheet() {
+    return _scaffoldKey.currentState.showBottomSheet((context) => Text('ahoj'),
+//         key: _formKey,
+//         backgroundColor: Colors.white,
+//         appBar: AppBar(
+//           leading: new IconButton(
+//             icon: new Icon(Icons.arrow_back),
+//             color: Colors.black,
+//             onPressed: () {
+//               Navigator.pop(context);
+//             },
+//           ),
+//           backgroundColor: Colors.white,
+//           elevation: 0.0,
+//           centerTitle: true,
+//           title: SizedBox(
+//             height: 70,
+//             child: Image.asset("assets/ryta_logo.png"),),
+//         ),
+//         body: ListView (
+//             padding: EdgeInsets.symmetric(horizontal: 25.0),
+//             children: [
+//               Form(
+//                 key: _scaffoldKey,
+//                 child: Column(
+//                   children: <Widget>[
+//                     // Input goal name
+//                   SizedBox(height: 40.0),
+//                   SizedBox(height: 50.0),
+//                   Text(
+//                     "What is your goal/target?",
+//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+//                   ),
+//                   SizedBox(height: 15.0),
+//                   TextFormField(
+//                     initialValue: widget.goal.goalname,
+//                     decoration: textInputDecoration.copyWith(hintText: 'The target'),
+//                     validator: (val) => val.isEmpty ? 'Enter the target title' : null,
+//                     onChanged: (val) {
+//                       setState(() => goalname = val);
+//                     }
+//                   ),
+//                   SizedBox(height: 30.0),
+//                   Text(
+//                     "Why do you want to achieve/reach it?",
+//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+//                   ),
+//                   SizedBox(height: 15.0),
+//                   TextFormField(
+//                     initialValue: widget.goal.goalmotivation,
+//                     keyboardType: TextInputType.multiline,
+//                     maxLines: 3,
+//                     decoration: textInputDecoration.copyWith(hintText: 'Your motivation'),
+//                     validator: (val) => val.isEmpty ? 'Your motivation is important part of the definition!' : null,
+//                     onChanged: (val) {
+//                       setState(() => goalmotivation = val);
+//                     }
+//                   ),
+//                   SizedBox(height: 20.0),
+//                   ElevatedButton(
+//                       child: Text(
+//                         "SAVE",
+//                         //style: TextStyle(color: Colors.white),
+//                       ),
+//                       onPressed: () async {
+//                         if (_formKey.currentState.validate()) {
+//                           goal.goalname = goalname;
+//                           goal.goalmotivation = goalmotivation;
+//                           Navigator.pop(context);
+//                         }
+//                       }
+//                   ),
+//                 ]
+//               ),
+//               ),
+//           ]
+//         ),
+    );
+  }
+  
+  static Brightness estimateBrightnessForColor(Color color) {
+  final double relativeLuminance = color.computeLuminance();
+
+  // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
+  // The spec says to use kThreshold=0.0525, but Material Design appears to bias
+  // more towards using light text than WCAG20 recommends. Material Design spec
+  // doesn't say what value to use, but 0.15 seemed close to what the Material
+  // Design spec shows for its color palette on
+  // <https://material.io/go/design-theming#color-color-palette>.
+  const double kThreshold = 0.15;
+  if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
+    return Brightness.light;
+  return Brightness.dark;
+  }
+  Color _getColorFromHex(String hexColor) {
+  hexColor = hexColor.replaceAll("#", "");
+  if (hexColor.length == 6) {
+    hexColor = "FF" + hexColor;
+  }
+  if (hexColor.length == 8) {
+    return Color(int.parse("0x$hexColor"));
+  }
+}
 }

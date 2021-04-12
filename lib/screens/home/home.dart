@@ -22,78 +22,72 @@ class _Home extends State<Home> {
     SettingsForm(),
   ];
 
-  _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  // void _showSettingsPanel() {
-  //   showModalBottomSheet(context: context, builder: (context) {
-  //     return Container(
-  //       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-  //       child: Text('bottom sheet'),
-  //     );
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
 
     final user = Provider.of<RytaUser>(context);
+    final width = MediaQuery.of(context).size.width;
+    final iconLocation = width/4-22;
 
     // Homescreen
     return StreamProvider<List<Goal>>.value(
         value: DatabaseService(uid: user.uid).goals,
         initialData: null,
         child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+          extendBody: true,
           backgroundColor: Colors.white,
-          elevation: 0.0,
-          centerTitle: true,
-          title: SizedBox(
-              height: 70,
-              child: Image.asset("assets/ryta_logo.png"),),
-
-          //    /* TextButton.icon(
-          //       icon: Icon(Icons.settings),
-          //       label: Text('settings'),
-          //       onPressed: () => _showSettingsPanel(),
-          //     ) */
-          
-          ),
-        body: Center(
-              child: _widgetOptions.elementAt(_selectedIndex),
-              ),
-
-        
-        // Implementing the toolbar
-        bottomNavigationBar: BottomNavigationBar(
+          appBar: AppBar(
             backgroundColor: Colors.white,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: '',
-              ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.home_filled),
-              //   label: ''
-              // ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: '',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            elevation: 0.0,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            unselectedItemColor: Colors.grey[400],
-            selectedItemColor: Color(0xFF995C75),
-            onTap: _onItemTapped,
-            ),
+            elevation: 1.0,
+            centerTitle: true,
+            title: SizedBox(
+                height: 70,
+                child: Image.asset("assets/ryta_logo.png"),),
 
+            //    /* TextButton.icon(
+            //       icon: Icon(Icons.settings),
+            //       label: Text('settings'),
+            //       onPressed: () => _showSettingsPanel(),
+            //     ) */
+            
+            ),
+          body: Center(
+                child: _widgetOptions.elementAt(_selectedIndex),
+                ),
+ 
+          // Implementing the toolbar
+          bottomNavigationBar: BottomAppBar(
+            // elevation: 2.0,
+            shape: CircularNotchedRectangle(),
+            notchMargin: 5.0,
+            color: Colors.white,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                  IconButton(
+                    color: Colors.grey[400],
+                    icon: Icon(Icons.home_filled, color: _selectedIndex == 0 ? Color(0xFF995C75) : Colors.grey[400]),
+                    padding: EdgeInsets.only(left: iconLocation), 
+                    onPressed: () {
+                        setState(() {
+                          _selectedIndex = 0;
+                        });
+                      },
+                    ),
+                  IconButton(
+                    color: Colors.grey[400],
+                    icon: Icon(Icons.person, color: _selectedIndex == 1 ? Color(0xFF995C75) : Colors.grey[400]),
+                    padding: EdgeInsets.only(right: iconLocation), 
+                    onPressed: () {
+                        setState(() {
+                          _selectedIndex = 1;
+                        });
+                      },
+                    ),
+                ],
+              ),
+          ),
 
           // Start a definition of a new goal 
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

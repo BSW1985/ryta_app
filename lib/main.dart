@@ -26,7 +26,21 @@ class MyApp extends StatelessWidget {
               create: (_) => Goal(),
               child: MaterialApp(
                   home: Wrapper(),
+
+                  //Hide the debug banner
+                  debugShowCheckedModeBanner: false,
+
                   theme: ThemeData(
+
+                    // fontFamily: 'Georgia',
+                    fontFamily: 'CenturyGothic',
+                    // fontFamily: 'Hind',
+                    
+                    // Bottom Sheet Theme
+                    bottomSheetTheme: BottomSheetThemeData(
+                      backgroundColor: Colors.black.withOpacity(0)),
+
+                    // Default theme of text buttons
                     textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(
                         primary: Colors.black,
@@ -35,9 +49,15 @@ class MyApp extends StatelessWidget {
                     // ElevatedButtonTheme
                     elevatedButtonTheme: ElevatedButtonThemeData(
                     style: ElevatedButton.styleFrom(
+                      // elevation: 10.0,
                       onPrimary: Colors.white, // Text color
                       primary: Color(0xFF995C75), // background color
                       padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+                      shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            // side: BorderSide(color: Colors.red)
+                      )
+                        
                       ),
                     ),
                   ),

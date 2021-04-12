@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ryta_app/models/goal.dart';
 
 class DatabaseService {
@@ -9,24 +10,27 @@ class DatabaseService {
   // collection reference
   final CollectionReference rytaUsersCollection = FirebaseFirestore.instance.collection('ryta_users');
 
-  Future updateUserData(String name, int numberOfGoals) async {
+  Future updateUserData(String name, String email) async {
     return await rytaUsersCollection.doc(uid).set({
       'name': name,
-      'numberOfGoals': numberOfGoals,
+      'email': email,
     });
   }
 
-  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID) async {
+  Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID, String goalBackgoundColor, String goalFontColor, String goalCategory) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
         'goalname': goalname,
         'goalmotivation': goalmotivation,
         'imageUrl': imageUrl,
         'imageID': imageID,
+        'goalBackgoundColor': goalBackgoundColor,
+        'goalFontColor': goalFontColor,
+        'goalCategory': goalCategory,
     });
   }
 
-    // Currenty unused
-    Future updateUserWillingnessToPay(bool willToPay) async {
+  // Testing button
+  Future updateUserWillingnessToPay(bool willToPay) async {
     return await rytaUsersCollection.doc(uid).update({
         'willToPay': willToPay,
     });
@@ -54,6 +58,9 @@ class DatabaseService {
         goalmotivation: doc.data()['goalmotivation'] ?? '',
         imageUrl: doc.data()['imageUrl'] ?? '',
         imageID: doc.data()['imageID'] ?? '',
+        goalBackgoundColor: doc.data()['goalBackgoundColor'] ?? '',
+        goalFontColor: doc.data()['goalFontColor'] ?? '',
+        goalCategory: doc.data()['goalCategory'] ?? '',
       );
     }).toList();
   }

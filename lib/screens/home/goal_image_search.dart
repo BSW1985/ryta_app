@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/constants.dart';
@@ -8,6 +10,9 @@ import 'package:ryta_app/widgets/image_tile.dart';
 
 // second screen of the goal definition process - unsplash image search
 class GoalImageSearch extends StatefulWidget {
+
+  final String goalname;
+  GoalImageSearch(this.goalname);  
 
   @override
   _GoalImageSearchState createState() => _GoalImageSearchState();
@@ -27,12 +32,13 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   String keyword;
 
   TextEditingController nameHolder = TextEditingController();
+  
 
 @override
   initState() {
     super.initState();
     // initial image Request
-    _loadImages();
+    _loadImages(keyword: widget.goalname);
   }
 
   /// Resets the state to the initial state.
@@ -105,7 +111,11 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
+  Widget build(BuildContext context) {
+    
+    final goal = Provider.of<Goal>(context);
+
+    return WillPopScope(
         onWillPop: () async {
           if (keyword != null) {
             _resetImages();
@@ -129,7 +139,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                         },
                       ),
                   backgroundColor: Colors.white,
-                  elevation: 0.0,
+                  elevation: 1.0,
                   centerTitle: true,
                   title: SizedBox(
                       height: 70,
@@ -146,7 +156,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                   _buildTitle(),
 
                   //App bar
-                  _buildSearchAppBar(),
+                  _buildSearchAppBar(goal),
 
                   //Grid view with all the images
                   _buildImageGrid(orientation: orientation),
@@ -163,20 +173,21 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
           ),
 
   );
-  
+  }
+
   Widget _buildTitle() => SliverPadding(
     padding: const EdgeInsets.all(16.0),
     sliver: SliverToBoxAdapter(
       child: Center(
           child: Text(
-          "Let's find the best image for this goal:",
+          "Let's find an image for your target",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
       ),
     ),
   );
   
-  Widget _buildSearchAppBar() => SliverAppBar(
+  Widget _buildSearchAppBar(goal) => SliverAppBar(
       backgroundColor: Colors.white,
       //Appbar Title
       title:
@@ -184,7 +195,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
           // either search-field or just the title
           TextField(
               keyboardType: TextInputType.text,
-              decoration: textInputDecoration.copyWith(hintText: 'Search...'),
+              decoration: textInputDecoration.copyWith(hintText: goal.goalname),
               // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
               onSubmitted: (String keyword) =>
 
