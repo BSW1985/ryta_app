@@ -26,6 +26,11 @@ class _GoalsListState extends State<GoalsList> {
       final goals = Provider.of<List<Goal>>(context);
       final user = Provider.of<RytaUser>(context);
 
+      // extracting just the first name
+      String wholeName = user.displayName;
+      int i = wholeName.indexOf(' ');
+      String firstName = wholeName.substring(0, i);
+
       // keys for Unsplash are confidential
                 if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
                     return AlertDialog(
@@ -51,7 +56,7 @@ class _GoalsListState extends State<GoalsList> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Welcome, #### !',
+              Text('Welcome, $firstName!',
                       style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 28.0),
                     ), 
               SizedBox(height: 20.0),
@@ -222,15 +227,15 @@ class _GoalsListState extends State<GoalsList> {
     ),
   );
   }
-    Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    if (hexColor.length == 8) {
-      return Color(int.parse("0x$hexColor"));
-    }
-  }
+  //   Color _getColorFromHex(String hexColor) {
+  //   hexColor = hexColor.replaceAll("#", "");
+  //   if (hexColor.length == 6) {
+  //     hexColor = "FF" + hexColor;
+  //   }
+  //   if (hexColor.length == 8) {
+  //     return Color(int.parse("0x$hexColor"));
+  //   }
+  // }
 }
 
 ///// OLD GoalsList using GoalTile

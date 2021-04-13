@@ -30,11 +30,35 @@ class _SettingsFormState extends State<SettingsForm> {
               child: Form(
               child: Column(
                 children: <Widget>[
-                  // Implementation of the log in button.
-                  SizedBox(height: 20.0),
-                  Text('Your Email:'),
-                  Text(user.email.toString()),
-                  SizedBox(height: 20.0),
+                  // SizedBox(height: 20.0),
+                  // username
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30.0, left: 30.0, right:30.0, bottom:5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(user.displayName,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+                            ),
+                        SizedBox(width: 40.0),
+                      // settings
+                      IconButton(
+                          
+                          icon: Icon(
+                            Icons.settings,
+                            color: Color(0xFF995C75),
+                          ),
+                          tooltip: 'Image Info',
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 20.0),
+                  // email
+                  Text(user.email,
+                      style: TextStyle(fontSize: 17.0),),
+                  SizedBox(height: 30.0),
                   ElevatedButton(
                     child: Text(
                       'LOGOUT',
@@ -45,10 +69,14 @@ class _SettingsFormState extends State<SettingsForm> {
 
                         }
                     ),
-                  SizedBox(height: 70.0),
-                  Text(
-                  "Unleash Ryta's full potential:",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+                  SizedBox(height: 30.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right:15.0),
+                    child: Text(
+                    "Unleash Ryta's full potential:",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+                    ),
                   ),
                   SizedBox(height: 25.0),
                   Padding(

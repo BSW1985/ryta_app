@@ -9,7 +9,7 @@ class AuthService {
 
   // create user object based on firebase user
   RytaUser _userFromFirebaseUser(User user) {
-    return user != null ? RytaUser(uid: user.uid, email: user.email, name: user.displayName) : null;
+    return user != null ? RytaUser(uid: user.uid, email: user.email, displayName: user.displayName) : null;
   }
 
   // Gets called when Auth changes occurs.
@@ -51,6 +51,7 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
+      user.updateProfile(displayName: username);
 
       // create a new document for the user with the uid
       await DatabaseService(uid: user.uid).updateUserData(username, email); //pass the name from registration form
