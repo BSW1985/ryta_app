@@ -38,7 +38,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   initState() {
     super.initState();
     // initial image Request
-    _loadImages(keyword: widget.goalname);
+    _loadImages();
   }
 
   /// Resets the state to the initial state.
@@ -195,7 +195,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
           // either search-field or just the title
           TextField(
               keyboardType: TextInputType.text,
-              decoration: textInputDecoration.copyWith(hintText: goal.goalname),
+              decoration: textInputDecoration.copyWith(hintText: 'Search...'),
               // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
               onSubmitted: (String keyword) =>
 

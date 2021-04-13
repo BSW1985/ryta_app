@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
 
@@ -69,5 +70,41 @@ class AuthService {
       return null;
     }
   }
+
+  //Log in using google
+  Future<dynamic> googleSignIn() async {
+    try {
+    // Step 1
+    GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    // Step 2
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    UserCredential _res = await _auth.signInWithCredential(credential);
+    User user = _res.user;
+ 
+      // create a new document for the user with the uid
+      await DatabaseService(uid: user.uid).updateUserData(user.displayName, user.email); //pass the name from registration form
+      return _userFromFirebaseUser(user);
+    } catch(e) {
+      print(e.toString());
+      return null;
+    }
+  }
+  //   //Add the data to the database
+  //   userProfile = UserProfile.fromFirebaseUser(firebaseUser);
+  //   await FirestoreService.getUserData();
+  //   if (userProfile.uid == null || userProfile.email == null) {
+  //     userProfile = UserProfile.fromFirebaseUser(firebaseUser);
+  //     await FirestoreService.setUserData();
+  //   }
+
+  //   //Get the data from the database
+  //   FirestoreService.getUserData();
+
+  //   return firebaseUser;
+  // }
 
 }

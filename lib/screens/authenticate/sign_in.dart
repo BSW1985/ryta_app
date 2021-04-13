@@ -138,7 +138,50 @@ class _SignInState extends State<SignIn> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
                       text: "SIGN UP WITH GOOGLE",
-                      onPressed: () {},
+                      onPressed: () {
+
+                    //LOGIN USING GOOGLE HERE
+                    Loading.showLoading(context);
+
+                    // AuthService authService = new AuthService();
+                    var user = _auth.googleSignIn();
+
+                    //Pop the loading
+                    Navigator.of(context).pop(false);
+
+                    //Check if the login was successful
+                    if (user == null) 
+                    // {
+                      //Login failed
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          // return object of type Dialog
+                          return AlertDialog(
+                            title: Text("Failed to log in!"),
+                            content: Text(
+                                "Please make sure your Google Account is usable. Also make sure that you have a active internet connection, and try again."),
+                            actions: <Widget>[
+                              // usually buttons at the bottom of the dialog
+                              new ElevatedButton(
+                                child: new Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    // } else {
+                    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
+                    // }
+
+
+
+
+
+                      },
                     ),
                   SizedBox(height: 10.0),
                   Text(
