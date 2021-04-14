@@ -9,6 +9,7 @@ class AuthService {
 
   // create user object based on firebase user
   RytaUser _userFromFirebaseUser(User user) {
+    
     return user != null ? RytaUser(uid: user.uid, email: user.email, displayName: user.displayName) : null;
   }
 
@@ -54,7 +55,7 @@ class AuthService {
       user.updateProfile(displayName: username);
 
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData(username, email); //pass the name from registration form
+      await DatabaseService(uid: user.uid).initializeUserData(username, email); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());
@@ -87,7 +88,7 @@ class AuthService {
     User user = _res.user;
  
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).updateUserData(user.displayName, user.email); //pass the name from registration form
+      await DatabaseService(uid: user.uid).initializeUserData(user.displayName, user.email); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());

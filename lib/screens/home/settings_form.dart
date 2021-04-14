@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/models/user_file.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,22 +18,48 @@ class _SettingsFormState extends State<SettingsForm> {
 
     final AuthService _auth = AuthService();
 
+    int price = 0;
+
+    bool _checkboxListTile1 = false;
+    bool _checkboxListTile2 = false;
+    bool _checkboxListTile3 = false;
+    bool _checkboxListTile4 = false;
+
   @override
   Widget build(BuildContext context) {
 
     final user = Provider.of<RytaUser>(context);
+    final userfile = Provider.of<UserFile>(context);
+
+    if (userfile==null)
+      return 
+        Container();
+      else
+
+    if(userfile.willToPay==true) {
+    _checkboxListTile1 = userfile.package1;
+    _checkboxListTile2 = userfile.package2;
+    _checkboxListTile3 = userfile.package3;
+    _checkboxListTile4 = userfile.package4;
+    price=userfile.price;}
 
 
-    return Scaffold(
+    return NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
+            // ignore: missing_return
+            onNotification: (overscroll) {
+              overscroll.disallowGlow();
+            },
+      child: Scaffold(
       backgroundColor: Colors.white,
       body: 
 
-      Center(
-              child: Form(
+      ListView(
+          children: <Widget>[
+            // SizedBox(height: 20.0),
+            // username
+            Form(
               child: Column(
                 children: <Widget>[
-                  // SizedBox(height: 20.0),
-                  // username
                   Padding(
                     padding: const EdgeInsets.only(top: 30.0, left: 30.0, right:30.0, bottom:5.0),
                     child: Row(
@@ -48,134 +76,249 @@ class _SettingsFormState extends State<SettingsForm> {
                             Icons.settings,
                             color: Color(0xFF995C75),
                           ),
-                          tooltip: 'Image Info',
+                          tooltip: 'Settings',
                           onPressed: () {},
                         ),
                       ],
                     ),
                   ),
-                  // SizedBox(height: 20.0),
-                  // email
-                  Text(user.email,
-                      style: TextStyle(fontSize: 17.0),),
-                  SizedBox(height: 30.0),
-                  ElevatedButton(
-                    child: Text(
-                      'LOGOUT',
-                      ),
-                    onPressed: () async {
+
+            // SizedBox(height: 20.0),
+            // email
+            Text(user.email,
+            textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17.0),),
+            SizedBox(height: 30.0),
+            ElevatedButton(
+              style: ButtonStyle(
+              elevation: MaterialStateProperty.all<double>(0),
+              padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+              // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+              // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+              //         borderRadius: BorderRadius.circular(15.0))),
+              ),
+              child: Text(
+                'LOGOUT',
+                ),
+              onPressed: () async {
   
-                    await _auth.signOut();
+              await _auth.signOut();
 
-                        }
-                    ),
-                  SizedBox(height: 30.0),
+                  }
+              ),
+            SizedBox(height: 10.0),
+
+            Visibility(
+              // visible: (userfile.willToPay!=true),
+              child: Column(
+                children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right:15.0),
-                    child: Text(
-                    "Unleash Ryta's full potential:",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
-                    ),
+                       padding: const EdgeInsets.only(left: 40.0, right:40.0),
+                    child: Divider(
+                                    color: Colors.black,
+                                    height: 50,
+                                  ),
                   ),
-                  SizedBox(height: 25.0),
-                  Padding(
-                    padding: const EdgeInsets.only(left:50.0, right: 50.0),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.check_circle_outline, color: Colors.green[700]),
-                          minVerticalPadding: 0.0,
-                          contentPadding: EdgeInsets.only(top: 0.0, bottom: 0.0),
-                          title: new Text('Smart Notifications', style: TextStyle(fontWeight: FontWeight.bold),),
-                          subtitle: new Text('Get notified about your goal everytime you need it the most'),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.check_circle_outline, color: Colors.green[700]),
-                          minVerticalPadding: 0.0,
-                          contentPadding: EdgeInsets.only(top: 0.0, bottom: 0.0),
-                          title: new Text('Upload your own images', style: TextStyle(fontWeight: FontWeight.bold),),
-                          subtitle: new Text('Personalize Ryta even more to suit you best'),
-                        )
-                      ],
+
+            SizedBox(height: 10.0),
+
+            Text(
+            "Ryta Premium:",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+            ),
+           
+            SizedBox(height: 15.0),
+            
+            Padding(
+              padding: const EdgeInsets.only(left:20.0, right: 20.0),
+              child: Column(
+                children: <Widget>[
+                  CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // checkColor: Color(0xFFF9A825),
+                    activeColor: Color(0xFFF9A825),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0, right:8.0),
+                      child: Text('Get practical', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
                     ),
-                  ),
-                  SizedBox(height: 25.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      elevation: MaterialStateProperty.all<double>(0),
-                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFF9A825)),
-                    ),
-                    child: Text(
-                      'UPGRADE TO PREMIUM',
-                      ),
-                    onPressed: () async {
-  
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                      title: Row(
-                          children:[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Icon(Icons.thumb_up_alt, color: Color(0xFFF9A825), size: 40.0,),
-                            ),
-                            Flexible(child: Text('We are doing our best to make these features available!')),
-                            ]
-                          ),
-                      content:
-                        RichText(
-                          text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                
-                                // ignore: todo
-                                // TODO: make the link work!!!
-                                TextSpan(
-                                  text: "info@ryta.eu",
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                                    recognizer: TapGestureRecognizer()..onTap =  () async{
-                                      var url = 'https://www.ryta.eu/';
-                                          if (await canLaunch(url)) {
-                                            await launch(url.toString());
-                                          } else {
-                                            throw 'Could not launch $url';
-                                          }
-                                    }
-                                ),
-                                TextSpan(
-                                  text: ". Your Ryta team :)",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ]
-                          ),
-                        ),
-                      // actions: <Widget>[
-                      //   TextButton(
-                      //     child: Text('Back to the app'),
-                      //     onPressed: (){
-                      //       Navigator.of(context).pop();
-                      //     }
-                      //   ),
-                      // ],
-                    ),
-                    );
-
-
-                    // Set willToPay to True
-                    DatabaseService(uid: user.uid).updateUserWillingnessToPay(true);
-
-                    
-
+                    subtitle: Text('connect Ryta to your Calendar, ToDo list...', style: TextStyle(fontSize: 17.0)),
+                    value: _checkboxListTile1,
+                    onChanged: (value) {
+                      setState(() {
+                        if(userfile.willToPay!=true) {
+                        _checkboxListTile1 = !_checkboxListTile1;
+                        if (_checkboxListTile1==true)
+                        price=price+1;
+                        if (_checkboxListTile1==false)
+                        price=price-1;
                         }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // checkColor: Color(0xFFF9A825),
+                    activeColor: Color(0xFFF9A825),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0, right:8.0),
+                      child: Text('Personalize', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
                     ),
+                    subtitle: Text('personal pictures, favorite quote, design...', style: TextStyle(fontSize: 17.0)),
+                    value: _checkboxListTile2,
+                    onChanged: (value) {
+                      setState(() {
+                        if(userfile.willToPay!=true) {
+                        _checkboxListTile2 = !_checkboxListTile2;
+                        if (_checkboxListTile2==true)
+                        price=price+1;
+                        if (_checkboxListTile2==false)
+                        price=price-1;
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // checkColor: Color(0xFFF9A825),
+                    activeColor: Color(0xFFF9A825),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0, right:8.0),
+                      child: Text('Push yourself', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
+                    ),
+                    subtitle: Text('Smart push notification, timer...', style: TextStyle(fontSize: 17.0)),
+                    value: _checkboxListTile3,
+                    onChanged: (value) {
+                      setState(() {
+                        if(userfile.willToPay!=true) {
+                        _checkboxListTile3 = !_checkboxListTile3;
+                        if (_checkboxListTile3==true)
+                        price=price+1;
+                        if (_checkboxListTile3==false)
+                        price=price-1;
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // checkColor: Color(0xFFF9A825),
+                    activeColor: Color(0xFFF9A825),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0, right:8.0),
+                      child: Text('Get the most out of your data', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
+                    ),
+                    subtitle: Text('Connect your favourite Apps and let Ryta analyze the data...', style: TextStyle(fontSize: 17.0)),
+                    value: _checkboxListTile4,
+                    onChanged: (value) {
+                      setState(() {
+                        if(userfile.willToPay!=true) {
+                        _checkboxListTile4 = !_checkboxListTile4;
+                        if (_checkboxListTile4==true)
+                        price=price+1;
+                        if (_checkboxListTile4==false)
+                        price=price-1;
+                        }
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
-      ),
+            
+            SizedBox(height: 15.0),
+            
+            Text(
+              "$price.99 EUR",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, fontSize: 25.0),
+              ),
+            
+            SizedBox(height: 20.0),
+            
+            ElevatedButton(
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all<double>(0),
+                backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFF9A825)),
+              ),
+              child: Text(
+                'UPGRADE TO PREMIUM',
+                style: TextStyle(fontWeight: FontWeight.bold)
+                ),
+              onPressed: () async {
+
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                title: Row(
+                    children:[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Icon(Icons.thumb_up_alt, color: Color(0xFFF9A825), size: 40.0,),
+                      ),
+                      Flexible(child: Text('We are doing our best to make these features available!')),
+                      ]
+                    ),
+                content:
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          
+                          // ignore: todo
+                          // TODO: make the link work!!!
+                          TextSpan(
+                            text: "info@ryta.eu",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                              recognizer: TapGestureRecognizer()..onTap =  () async{
+                                var url = 'https://www.ryta.eu/';
+                                    if (await canLaunch(url)) {
+                                      await launch(url.toString());
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                              }
+                          ),
+                          TextSpan(
+                            text: ". Your Ryta team :)",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ]
+                    ),
+                  ),
+                // actions: <Widget>[
+                //   TextButton(
+                //     child: Text('Back to the app'),
+                //     onPressed: (){
+                //       Navigator.of(context).pop();
+                //     }
+                //   ),
+                // ],
+              ),
+              );
+              if(userfile.willToPay!=true)
+              // Set willToPay to True
+              DatabaseService(uid: user.uid).updateUserWillingnessToPay(true,_checkboxListTile1, _checkboxListTile2, _checkboxListTile3, _checkboxListTile4, price);
+
+
+                  }
+              ),
+              
+              SizedBox(height: 40.0),
+                              ],
+              ),
+            ),
+              ],
+              ),
+            ),
+          ],
+        ),
+    ),
     );
   }
 }

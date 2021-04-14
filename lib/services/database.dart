@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ryta_app/models/goal.dart';
+import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/models/user_file.dart';
 
 class DatabaseService {
   
@@ -10,13 +12,56 @@ class DatabaseService {
   // collection reference
   final CollectionReference rytaUsersCollection = FirebaseFirestore.instance.collection('ryta_users');
 
-  Future updateUserData(String name, String email) async {
+
+  // USERFILE - Handling communication with Firestore
+  Future initializeUserData(String name, String email) async {
     return await rytaUsersCollection.doc(uid).set({
       'name': name,
       'email': email,
+      'willToPay': false,
+      'package1': false,
+      'package2': false,
+      'package3': false,
+      'package4': false,
+      'price': 0,
     });
   }
 
+  // Testing button
+  Future updateUserWillingnessToPay(bool willToPay, bool package1, bool package2, bool package3, bool package4, int price) async {
+    return await rytaUsersCollection.doc(uid).update({
+        'willToPay': willToPay,
+        'package1': package1,
+        'package2': package2,
+        'package3': package3,
+        'package4': package4,
+        'price': price,
+    });
+  }
+
+// Stream of USERFILE called in home
+// 
+  Stream<UserFile> get userfile {
+    return rytaUsersCollection.doc(uid).snapshots()
+    .map(_userFileFromSnapshot);
+  }
+
+  UserFile _userFileFromSnapshot(DocumentSnapshot snapshot) {
+      return UserFile(
+        name: snapshot.data()['name'] ?? '',
+        willToPay: snapshot.data()['willToPay'] ?? '',
+        package1: snapshot.data()['package1'] ?? '',
+        package2: snapshot.data()['package2'] ?? '',
+        package3: snapshot.data()['package3'] ?? '',
+        package4: snapshot.data()['package4'] ?? '',
+        price: snapshot.data()['price'] ?? '',
+      );
+    }
+  
+
+
+  // GOALS - Handling communication with Firestore 
+  
   Future addUserGoals(String goalname, String goalmotivation, String imageUrl, String imageID, String goalBackgoundColor, String goalFontColor, String goalCategory) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
         'goalname': goalname,
@@ -26,13 +71,6 @@ class DatabaseService {
         'goalBackgoundColor': goalBackgoundColor,
         'goalFontColor': goalFontColor,
         'goalCategory': goalCategory,
-    });
-  }
-
-  // Testing button
-  Future updateUserWillingnessToPay(bool willToPay) async {
-    return await rytaUsersCollection.doc(uid).update({
-        'willToPay': willToPay,
     });
   }
 
@@ -49,6 +87,7 @@ class DatabaseService {
     return await rytaUsersCollection.doc(uid).collection('goals').doc(goalID).delete();
   }
 
+// Stream of goals called in home
   // goal list from snapshot
   List<Goal> _goalListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc){

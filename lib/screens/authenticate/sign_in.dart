@@ -136,8 +136,8 @@ class _SignInState extends State<SignIn> {
                             borderRadius: BorderRadius.circular(15.0),
                             side: BorderSide(color: Colors.grey)
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
-                      text: "SIGN UP WITH GOOGLE",
+                      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                      text: "CONTINUE WITH GOOGLE",
                       onPressed: () {
 
                     //LOGIN USING GOOGLE HERE
