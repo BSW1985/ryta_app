@@ -44,6 +44,7 @@ dependencies:
   flutter_native_splash: ^1.1.7+1
   flutter_signin_button: ^2.0.0
   palette_generator: ^0.3.0
+  google_sign_in: ^5.0.0
 
 
 dev_dependencies:

@@ -2,7 +2,11 @@
 class RytaUser {
   final String uid;
   final String email;
-  final String name;
+  final String displayName;
+  final bool emailVerified;
 
-  RytaUser({this.uid, this.email, this.name});
+
+  RytaUser({ this.uid, this.email, this.displayName, this.emailVerified });
+
 }
+
