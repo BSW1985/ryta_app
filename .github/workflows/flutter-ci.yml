@@ -5,7 +5,9 @@ name: Flutter CI
 on:
   push:
     branches:
-    - "**"
+    - master
+    - marek_branch
+    - Framtale
     
 # on: push    # Default will running for every branch.
     
