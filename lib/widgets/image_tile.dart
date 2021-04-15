@@ -16,12 +16,16 @@ class ImageTile extends StatelessWidget {
 
   /// Returns a placeholder to show until an image is loaded.
   Widget _buildImagePlaceholder({UnsplashImage image}) => Container(
-        color: image != null ? Color(int.parse(image.getColor().substring(1, 7), radix: 16) + 0x64000000) : Colors.grey[200],
+        color: image != null
+            ? Color(int.parse(image.getColor().substring(1, 7), radix: 16) +
+                0x64000000)
+            : Colors.grey[200],
       );
 
   /// Returns a error placeholder to show until an image is loaded.
-  Widget _buildImageErrorWidget() =>
-      Container(color: Colors.grey[200], child: Center(child: Icon(Icons.broken_image, color: Colors.grey[400])));
+  Widget _buildImageErrorWidget() => Container(
+      color: Colors.grey[200],
+      child: Center(child: Icon(Icons.broken_image, color: Colors.grey[400])));
 
   @override
   Widget build(BuildContext context) => InkWell(
@@ -42,8 +46,10 @@ class ImageTile extends StatelessWidget {
                 child: _addRoundedCorners(
                   CachedNetworkImage(
                     imageUrl: image?.getSmallUrl(),
-                    placeholder: (context, url) => _buildImagePlaceholder(image: image),
-                    errorWidget: (context, url, obj) => _buildImageErrorWidget(),
+                    placeholder: (context, url) =>
+                        _buildImagePlaceholder(image: image),
+                    errorWidget: (context, url, obj) =>
+                        _buildImageErrorWidget(),
                     fit: BoxFit.cover,
                   ),
                 ),

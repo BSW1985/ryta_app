@@ -3,7 +3,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // Simple loading screen
 class Loading extends StatelessWidget {
-
   final Color color;
   Loading(this.color);
 
@@ -17,7 +16,7 @@ class Loading extends StatelessWidget {
           color: Color(0xFF995C75),
           size: 30.0,
         ),
-      ), 
+      ),
     );
   }
 }
