@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ryta_app/models/goal.dart';
@@ -15,6 +17,10 @@ class DatabaseService {
 
   // USERFILE - Handling communication with Firestore
   Future initializeUserData(String name, String email) async {
+
+    // initialize the price between 2.99 and 7.99
+    double randomNumber = 0.99 + 2 + Random().nextInt(5);
+
     return await rytaUsersCollection.doc(uid).set({
       'name': name,
       'email': email,
@@ -22,19 +28,20 @@ class DatabaseService {
       'package1': false,
       'package2': false,
       'package3': false,
-      'package4': false,
-      'price': 0,
+      // 'package4': false,
+      'price': 0.111,
+      'priceInitialized': randomNumber,
     });
   }
 
   // Testing button
-  Future updateUserWillingnessToPay(bool willToPay, bool package1, bool package2, bool package3, bool package4, int price) async {
+  Future updateUserWillingnessToPay(bool willToPay, bool package1, bool package2, bool package3, double price) async {
     return await rytaUsersCollection.doc(uid).update({
         'willToPay': willToPay,
         'package1': package1,
         'package2': package2,
         'package3': package3,
-        'package4': package4,
+        // 'package4': package4,
         'price': price,
     });
   }
@@ -53,8 +60,9 @@ class DatabaseService {
         package1: snapshot.data()['package1'] ?? '',
         package2: snapshot.data()['package2'] ?? '',
         package3: snapshot.data()['package3'] ?? '',
-        package4: snapshot.data()['package4'] ?? '',
+        // package4: snapshot.data()['package4'] ?? '',
         price: snapshot.data()['price'] ?? '',
+        priceInitialized: snapshot.data()['priceInitialized'] ?? '',
       );
     }
   

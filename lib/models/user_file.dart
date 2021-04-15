@@ -6,9 +6,10 @@ class UserFile{
   final bool package1;
   final bool package2;
   final bool package3;
-  final bool package4;
-  final int price;
+  // final bool package4;
+  final double price;
+  final double priceInitialized;
 
-  UserFile({ this.name, this.email, this.willToPay, this.package1, this.package2, this.package3, this.package4, this.price });
+  UserFile({ this.name, this.email, this.willToPay, this.package1, this.package2, this.package3, this.price, this.priceInitialized });
 
 }
