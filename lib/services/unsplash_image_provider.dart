@@ -23,7 +23,8 @@ class UnsplashImageProvider {
     // receive image data from unsplash
     var data = await _getImageData(url);
     // generate UnsplashImage List from received data
-    List<UnsplashImage> images = List<UnsplashImage>.generate(data.length, (index) {
+    List<UnsplashImage> images =
+        List<UnsplashImage>.generate(data.length, (index) {
       return UnsplashImage(data[index]);
     });
     // return images
@@ -34,13 +35,16 @@ class UnsplashImageProvider {
   /// Returns a list where the first element is the [totalPages] available and the second element is a list of [UnsplashImage].
   /// [page] is the page index for the api request.
   /// [perPage] sets the length of the returned list.
-  static Future<List> loadImagesWithKeyword(String keyword, {int page = 1, int perPage = 10}) async {
+  static Future<List> loadImagesWithKeyword(String keyword,
+      {int page = 1, int perPage = 10}) async {
     // Search for image associated with the keyword
-    String url = 'https://api.unsplash.com/search/photos?query=$keyword&page=$page&per_page=$perPage&order_by=popular';
+    String url =
+        'https://api.unsplash.com/search/photos?query=$keyword&page=$page&per_page=$perPage&order_by=popular';
     // receive image data from unsplash associated to the given keyword
     var data = await _getImageData(url);
     // generate UnsplashImage List from received data
-    List<UnsplashImage> images = List<UnsplashImage>.generate(data['results'].length, (index) {
+    List<UnsplashImage> images =
+        List<UnsplashImage>.generate(data['results'].length, (index) {
       return UnsplashImage(data['results'][index]);
     });
     int totalPages = data['total_pages'];
@@ -56,7 +60,8 @@ class UnsplashImageProvider {
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
 
     // pass the client_id in the header
-    request.headers.add('Authorization', 'Client-ID ${Keys.UNSPLASH_API_CLIENT_ID}');
+    request.headers
+        .add('Authorization', 'Client-ID ${Keys.UNSPLASH_API_CLIENT_ID}');
 
     // wait for response
     HttpClientResponse response = await request.close();

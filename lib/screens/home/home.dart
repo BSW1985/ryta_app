@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
@@ -8,13 +7,13 @@ import 'package:ryta_app/screens/home/goal_definition.dart';
 import 'package:ryta_app/screens/home/settings_form.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/screens/home/goals_list.dart';
-class Home extends StatefulWidget{
+
+class Home extends StatefulWidget {
   @override
-  _Home createState()=> _Home();
+  _Home createState() => _Home();
 }
 
 class _Home extends State<Home> {
-
   // final AuthService _auth = AuthService();
 
   int _selectedIndex = 0;
@@ -25,10 +24,9 @@ class _Home extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<RytaUser>(context);
     final width = MediaQuery.of(context).size.width;
-    final iconLocation = width/4-22;
+    final iconLocation = width / 4 - 22;
 
     // Homescreen
     return  MultiProvider(

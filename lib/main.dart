@@ -6,8 +6,6 @@ import 'package:ryta_app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ryta_app/services/auth.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Provider listens to changes in AuthService(). The data is streamed to the wrapper.
-    return  StreamProvider<RytaUser>.value(
+    return StreamProvider<RytaUser>.value(
       initialData: null, //???
       value: AuthService().user,
       child: Provider<Goal>( // Provider listens for changes in goal definition and the data stream into all screens.

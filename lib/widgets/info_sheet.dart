@@ -4,7 +4,6 @@ import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/shared/loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 /// Bottom-sheet displaying info for a given [image].
 class InfoSheet extends StatelessWidget {
   final UnsplashImage image;
@@ -21,24 +20,30 @@ class InfoSheet extends StatelessWidget {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: 
-              image != null ? 
-                <Widget>[
+            children: image != null
+                ? <Widget>[
                     InkWell(
                       onTap: () => launch(image?.getUser()?.getHtmlLink()),
                       child: Row(
                         children: <Widget>[
-                          _buildUserProfileImage(image?.getUser()?.getMediumProfileImage()),
+                          _buildUserProfileImage(
+                              image?.getUser()?.getMediumProfileImage()),
                           Text(
                             '${image.getUser().getFirstName()} ${image?.getUser()?.getLastName()}',
-                            style: TextStyle(color: Colors.black87, fontSize: 18.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold),
                           ),
                           Spacer(),
                           Padding(
                             padding: const EdgeInsets.only(right: 16.0),
                             child: Text(
                               '${image.createdAtFormatted()}'.toUpperCase(),
-                              style: TextStyle(color: Colors.black26, fontSize: 12.0, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Colors.black26,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -52,14 +57,14 @@ class InfoSheet extends StatelessWidget {
                     // filter null views
                   ].where((w) => w != null).toList()
                 : <Widget>[Loading(Colors.white)]),
-          decoration: new BoxDecoration(
+        decoration: new BoxDecoration(
           color: Colors.grey[50],
           borderRadius: new BorderRadius.only(
-              topLeft: const Radius.circular(10.0),
-              topRight: const Radius.circular(10.0),
-              ),
-              ),
-              );
+            topLeft: const Radius.circular(10.0),
+            topRight: const Radius.circular(10.0),
+          ),
+        ),
+      );
 
   /// Builds a round image widget displaying a profile image from a given [url].
   Widget _buildUserProfileImage(String url) => Padding(
@@ -72,7 +77,8 @@ class InfoSheet extends StatelessWidget {
   /// Builds widget displaying a given [description] for an image.
   Widget _buildDescriptionWidget(String description) => description != null
       ? Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 3.0, bottom: 16.0),
+          padding: const EdgeInsets.only(
+              left: 16.0, right: 16.0, top: 3.0, bottom: 16.0),
           child: Text(
             '$description',
             style: TextStyle(
@@ -99,7 +105,8 @@ class InfoSheet extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    '${location.getCity()}, ${location.getCountry()}'.toUpperCase(),
+                    '${location.getCity()}, ${location.getCountry()}'
+                        .toUpperCase(),
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 14.0,

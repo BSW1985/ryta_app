@@ -17,8 +17,7 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
-
-    final AuthService _auth = AuthService();
+  final AuthService _auth = AuthService();
 
     double price = 0;
 
@@ -32,9 +31,9 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<RytaUser>(context);
     final userfile = Provider.of<UserFile>(context);
+
 
     if (userfile==null)
       return 

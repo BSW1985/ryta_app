@@ -2,7 +2,6 @@ import 'package:date_format/date_format.dart';
 import 'package:ryta_app/models/image_location.dart';
 import 'package:ryta_app/models/unsplash_user.dart';
 
-
 /// Model for Unsplash Image
 class UnsplashImage {
   var data;
