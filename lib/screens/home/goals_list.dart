@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/screens/home/goal_view.dart';
+import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
@@ -20,16 +22,25 @@ class GoalsList extends StatefulWidget {
 /// Provide a state for [GoalsList].
 class _GoalsListState extends State<GoalsList> {
 
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) { 
     
       final goals = Provider.of<List<Goal>>(context);
       final user = Provider.of<RytaUser>(context);
 
+      String firstName;
+
       // extracting just the first name
-      String wholeName = user.displayName;
-      int i = wholeName.indexOf(' ');
-      String firstName = wholeName.substring(0, i);
+      if (user.displayName!=null) {
+          if (user.displayName.length>1) {
+          List<String> wordList = user.displayName.split(" ");
+                firstName=wordList[0];
+          } else {
+                firstName=user.displayName;
+          }
+      }
 
       // keys for Unsplash are confidential
                 if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
@@ -45,10 +56,64 @@ class _GoalsListState extends State<GoalsList> {
                         ),
                       ],
                     );
-      
+      if (user.emailVerified!=true)
+        return Container(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Please verify your email to continue.', style: TextStyle(color: Colors.black, fontSize: 17.0)),
+            SizedBox(height:20.0),
+            Loading(Colors.white),
+            SizedBox(height:20.0),
+            ElevatedButton(
+              style: ButtonStyle(
+              elevation: MaterialStateProperty.all<double>(0),
+              padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+              // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+              // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+              //         borderRadius: BorderRadius.circular(15.0))),
+              ),
+              child: Text(
+                'DONE - TAKE ME TO SIGN IN',
+                ),
+              onPressed: () async {
+                DatabaseService(uid: user.uid).updateEmailVerified(user.emailVerified);
+                // await FirebaseAuth.instance.currentUser.reload();
+                await _auth.signOut();
+                  }
+              ),
+            // SizedBox(height:10.0),
+            // ElevatedButton(
+            //   style: ButtonStyle(
+            //   elevation: MaterialStateProperty.all<double>(0),
+            //   padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+            //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            //   // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+            //   // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            //   //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+            //   //         borderRadius: BorderRadius.circular(15.0))),
+            //   ),
+            //   child: Text(
+            //     'LOGOUT',
+            //     ),
+            //   onPressed: () async {
+  
+            //   await _auth.signOut();
+
+            //       }
+            //   ),
+          ],
+        ));
+        // print(user.emailVerified);
+        
+        // return 
+        //   Center(child: Text('please verify'));
+        //   // Loading(Colors.white);
+      else
       if (goals==null)
       return 
-        Container();
+        Loading(Colors.white);
       else
       if (goals.length == 0)
       return 

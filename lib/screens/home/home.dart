@@ -83,6 +83,7 @@ class _Home extends State<Home> {
                       icon: Icon(Icons.home_filled, color: _selectedIndex == 0 ? Color(0xFF995C75) : Colors.grey[400]),
                       padding: EdgeInsets.only(left: iconLocation), 
                       onPressed: () {
+                         if (user.emailVerified==true)
                           setState(() {
                             _selectedIndex = 0;
                           });
@@ -93,6 +94,8 @@ class _Home extends State<Home> {
                       icon: Icon(Icons.person, color: _selectedIndex == 1 ? Color(0xFF995C75) : Colors.grey[400]),
                       padding: EdgeInsets.only(right: iconLocation), 
                       onPressed: () {
+                        DatabaseService(uid: user.uid).updateEmailVerified(user.emailVerified);
+                        if (user.emailVerified==true) 
                           setState(() {
                             _selectedIndex = 1;
                           });
@@ -104,10 +107,12 @@ class _Home extends State<Home> {
 
             // Start a definition of a new goal 
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            
             floatingActionButton: FloatingActionButton(
                 elevation: 0.0,
                 clipBehavior: Clip.none,
                 onPressed: () async {
+            if (user.emailVerified==true)
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => GoalDefinition())
             );
             },

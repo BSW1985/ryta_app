@@ -16,7 +16,7 @@ class DatabaseService {
 
 
   // USERFILE - Handling communication with Firestore
-  Future initializeUserData(String name, String email) async {
+  Future initializeUserData(String name, String email, bool emailVerified) async {
 
     // initialize the price between 2.99 and 7.99
     double randomNumber = 0.99 + 2 + Random().nextInt(5);
@@ -24,6 +24,7 @@ class DatabaseService {
     return await rytaUsersCollection.doc(uid).set({
       'name': name,
       'email': email,
+      'emailVerified': emailVerified,
       'willToPay': false,
       'package1': false,
       'package2': false,
@@ -31,6 +32,13 @@ class DatabaseService {
       // 'package4': false,
       'price': 0.111,
       'priceInitialized': randomNumber,
+    });
+  }
+
+    Future updateEmailVerified(bool emailVerified) async {
+
+    return await rytaUsersCollection.doc(uid).update({
+      'emailVerified': emailVerified,
     });
   }
 

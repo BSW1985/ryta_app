@@ -6,6 +6,7 @@ import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/models/user_file.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
+import 'package:ryta_app/shared/loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 
@@ -37,12 +38,10 @@ class _SettingsFormState extends State<SettingsForm> {
 
     if (userfile==null)
       return 
-        Container();
+        Loading(Colors.white);
       else
       
     oneThird = num.parse((userfile.priceInitialized/3).toStringAsFixed(3));
-    print(userfile.priceInitialized);
-    print(oneThird);
 
     if(userfile.willToPay==true) {
     _checkboxListTile1 = userfile.package1;
