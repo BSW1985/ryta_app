@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
-import 'package:ryta_app/screens/home/home.dart';
-import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
 import 'package:ryta_app/widgets/goal_category_selection.dart';
@@ -490,6 +488,7 @@ class _ImagePageState extends State<ImagePage> {
     }
     if (hexColor.length == 8) {
       return Color(int.parse("0x$hexColor"));
-    }
+    } else
+      return null;
   }
 }

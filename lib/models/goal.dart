@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 // Model for a goal during its definition
 
 class Goal {
