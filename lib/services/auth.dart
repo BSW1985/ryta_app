@@ -8,8 +8,13 @@ class AuthService {
 
   // create user object based on firebase user
   RytaUser _userFromFirebaseUser(User user) {
-    
-    return user != null ? RytaUser(uid: user.uid, email: user.email, displayName: user.displayName, emailVerified: user.emailVerified) : null;
+    return user != null
+        ? RytaUser(
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            emailVerified: user.emailVerified)
+        : null;
   }
 
   // Gets called when Auth changes occurs.
@@ -58,8 +63,8 @@ class AuthService {
       await user.sendEmailVerification();
 
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).initializeUserData(username, email, user.emailVerified); //pass the name from registration form
-
+      await DatabaseService(uid: user.uid).initializeUserData(username, email,
+          user.emailVerified); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -80,21 +85,24 @@ class AuthService {
   //Log in using google
   Future<dynamic> googleSignIn() async {
     try {
-    // Step 1
-    GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-    // Step 2
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    UserCredential _res = await _auth.signInWithCredential(credential);
-    User user = _res.user;
- 
+      // Step 1
+      GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+      // Step 2
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      UserCredential _res = await _auth.signInWithCredential(credential);
+      User user = _res.user;
+
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).initializeUserData(user.displayName, user.email, user.emailVerified); //pass the name from registration form
+      await DatabaseService(uid: user.uid).initializeUserData(
+          user.displayName,
+          user.email,
+          user.emailVerified); //pass the name from registration form
       return _userFromFirebaseUser(user);
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
       return null;
     }

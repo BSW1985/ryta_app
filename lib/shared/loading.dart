@@ -19,6 +19,7 @@ class Loading extends StatelessWidget {
       ),
     );
   }
+
   //Show loading pop up
   static void showLoading(BuildContext context) {
     showDialog(
@@ -26,7 +27,8 @@ class Loading extends StatelessWidget {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30.0))),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0))),
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Row(

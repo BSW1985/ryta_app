@@ -20,13 +20,24 @@ class GoalsList extends StatefulWidget {
 
 /// Provide a state for [GoalsList].
 class _GoalsListState extends State<GoalsList> {
-
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
     final goals = Provider.of<List<Goal>>(context);
     final user = Provider.of<RytaUser>(context);
+    
+    String firstName;
+
+    // extracting just the first name
+    if (user.displayName != null) {
+      if (user.displayName.length > 1) {
+        List<String> wordList = user.displayName.split(" ");
+        firstName = wordList[0];
+      } else {
+        firstName = user.displayName;
+      }
+    }
 
     // keys for Unsplash are confidential
     if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
@@ -41,16 +52,72 @@ class _GoalsListState extends State<GoalsList> {
               }),
         ],
       );
+    if (user.emailVerified != true)
+      return Container(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Please verify your email to continue.',
+              style: TextStyle(color: Colors.black, fontSize: 17.0)),
+          SizedBox(height: 20.0),
+          Loading(Colors.white),
+          SizedBox(height: 20.0),
+          ElevatedButton(
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all<double>(0),
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+                // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                //         borderRadius: BorderRadius.circular(15.0))),
+              ),
+              child: Text(
+                'DONE - TAKE ME TO SIGN IN',
+              ),
+              onPressed: () async {
+                DatabaseService(uid: user.uid)
+                    .updateEmailVerified(user.emailVerified);
+                // await FirebaseAuth.instance.currentUser.reload();
+                await _auth.signOut();
+              }),
+          // SizedBox(height:10.0),
+          // ElevatedButton(
+          //   style: ButtonStyle(
+          //   elevation: MaterialStateProperty.all<double>(0),
+          //   padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
+          //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+          //   // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+          //   // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+          //   //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+          //   //         borderRadius: BorderRadius.circular(15.0))),
+          //   ),
+          //   child: Text(
+          //     'LOGOUT',
+          //     ),
+          //   onPressed: () async {
 
-    if (goals == null)
-      return Container();
+          //   await _auth.signOut();
+
+          //       }
+          //   ),
+        ],
+      ));
+    // print(user.emailVerified);
+
+    // return
+    //   Center(child: Text('please verify'));
+    //   // Loading(Colors.white);
+    else if (goals == null)
+      return Loading(Colors.white);
     else if (goals.length == 0)
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome, #### !',
+              'Welcome, $firstName!',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -98,20 +165,11 @@ class _GoalsListState extends State<GoalsList> {
                       ),
                     );
 
-      String firstName;
-
-      // extracting just the first name
-      if (user.displayName!=null) {
-          if (user.displayName.length>1) {
-          List<String> wordList = user.displayName.split(" ");
-                firstName=wordList[0];
-          } else {
-                firstName=user.displayName;
-          }
-      }
-
-      // keys for Unsplash are confidential
-                if (Keys.UNSPLASH_API_CLIENT_ID == "ask_Marek")
+                  try {
+                    snapshot.data.getSmallUrl();
+                  } catch (e) {
+                    print(e.toString());
+                    print('Unable to acces Unsplash');
                     return AlertDialog(
                       elevation: 5.0,
                       title: Text('001: Unable to acces Unsplash'),
@@ -125,102 +183,7 @@ class _GoalsListState extends State<GoalsList> {
                       //   ),
                       // ],
                     );
-      if (user.emailVerified!=true)
-        return Container(child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Please verify your email to continue.', style: TextStyle(color: Colors.black, fontSize: 17.0)),
-            SizedBox(height:20.0),
-            Loading(Colors.white),
-            SizedBox(height:20.0),
-            ElevatedButton(
-              style: ButtonStyle(
-              elevation: MaterialStateProperty.all<double>(0),
-              padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
-              // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-              // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
-              // shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
-              //         borderRadius: BorderRadius.circular(15.0))),
-              ),
-              child: Text(
-                'DONE - TAKE ME TO SIGN IN',
-                ),
-              onPressed: () async {
-                DatabaseService(uid: user.uid).updateEmailVerified(user.emailVerified);
-                // await FirebaseAuth.instance.currentUser.reload();
-                await _auth.signOut();
                   }
-              ),
-            // SizedBox(height:10.0),
-            // ElevatedButton(
-            //   style: ButtonStyle(
-            //   elevation: MaterialStateProperty.all<double>(0),
-            //   padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0)),
-            //   // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-            //   // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
-            //   // shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            //   //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
-            //   //         borderRadius: BorderRadius.circular(15.0))),
-            //   ),
-            //   child: Text(
-            //     'LOGOUT',
-            //     ),
-            //   onPressed: () async {
-  
-            //   await _auth.signOut();
-
-            //       }
-            //   ),
-          ],
-        ));
-        // print(user.emailVerified);
-        
-        // return 
-        //   Center(child: Text('please verify'));
-        //   // Loading(Colors.white);
-      else
-      if (goals==null)
-      return 
-        Loading(Colors.white);
-      else
-      if (goals.length == 0)
-      return 
-        Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Welcome, $firstName!',
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 28.0),
-                    ), 
-              SizedBox(height: 20.0),
-              Text("Let's define your first goal.",
-                      style: TextStyle(color: Colors.black, fontSize: 17.0),
-                    ),
-              SizedBox(height: 20.0),
-              Icon(Icons.arrow_downward),
-              Icon(Icons.arrow_downward),
-            ],
-          ),
-        );
-      else
-      return 
-        Scaffold(
-          backgroundColor: Colors.white,
-          body:NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
-            // ignore: missing_return
-            onNotification: (overscroll) {
-              overscroll.disallowGlow();
-            },
-            child:ListView.builder(
-          // body: ListView.builder(
-                // controller: _controller,
-                itemCount: goals == null ? 0 : goals.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return FutureBuilder<UnsplashImage>(
-                    future: UnsplashImageProvider.loadImage(goals[index].imageID),
-                    builder: (BuildContext context, AsyncSnapshot<UnsplashImage> snapshot) {
-                        if (snapshot.hasData == false) 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ClipRRect(

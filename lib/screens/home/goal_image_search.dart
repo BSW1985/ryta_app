@@ -192,7 +192,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
             // either search-field or just the title
             TextField(
           keyboardType: TextInputType.text,
-          decoration: textInputDecoration.copyWith(hintText:  'Search...'),
+          decoration: textInputDecoration.copyWith(hintText: 'Search...'),
           // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
           onSubmitted: (String keyword) =>
 

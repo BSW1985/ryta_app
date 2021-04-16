@@ -1,5 +1,4 @@
-class UserFile{
-
+class UserFile {
   final String name;
   final String email;
   final bool willToPay;
@@ -10,6 +9,13 @@ class UserFile{
   final double price;
   final double priceInitialized;
 
-  UserFile({ this.name, this.email, this.willToPay, this.package1, this.package2, this.package3, this.price, this.priceInitialized });
-
+  UserFile(
+      {this.name,
+      this.email,
+      this.willToPay,
+      this.package1,
+      this.package2,
+      this.package3,
+      this.price,
+      this.priceInitialized});
 }
