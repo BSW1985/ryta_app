@@ -120,5 +120,4 @@ class AuthService {
 
   //   return firebaseUser;
   // }
-
 }

@@ -26,7 +26,7 @@ class _GoalsListState extends State<GoalsList> {
   Widget build(BuildContext context) {
     final goals = Provider.of<List<Goal>>(context);
     final user = Provider.of<RytaUser>(context);
-
+    
     String firstName;
 
     // extracting just the first name
@@ -184,7 +184,6 @@ class _GoalsListState extends State<GoalsList> {
                       // ],
                     );
                   }
-
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ClipRRect(
@@ -298,15 +297,6 @@ class _GoalsListState extends State<GoalsList> {
       ),
     );
   }
-  //   Color _getColorFromHex(String hexColor) {
-  //   hexColor = hexColor.replaceAll("#", "");
-  //   if (hexColor.length == 6) {
-  //     hexColor = "FF" + hexColor;
-  //   }
-  //   if (hexColor.length == 8) {
-  //     return Color(int.parse("0x$hexColor"));
-  //   }
-  // }
 }
 
 ///// OLD GoalsList using GoalTile

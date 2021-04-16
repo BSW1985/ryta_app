@@ -28,6 +28,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+
     final user = Provider.of<RytaUser>(context);
 
     return loading

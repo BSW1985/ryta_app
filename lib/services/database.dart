@@ -52,7 +52,6 @@ class DatabaseService {
       'price': price,
     });
   }
-
 // Stream of USERFILE called in home
 //
   Stream<UserFile> get userfile {
