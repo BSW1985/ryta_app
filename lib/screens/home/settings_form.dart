@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,6 @@ import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/shared/loading.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math';
 
 ///Showing a personal settings and info
 class SettingsForm extends StatefulWidget {

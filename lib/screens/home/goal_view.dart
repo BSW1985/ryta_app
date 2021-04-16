@@ -4,10 +4,6 @@ import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
-import 'package:ryta_app/models/goal.dart';
-import 'package:ryta_app/shared/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:parallax_image/parallax_image.dart';
 
 /// Screen for showing an individual goal ---> Visualization
 class GoalPage extends StatefulWidget {
@@ -41,7 +37,7 @@ class _GoalPageState extends State<GoalPage> {
   bool _motivationOn = false;
 
   @override
-  Future<void> initState() {
+  void initState() {
     super.initState();
     // load image
     _loadImage();
@@ -96,14 +92,6 @@ class _GoalPageState extends State<GoalPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = new GlobalKey<FormState>();
-
-    String goalname = '';
-    String goalmotivation = '';
-    String error = '';
-
-    final goal = Provider.of<Goal>(context);
-
     return Scaffold(
       // set the global key
       key: _scaffoldKey,
@@ -173,6 +161,7 @@ class _GoalPageState extends State<GoalPage> {
                             setState(() {
                               _motivationOn = false;
                             });
+                            return null;
                           },
                           child: AlertDialog(
                             // shape: RoundedRectangleBorder(
@@ -229,9 +218,11 @@ class _GoalPageState extends State<GoalPage> {
   }
 
   /// Shows a BottomSheet containing image info.
-  PersistentBottomSheetController _showInfoBottomSheet() {
-    return _scaffoldKey.currentState.showBottomSheet(
-      (context) => Text('ahoj'),
+  // PersistentBottomSheetController _showInfoBottomSheet() {
+  //   return _scaffoldKey.currentState.showBottomSheet(
+  //     (context) => Text('ahoj'),
+  //       );
+  //   }
 //         key: _formKey,
 //         backgroundColor: Colors.white,
 //         appBar: AppBar(
@@ -307,23 +298,21 @@ class _GoalPageState extends State<GoalPage> {
 //               ),
 //           ]
 //         ),
-    );
-  }
 
-  static Brightness estimateBrightnessForColor(Color color) {
-    final double relativeLuminance = color.computeLuminance();
+  // static Brightness estimateBrightnessForColor(Color color) {
+  //   final double relativeLuminance = color.computeLuminance();
 
-    // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
-    // The spec says to use kThreshold=0.0525, but Material Design appears to bias
-    // more towards using light text than WCAG20 recommends. Material Design spec
-    // doesn't say what value to use, but 0.15 seemed close to what the Material
-    // Design spec shows for its color palette on
-    // <https://material.io/go/design-theming#color-color-palette>.
-    const double kThreshold = 0.15;
-    if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
-      return Brightness.light;
-    return Brightness.dark;
-  }
+  //   // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
+  //   // The spec says to use kThreshold=0.0525, but Material Design appears to bias
+  //   // more towards using light text than WCAG20 recommends. Material Design spec
+  //   // doesn't say what value to use, but 0.15 seemed close to what the Material
+  //   // Design spec shows for its color palette on
+  //   // <https://material.io/go/design-theming#color-color-palette>.
+  //   const double kThreshold = 0.15;
+  //   if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
+  //     return Brightness.light;
+  //   return Brightness.dark;
+  // }
 
   Color _getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll("#", "");
@@ -332,6 +321,7 @@ class _GoalPageState extends State<GoalPage> {
     }
     if (hexColor.length == 8) {
       return Color(int.parse("0x$hexColor"));
-    }
+    } else
+      return null;
   }
 }

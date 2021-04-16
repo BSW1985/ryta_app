@@ -1,9 +1,6 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:ryta_app/models/goal.dart';
-import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/models/user_file.dart';
 
 class DatabaseService {
