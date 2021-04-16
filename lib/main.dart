@@ -6,8 +6,6 @@ import 'package:ryta_app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ryta_app/services/auth.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -19,50 +17,49 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Provider listens to changes in AuthService(). The data is streamed to the wrapper.
-    return  StreamProvider<RytaUser>.value(
+    return StreamProvider<RytaUser>.value(
       initialData: null, //???
       value: AuthService().user,
-      child: Provider<Goal>( // Provider listens for changes in goal definition and the data stream into all screens.
-              create: (_) => Goal(),
-                  child: MaterialApp(
-                      home: Wrapper(),
+      child: Provider<Goal>(
+        // Provider listens for changes in goal definition and the data stream into all screens.
+        create: (_) => Goal(),
+        child: MaterialApp(
+          home: Wrapper(),
 
-                      //Hide the debug banner
-                      debugShowCheckedModeBanner: false,
+          //Hide the debug banner
+          debugShowCheckedModeBanner: false,
 
-                      theme: ThemeData(
+          theme: ThemeData(
+            // fontFamily: 'Georgia',
+            fontFamily: 'CenturyGothic',
+            // fontFamily: 'Hind',
 
-                        // fontFamily: 'Georgia',
-                        fontFamily: 'CenturyGothic',
-                        // fontFamily: 'Hind',
-                        
-                        // Bottom Sheet Theme
-                        bottomSheetTheme: BottomSheetThemeData(
-                          backgroundColor: Colors.black.withOpacity(0)),
+            // Bottom Sheet Theme
+            bottomSheetTheme: BottomSheetThemeData(
+                backgroundColor: Colors.black.withOpacity(0)),
 
-                        // Default theme of text buttons
-                        textButtonTheme: TextButtonThemeData(
-                          style: TextButton.styleFrom(
-                            primary: Colors.black,
-                          ),
-                        ),
-                        // ElevatedButtonTheme
-                        elevatedButtonTheme: ElevatedButtonThemeData(
-                        style: ElevatedButton.styleFrom(
-                          // elevation: 10.0,
-                          onPrimary: Colors.white, // Text color
-                          primary: Color(0xFF995C75), // background color
-                          padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
-                          shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                // side: BorderSide(color: Colors.red)
-                          )
-                            
-                          ),
-                        ),
-                      ),
-                    ),
+            // Default theme of text buttons
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+              ),
+            ),
+            // ElevatedButtonTheme
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  // elevation: 10.0,
+                  onPrimary: Colors.white, // Text color
+                  primary: Color(0xFF995C75), // background color
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 35.0, vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    // side: BorderSide(color: Colors.red)
+                  )),
+            ),
           ),
-    );  
+        ),
+      ),
+    );
   }
 }

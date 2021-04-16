@@ -10,9 +10,8 @@ import 'package:ryta_app/widgets/image_tile.dart';
 
 // second screen of the goal definition process - unsplash image search
 class GoalImageSearch extends StatefulWidget {
-
   final String goalname;
-  GoalImageSearch(this.goalname);  
+  GoalImageSearch(this.goalname);
 
   @override
   _GoalImageSearchState createState() => _GoalImageSearchState();
@@ -32,9 +31,8 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   String keyword;
 
   TextEditingController nameHolder = TextEditingController();
-  
 
-@override
+  @override
   initState() {
     super.initState();
     // initial image Request
@@ -91,7 +89,8 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
       images = await UnsplashImageProvider.loadImages(page: ++page);
     } else {
       // load images from the next page with a keyword
-      List res = await UnsplashImageProvider.loadImagesWithKeyword(keyword, page: ++page);
+      List res = await UnsplashImageProvider.loadImagesWithKeyword(keyword,
+          page: ++page);
       // set totalPages
       totalPages = res[0];
       // set images
@@ -112,124 +111,123 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
 
   @override
   Widget build(BuildContext context) {
-    
     final goal = Provider.of<Goal>(context);
 
     return WillPopScope(
-        onWillPop: () async {
-          if (keyword != null) {
-            _resetImages();
-            return false;
-          }
-          return true;
+      onWillPop: () async {
+        if (keyword != null) {
+          _resetImages();
+          return false;
+        }
+        return true;
+      },
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        // disabling a scroll glow
+        // ignore: missing_return
+        onNotification: (overscroll) {
+          overscroll.disallowGlow();
         },
-          child: NotificationListener<OverscrollIndicatorNotification>( // disabling a scroll glow
-            // ignore: missing_return
-            onNotification: (overscroll) {
-              overscroll.disallowGlow();
-            },
-                      child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                  leading: new IconButton(
-                        icon: new Icon(Icons.arrow_back),
-                        color: Colors.black,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                  backgroundColor: Colors.white,
-                  elevation: 1.0,
-                  centerTitle: true,
-                  title: SizedBox(
-                      height: 70,
-                      child: Image.asset("assets/ryta_logo.png"),),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            leading: new IconButton(
+              icon: new Icon(Icons.arrow_back),
+              color: Colors.black,
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            body: 
-
-            OrientationBuilder(
-              builder: (context, orientation) => CustomScrollView(
-                // put AppBar in NestedScrollView to have it sliver off on scrolling
-                slivers: <Widget>[
-
-                  // Title
-                  _buildTitle(),
-
-                  //App bar
-                  _buildSearchAppBar(goal),
-
-                  //Grid view with all the images
-                  _buildImageGrid(orientation: orientation),
-
-                  // loading indicator at the bottom of the list
-                  loadingImages ? SliverToBoxAdapter(child: Loading(Colors.white)) : null,
-
-                  // filter null views
-                ].where((w) => w != null).toList(),
-                    ),
-                   ),
-
+            backgroundColor: Colors.white,
+            elevation: 1.0,
+            centerTitle: true,
+            title: SizedBox(
+              height: 70,
+              child: Image.asset("assets/ryta_logo.png"),
             ),
           ),
+          body: OrientationBuilder(
+            builder: (context, orientation) => CustomScrollView(
+              // put AppBar in NestedScrollView to have it sliver off on scrolling
+              slivers: <Widget>[
+                // Title
+                _buildTitle(),
 
-  );
+                //App bar
+                _buildSearchAppBar(goal),
+
+                //Grid view with all the images
+                _buildImageGrid(orientation: orientation),
+
+                // loading indicator at the bottom of the list
+                loadingImages
+                    ? SliverToBoxAdapter(child: Loading(Colors.white))
+                    : null,
+
+                // filter null views
+              ].where((w) => w != null).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildTitle() => SliverPadding(
-    padding: const EdgeInsets.all(16.0),
-    sliver: SliverToBoxAdapter(
-      child: Center(
-          child: Text(
-          "Let's find an image for your target",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-        ),
-      ),
-    ),
-  );
-  
-  Widget _buildSearchAppBar(goal) => SliverAppBar(
-      backgroundColor: Colors.white,
-      //Appbar Title
-      title:
-
-          // either search-field or just the title
-          TextField(
-              keyboardType: TextInputType.text,
-              decoration: textInputDecoration.copyWith(hintText: 'Search...'),
-              // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
-              onSubmitted: (String keyword) =>
-
-                  // search and display images associated to the keyword
-                  _loadImages(keyword: keyword),
-                  
-              controller: nameHolder,
-              // autofocus: true,
+        padding: const EdgeInsets.all(16.0),
+        sliver: SliverToBoxAdapter(
+          child: Center(
+            child: Text(
+              "Let's find an image for your target",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
             ),
-  
-          // const Text('Define Your Goal', style: TextStyle(color: Colors.black87)),
+          ),
+        ),
+      );
 
-      //Appbar actions
-      // leading: new Container(),
-      automaticallyImplyLeading: false,
-    );
+  Widget _buildSearchAppBar(goal) => SliverAppBar(
+        backgroundColor: Colors.white,
+        //Appbar Title
+        title:
+
+            // either search-field or just the title
+            TextField(
+          keyboardType: TextInputType.text,
+          decoration: textInputDecoration.copyWith(hintText: 'Search...'),
+          // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
+          onSubmitted: (String keyword) =>
+
+              // search and display images associated to the keyword
+              _loadImages(keyword: keyword),
+
+          controller: nameHolder,
+          // autofocus: true,
+        ),
+
+        // const Text('Define Your Goal', style: TextStyle(color: Colors.black87)),
+
+        //Appbar actions
+        // leading: new Container(),
+        automaticallyImplyLeading: false,
+      );
 
   /// Returns the grid that displays images.
   /// [orientation] can be used to adjust the grid column count.
   Widget _buildImageGrid({orientation = Orientation.portrait}) {
-    
     // calc columnCount based on orientation
     int columnCount = orientation == Orientation.portrait ? 2 : 3;
     // return staggered grid
 
-      return SliverPadding(
+    return SliverPadding(
       padding: const EdgeInsets.all(16.0),
       sliver: SliverStaggeredGrid.countBuilder(
         // set column count
         crossAxisCount: columnCount,
         itemCount: images.length,
         // set itemBuilder
-        itemBuilder: (BuildContext context, int index) => _buildImageItemBuilder(index),
-        staggeredTileBuilder: (int index) => _buildStaggeredTile(images[index], columnCount),
+        itemBuilder: (BuildContext context, int index) =>
+            _buildImageItemBuilder(index),
+        staggeredTileBuilder: (int index) =>
+            _buildStaggeredTile(images[index], columnCount),
         mainAxisSpacing: 16.0,
         crossAxisSpacing: 16.0,
       ),
@@ -258,11 +256,11 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   /// Returns a StaggeredTile for a given [image].
   StaggeredTile _buildStaggeredTile(UnsplashImage image, int columnCount) {
     // calc image aspect ration
-    double aspectRatio = image.getHeight().toDouble() / image.getWidth().toDouble();
+    double aspectRatio =
+        image.getHeight().toDouble() / image.getWidth().toDouble();
     // calc columnWidth
     double columnWidth = MediaQuery.of(context).size.width / columnCount;
     // not using [StaggeredTile.fit(1)] because during loading StaggeredGrid is really jumpy.
     return StaggeredTile.extent(1, aspectRatio * columnWidth);
   }
-
 }
