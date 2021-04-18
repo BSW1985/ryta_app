@@ -26,7 +26,7 @@ class _GoalsListState extends State<GoalsList> {
   Widget build(BuildContext context) {
     final goals = Provider.of<List<Goal>>(context);
     final user = Provider.of<RytaUser>(context);
-    
+
     String firstName;
 
     // extracting just the first name
