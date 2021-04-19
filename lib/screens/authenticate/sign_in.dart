@@ -67,7 +67,7 @@ class _SignInState extends State<SignIn> {
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Password'),
                           validator: (val) => val.length < 6
-                              ? 'Enter a password 6+ chars long'
+                              ? 'Enter a password 8+ characters long'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);
