@@ -128,9 +128,8 @@ class _GoalsListState extends State<GoalsList> {
               "Let's define your first goal.",
               style: TextStyle(color: Colors.black, fontSize: 17.0),
             ),
-            SizedBox(height: 20.0),
-            Icon(Icons.arrow_downward),
-            Icon(Icons.arrow_downward),
+            SizedBox(height: 100.0),
+            Icon(Icons.arrow_downward_rounded, size: 50.0),
           ],
         ),
       );
@@ -226,7 +225,8 @@ class _GoalsListState extends State<GoalsList> {
                           extent: 120.0,
                           child: Center(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              padding:
+                                  EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
                               child: Text(
                                 goals[index].goalname,
                                 style: TextStyle(

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:provider/provider.dart';
-import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/auth.dart';
-import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
 
@@ -27,7 +24,6 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<RytaUser>(context);
 
     return loading
         ? Loading(Colors.white)
@@ -84,12 +80,10 @@ class _SignInState extends State<SignIn> {
                               setState(() => loading = true);
                               dynamic result = await _auth
                                   .signInWithEmailAndPassword(email, password);
-                              DatabaseService(uid: user.uid)
-                                  .updateEmailVerified(user.emailVerified);
+
                               if (result == null) {
                                 setState(() {
-                                  error =
-                                      'could not sign in with those credentials';
+                                  error = 'Email or password not correct';
                                   loading = false;
                                 });
                               }

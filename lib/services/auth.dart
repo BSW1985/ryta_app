@@ -45,6 +45,10 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+
+      //Update the emailVerified bool in Firestore
+      DatabaseService(uid: user.uid).updateEmailVerified(user.emailVerified);
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
