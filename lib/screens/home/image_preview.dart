@@ -96,7 +96,7 @@ class _ImagePageState extends State<ImagePage> {
           maxScale: PhotoViewComputedScale.covered,
           loadingBuilder:
               (BuildContext context, ImageChunkEvent imageChunkEvent) {
-            return Center(child: Loading(Colors.black));
+            return Center(child: Loading(Colors.black, Color(0xFF995C75)));
           },
         ),
       );

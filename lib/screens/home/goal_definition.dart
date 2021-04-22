@@ -24,7 +24,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
     final goal = Provider.of<Goal>(context);
 
     return loading
-        ? Loading(Colors.white)
+        ? Loading(Colors.white, Color(0xFF995C75))
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(

@@ -172,7 +172,7 @@ class _SheetButtonState extends State<SheetButton> {
                 padding: const EdgeInsets.all(5.0),
                 child: Text('Your visualization is getting ready!'),
               ),
-              Loading(Colors.transparent),
+              Loading(Colors.transparent, Color(0xFF995C75)),
             ],
           ))
         : Padding(

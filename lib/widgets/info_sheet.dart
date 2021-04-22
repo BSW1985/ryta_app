@@ -56,7 +56,7 @@ class InfoSheet extends StatelessWidget {
 
                     // filter null views
                   ].where((w) => w != null).toList()
-                : <Widget>[Loading(Colors.white)]),
+                : <Widget>[Loading(Colors.white, Color(0xFF995C75))]),
         decoration: new BoxDecoration(
           color: Colors.grey[50],
           borderRadius: new BorderRadius.only(

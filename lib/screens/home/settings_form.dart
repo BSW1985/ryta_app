@@ -32,7 +32,7 @@ class _SettingsFormState extends State<SettingsForm> {
     final userfile = Provider.of<UserFile>(context);
 
     if (userfile == null)
-      return Loading(Colors.white);
+      return Loading(Colors.white, Color(0xFF995C75));
     else
       oneThird = num.parse((userfile.priceInitialized / 3).toStringAsFixed(3));
 

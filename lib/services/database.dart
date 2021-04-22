@@ -28,6 +28,7 @@ class DatabaseService {
       // 'package4': false,
       'price': 0.111,
       'priceInitialized': randomNumber,
+      'throughIntroduction': false,
     });
   }
 
@@ -50,6 +51,13 @@ class DatabaseService {
     });
   }
 
+  // Is user through Introduction?
+  Future updateThroughIntroduction(bool throughIntroduction) async {
+    return await rytaUsersCollection.doc(uid).update({
+      'throughIntroduction': throughIntroduction,
+    });
+  }
+
 // Stream of USERFILE called in home
 //
   Stream<UserFile> get userfile {
@@ -66,6 +74,7 @@ class DatabaseService {
       // package4: snapshot.data()['package4'] ?? '',
       price: snapshot.data()['price'] ?? '',
       priceInitialized: snapshot.data()['priceInitialized'] ?? '',
+      throughIntroduction: snapshot.data()['throughIntroduction'] ?? '',
     );
   }
 

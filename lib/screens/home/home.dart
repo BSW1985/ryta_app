@@ -32,10 +32,11 @@ class _Home extends State<Home> {
     return MultiProvider(
       providers: [
         // Stream of data in USERFILE
-        StreamProvider<UserFile>.value(
-          value: DatabaseService(uid: user.uid).userfile,
-          initialData: null,
-        ),
+        if (user.uid != null)
+          StreamProvider<UserFile>.value(
+            value: DatabaseService(uid: user.uid).userfile,
+            initialData: null,
+          ),
 
         // Strean of GOALS
         StreamProvider<List<Goal>>.value(
