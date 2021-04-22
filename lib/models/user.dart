@@ -7,3 +7,4 @@ class RytaUser {
 
   RytaUser({this.uid, this.email, this.displayName, this.emailVerified});
 }
+

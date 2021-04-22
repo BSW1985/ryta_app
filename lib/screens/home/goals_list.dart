@@ -191,7 +191,6 @@ class _GoalsListState extends State<GoalsList> {
                       // ],
                     );
                   }
-
                   return Padding(
                     padding: userfile.throughIntroduction == true
                         ? EdgeInsets.all(8.0)
@@ -309,15 +308,6 @@ class _GoalsListState extends State<GoalsList> {
       ),
     );
   }
-  //   Color _getColorFromHex(String hexColor) {
-  //   hexColor = hexColor.replaceAll("#", "");
-  //   if (hexColor.length == 6) {
-  //     hexColor = "FF" + hexColor;
-  //   }
-  //   if (hexColor.length == 8) {
-  //     return Color(int.parse("0x$hexColor"));
-  //   }
-  // }
 }
 
 ///// OLD GoalsList using GoalTile
