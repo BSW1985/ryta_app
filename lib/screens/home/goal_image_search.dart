@@ -160,7 +160,8 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
 
                 // loading indicator at the bottom of the list
                 loadingImages
-                    ? SliverToBoxAdapter(child: Loading(Colors.white))
+                    ? SliverToBoxAdapter(
+                        child: Loading(Colors.white, Color(0xFF995C75)))
                     : null,
 
                 // filter null views

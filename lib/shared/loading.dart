@@ -3,8 +3,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // Simple loading screen
 class Loading extends StatelessWidget {
+  final Color dotsColor;
   final Color color;
-  Loading(this.color);
+  Loading(this.color, this.dotsColor);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class Loading extends StatelessWidget {
       color: color, //background color
       child: Center(
         child: SpinKitThreeBounce(
-          color: Color(0xFF995C75),
+          color: dotsColor, //dotsColor
           size: 30.0,
         ),
       ),
@@ -34,7 +35,7 @@ class Loading extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Loading(Colors.black),
+                Loading(Colors.black, Color(0xFF995C75)),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: new Text("Loading, please wait..."),

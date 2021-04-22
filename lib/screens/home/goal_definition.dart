@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/screens/home/goal_image_search.dart';
@@ -23,7 +24,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
     final goal = Provider.of<Goal>(context);
 
     return loading
-        ? Loading(Colors.white)
+        ? Loading(Colors.white, Color(0xFF995C75))
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -58,6 +59,8 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                       ),
                       SizedBox(height: 15.0),
                       TextFormField(
+                          maxLength: 50,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           decoration: textInputDecoration.copyWith(
                               hintText: 'The target'),
                           validator: (val) =>
@@ -66,7 +69,7 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                             setState(() => goalname = val);
                           }),
                       // Input goal motivation
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 25.0),
                       Text(
                         "Why do you want to reach it?",
                         style: TextStyle(
@@ -74,6 +77,8 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                       ),
                       SizedBox(height: 15.0),
                       TextFormField(
+                          maxLength: 150,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           keyboardType: TextInputType.multiline,
                           maxLines: 3,
                           decoration: textInputDecoration.copyWith(

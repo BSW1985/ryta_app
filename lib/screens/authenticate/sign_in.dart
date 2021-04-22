@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:provider/provider.dart';
-import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/auth.dart';
-import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
 
@@ -28,10 +25,8 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<RytaUser>(context);
-
     return loading
-        ? Loading(Colors.white)
+        ? Loading(Colors.white, Color(0xFF995C75))
         : Scaffold(
             backgroundColor: Colors.white,
             // appBar: AppBar(
@@ -68,7 +63,7 @@ class _SignInState extends State<SignIn> {
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Password'),
                           validator: (val) => val.length < 6
-                              ? 'Enter a password 6+ chars long'
+                              ? 'Enter a password 8+ characters long'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);
@@ -85,12 +80,10 @@ class _SignInState extends State<SignIn> {
                               setState(() => loading = true);
                               dynamic result = await _auth
                                   .signInWithEmailAndPassword(email, password);
-                              DatabaseService(uid: user.uid)
-                                  .updateEmailVerified(user.emailVerified);
+
                               if (result == null) {
                                 setState(() {
-                                  error =
-                                      'could not sign in with those credentials';
+                                  error = 'Email or password not correct';
                                   loading = false;
                                 });
                               }

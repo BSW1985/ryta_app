@@ -32,7 +32,7 @@ class _SettingsFormState extends State<SettingsForm> {
     final userfile = Provider.of<UserFile>(context);
 
     if (userfile == null)
-      return Loading(Colors.white);
+      return Loading(Colors.white, Color(0xFF995C75));
     else
       oneThird = num.parse((userfile.priceInitialized / 3).toStringAsFixed(3));
 
@@ -256,7 +256,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         ),
                         SizedBox(height: 15.0),
                         Text(
-                          "${(num.parse((price).toStringAsFixed(2)))} EUR per month",
+                          "${(num.parse((price).toStringAsFixed(2))).abs()} EUR per month",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 20.0),
                         ),
@@ -264,69 +264,80 @@ class _SettingsFormState extends State<SettingsForm> {
                         ElevatedButton(
                             style: ButtonStyle(
                               elevation: MaterialStateProperty.all<double>(0),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFF9A825)),
+                              backgroundColor: (_checkboxListTile1 == false &&
+                                      _checkboxListTile2 == false &&
+                                      _checkboxListTile3 == false)
+                                  ? MaterialStateProperty.all<Color>(
+                                      Colors.grey)
+                                  : MaterialStateProperty.all<Color>(
+                                      Color(0xFFF9A825)),
                             ),
                             child: Text('UPGRADE TO PREMIUM',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             onPressed: () async {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Row(children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.thumb_up_alt,
-                                        color: Color(0xFFF9A825),
-                                        size: 40.0,
+                              if (_checkboxListTile1 == false &&
+                                  _checkboxListTile2 == false &&
+                                  _checkboxListTile3 == false) {
+                                return null;
+                              } else
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Row(children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: Icon(
+                                          Icons.thumb_up_alt,
+                                          color: Color(0xFFF9A825),
+                                          size: 40.0,
+                                        ),
                                       ),
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                            'We are doing our best to make these features available!')),
-                                  ]),
-                                  content: RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                        text:
-                                            "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-
-                                      // ignore: todo
-                                      // TODO: make the link work!!!
-                                      TextSpan(
-                                          text: "info@ryta.eu",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () async {
-                                              var url = 'https://www.ryta.eu/';
-                                              if (await canLaunch(url)) {
-                                                await launch(url.toString());
-                                              } else {
-                                                throw 'Could not launch $url';
-                                              }
-                                            }),
-                                      TextSpan(
-                                        text: ". Your Ryta team :)",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
+                                      Flexible(
+                                          child: Text(
+                                              'We are doing our best to make these features available!')),
                                     ]),
+                                    content: RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                          text:
+                                              "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+
+                                        // ignore: todo
+                                        // TODO: make the link work!!!
+                                        TextSpan(
+                                            text: "info@ryta.eu",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () async {
+                                                var url =
+                                                    'https://www.ryta.eu/';
+                                                if (await canLaunch(url)) {
+                                                  await launch(url.toString());
+                                                } else {
+                                                  throw 'Could not launch $url';
+                                                }
+                                              }),
+                                        TextSpan(
+                                          text: ". Your Ryta team :)",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ]),
+                                    ),
+                                    // actions: <Widget>[
+                                    //   TextButton(
+                                    //     child: Text('Back to the app'),
+                                    //     onPressed: (){
+                                    //       Navigator.of(context).pop();
+                                    //     }
+                                    //   ),
+                                    // ],
                                   ),
-                                  // actions: <Widget>[
-                                  //   TextButton(
-                                  //     child: Text('Back to the app'),
-                                  //     onPressed: (){
-                                  //       Navigator.of(context).pop();
-                                  //     }
-                                  //   ),
-                                  // ],
-                                ),
-                              );
+                                );
                               if (userfile.willToPay != true)
                                 // Set willToPay to True
                                 DatabaseService(uid: user.uid)

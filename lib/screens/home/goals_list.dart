@@ -6,6 +6,7 @@ import 'package:ryta_app/config/keys.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/models/user_file.dart';
 import 'package:ryta_app/screens/home/goal_view.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
@@ -26,7 +27,10 @@ class _GoalsListState extends State<GoalsList> {
   Widget build(BuildContext context) {
     final goals = Provider.of<List<Goal>>(context);
     final user = Provider.of<RytaUser>(context);
-    
+    final userfile = Provider.of<UserFile>(context);
+    final height = MediaQuery.of(context).size.height;
+    final introductionLocation = height / 2 - 150;
+
     String firstName;
 
     // extracting just the first name
@@ -60,7 +64,7 @@ class _GoalsListState extends State<GoalsList> {
           Text('Please verify your email to continue.',
               style: TextStyle(color: Colors.black, fontSize: 17.0)),
           SizedBox(height: 20.0),
-          Loading(Colors.white),
+          Loading(Colors.white, Color(0xFF995C75)),
           SizedBox(height: 20.0),
           ElevatedButton(
               style: ButtonStyle(
@@ -110,7 +114,7 @@ class _GoalsListState extends State<GoalsList> {
     //   Center(child: Text('please verify'));
     //   // Loading(Colors.white);
     else if (goals == null)
-      return Loading(Colors.white);
+      return Loading(Colors.white, Color(0xFF995C75));
     else if (goals.length == 0)
       return Container(
         child: Column(
@@ -128,9 +132,8 @@ class _GoalsListState extends State<GoalsList> {
               "Let's define your first goal.",
               style: TextStyle(color: Colors.black, fontSize: 17.0),
             ),
-            SizedBox(height: 20.0),
-            Icon(Icons.arrow_downward),
-            Icon(Icons.arrow_downward),
+            SizedBox(height: 100.0),
+            Icon(Icons.arrow_downward_rounded, size: 50.0),
           ],
         ),
       );
@@ -154,13 +157,17 @@ class _GoalsListState extends State<GoalsList> {
                     AsyncSnapshot<UnsplashImage> snapshot) {
                   if (snapshot.hasData == false)
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: userfile.throughIntroduction == true
+                          ? EdgeInsets.all(8.0)
+                          : EdgeInsets.fromLTRB(
+                              8.0, introductionLocation, 8.0, 0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                             height: 120.0,
                             child: Center(
-                              child: Loading(Colors.grey[100]),
+                              child:
+                                  Loading(Colors.grey[100], Color(0xFF995C75)),
                             )),
                       ),
                     );
@@ -185,7 +192,10 @@ class _GoalsListState extends State<GoalsList> {
                     );
                   }
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: userfile.throughIntroduction == true
+                        ? EdgeInsets.all(8.0)
+                        : EdgeInsets.fromLTRB(
+                            8.0, introductionLocation, 8.0, 0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
@@ -195,7 +205,7 @@ class _GoalsListState extends State<GoalsList> {
                               builder: (context) =>
                                   // open [ImagePage] with the given image
                                   GoalPage(goals[index], goals[index].imageID,
-                                      goals[index].imageUrl),
+                                      goals[index].imageUrl, userfile),
                             ),
                           );
                         },
@@ -225,7 +235,8 @@ class _GoalsListState extends State<GoalsList> {
                           extent: 120.0,
                           child: Center(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              padding:
+                                  EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
                               child: Text(
                                 goals[index].goalname,
                                 style: TextStyle(

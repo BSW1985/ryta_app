@@ -1,17 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
+import 'package:ryta_app/models/user.dart';
+import 'package:ryta_app/models/user_file.dart';
+import 'package:ryta_app/screens/home/home.dart';
+import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
 
 /// Screen for showing an individual goal ---> Visualization
 class GoalPage extends StatefulWidget {
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final String imageId, imageUrl;
 
   final Goal goal;
+  final UserFile userfile;
   // GoalPage(this.imageId, this.imageUrl, {Key key}) : super(key: key);
-  GoalPage(this.goal, this.imageId, this.imageUrl, {Key key}) : super(key: key);
+  GoalPage(this.goal, this.imageId, this.imageUrl, this.userfile, {Key key})
+      : super(key: key);
 
   @override
   _GoalPageState createState() => _GoalPageState();
@@ -65,14 +75,18 @@ class _GoalPageState extends State<GoalPage> {
   Widget _buildAppBar() => AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
+        automaticallyImplyLeading:
+            widget.userfile.throughIntroduction == true ? true : false,
         leading:
             // back button
-            IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                onPressed: () => Navigator.pop(context)),
+            widget.userfile.throughIntroduction == true
+                ? IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pop(context))
+                : null,
       );
 
   /// Returns PhotoView around given [imageId] & [imageUrl].
@@ -85,13 +99,15 @@ class _GoalPageState extends State<GoalPage> {
           maxScale: PhotoViewComputedScale.covered,
           loadingBuilder:
               (BuildContext context, ImageChunkEvent imageChunkEvent) {
-            return Center(child: Loading(Colors.black));
+            return Center(child: Loading(Colors.black, Colors.grey));
           },
         ),
       );
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<RytaUser>(context);
+
     return Scaffold(
       // set the global key
       key: _scaffoldKey,
@@ -137,14 +153,20 @@ class _GoalPageState extends State<GoalPage> {
                 child: FloatingActionButton.extended(
                   // icon: Icon(Icons.check),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: goalBackgound, width: 1.0),
+                      side: BorderSide(
+                          color: widget.userfile.throughIntroduction == false
+                              ? goalFont
+                              : goalBackgound,
+                          width: 1.0),
                       borderRadius: BorderRadius.circular(15.0)),
                   elevation: 0.0,
                   label: Text('Why?',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25.0,
-                          color: goalBackgound)),
+                          color: widget.userfile.throughIntroduction == false
+                              ? goalFont
+                              : goalBackgound)),
                   tooltip: 'See the motivation!',
                   onPressed: () {
                     setState(() {
@@ -152,40 +174,254 @@ class _GoalPageState extends State<GoalPage> {
                     });
                     showDialog(
                       barrierColor: Colors.white.withOpacity(0),
-                      barrierDismissible: true,
-                      context: context,
+                      barrierDismissible:
+                          widget.userfile.throughIntroduction == false
+                              ? false
+                              : true,
+                      context: _scaffoldKey.currentContext,
                       builder: (BuildContext context) {
                         return WillPopScope(
                           onWillPop: () {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              _motivationOn = false;
-                            });
-                            return null;
+                            if (widget.userfile.throughIntroduction == true) {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                _motivationOn = false;
+                              });
+                              return null;
+                            } else {
+                              return null;
+                            }
                           },
                           child: AlertDialog(
-                            // shape: RoundedRectangleBorder(
-                            //   borderRadius:
-                            //     BorderRadius.all(
-                            //       Radius.circular(15.0))),
-                            //   content: Builder(
-                            //     builder: (context) {
-                            //       // Get available height and width of the build area of this widget. Make a choice depending on the size.
-                            //       // var height = MediaQuery.of(context).size.height;
-                            //       var width = MediaQuery.of(context).size.width;
-
-                            //       return Container(
-                            //         // height: height - 400,
-                            //         // width: width - 800,
-                            //         child: Column(
-                            //           children: <Widget>[
-                            //           Text (widget.goal.goalname, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34.0, color: goalFont), textAlign: TextAlign.center,),
-                            //           Text(widget.goal.goalmotivation, style: TextStyle(fontSize: 25.0, color: goalFont)),
-                            //           ],
-                            //         ),
-                            //       );
-                            //     },
-                            //   ),
+                            actions: [
+                              widget.userfile.throughIntroduction == false
+                                  ? IconButton(
+                                      color: goalFont,
+                                      icon:
+                                          Icon(Icons.arrow_forward_ios_rounded),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        //introduction
+                                        showDialog(
+                                          barrierColor:
+                                              Colors.white.withOpacity(0),
+                                          barrierDismissible: false,
+                                          context: _scaffoldKey.currentContext,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              actions: [
+                                                IconButton(
+                                                  color: goalFont,
+                                                  icon: Icon(Icons
+                                                      .arrow_forward_ios_rounded),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    //next motivation screen
+                                                    showDialog(
+                                                      barrierColor: Colors.white
+                                                          .withOpacity(0),
+                                                      barrierDismissible: false,
+                                                      context: _scaffoldKey
+                                                          .currentContext,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          actions: [
+                                                            IconButton(
+                                                              color: goalFont,
+                                                              icon: Icon(Icons
+                                                                  .arrow_forward_ios_rounded),
+                                                              onPressed:
+                                                                  () async {
+                                                                //Show Ryta logo
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                showDialog(
+                                                                  barrierColor: Colors
+                                                                      .white
+                                                                      .withOpacity(
+                                                                          0.8),
+                                                                  barrierDismissible:
+                                                                      false,
+                                                                  context:
+                                                                      _scaffoldKey
+                                                                          .currentContext,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return AlertDialog(
+                                                                      elevation:
+                                                                          0.0,
+                                                                      backgroundColor: Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0),
+                                                                      content: Image
+                                                                          .asset(
+                                                                        "assets/ryta_logo.png",
+                                                                        height:
+                                                                            150,
+                                                                        // width: 100,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                                //Delete the introduction set through introduction to true, get back to home screen
+                                                                DatabaseService(
+                                                                        uid: user
+                                                                            .uid)
+                                                                    .updateThroughIntroduction(
+                                                                        true);
+                                                                Timer(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                    () {
+                                                                  DatabaseService(
+                                                                          uid: user
+                                                                              .uid)
+                                                                      .deleteUserGoals(widget
+                                                                          .goal
+                                                                          .goalID);
+                                                                  Navigator
+                                                                      .push(
+                                                                    _scaffoldKey
+                                                                        .currentContext,
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Home(),
+                                                                    ),
+                                                                  );
+                                                                });
+                                                              },
+                                                            )
+                                                          ],
+                                                          elevation: 0.0,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                                  // side: BorderSide(color: goalFont, width: 1.0),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15.0)),
+                                                          backgroundColor:
+                                                              goalBackgound
+                                                                  .withOpacity(
+                                                                      0.8),
+                                                          content: RichText(
+                                                            text: TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                      text:
+                                                                          "Lets reach your ",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              25.0,
+                                                                          color:
+                                                                              goalFont,
+                                                                          fontFamily:
+                                                                              'CenturyGothic')),
+                                                                  TextSpan(
+                                                                      text:
+                                                                          "full potential",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              25.0,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontFamily:
+                                                                              'CenturyGothic',
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  TextSpan(
+                                                                      text:
+                                                                          '''! 
+                                                                                                                                                                  Lets reach your ''',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              25.0,
+                                                                          color:
+                                                                              goalFont,
+                                                                          fontFamily:
+                                                                              'CenturyGothic')),
+                                                                  TextSpan(
+                                                                      text:
+                                                                          "targets",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              25.0,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontFamily:
+                                                                              'CenturyGothic',
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  TextSpan(
+                                                                      text: "!",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              25.0,
+                                                                          color:
+                                                                              goalFont,
+                                                                          fontFamily:
+                                                                              'CenturyGothic')),
+                                                                ]),
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                )
+                                              ],
+                                              elevation: 0.0,
+                                              shape: RoundedRectangleBorder(
+                                                  // side: BorderSide(color: goalFont, width: 1.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0)),
+                                              backgroundColor: goalBackgound
+                                                  .withOpacity(0.8),
+                                              content: RichText(
+                                                text: TextSpan(children: [
+                                                  TextSpan(
+                                                      text:
+                                                          '''Elite athletes use it. 
+                                              The super-rich use it. 
+                                              Peak performers in all fields use it. 
+                                              And you can use it too! That power is called ''',
+                                                      style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: goalFont,
+                                                          fontFamily:
+                                                              'CenturyGothic')),
+                                                  TextSpan(
+                                                      text: "visualization",
+                                                      style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              'CenturyGothic',
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text: ".",
+                                                      style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: goalFont,
+                                                          fontFamily:
+                                                              'CenturyGothic')),
+                                                ]),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    )
+                                  : null
+                            ],
+                            scrollable: true,
                             elevation: 0.0,
                             shape: RoundedRectangleBorder(
                                 // side: BorderSide(color: goalFont, width: 1.0),
@@ -197,9 +433,36 @@ class _GoalPageState extends State<GoalPage> {
                                     fontSize: 34.0,
                                     color:
                                         goalFont)), //, textAlign: TextAlign.center,
-                            content: Text(widget.goal.goalmotivation,
-                                style:
-                                    TextStyle(fontSize: 25.0, color: goalFont)),
+                            content: widget.userfile.throughIntroduction == true
+                                ? Text(widget.goal.goalmotivation,
+                                    style: TextStyle(
+                                        fontSize: 25.0, color: goalFont))
+                                : RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                          text:
+                                              '''Visualization techniques have been used by successful people for ages, helping them create their dream lives. 
+                                              We all have this ''',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: goalFont,
+                                              fontFamily: 'CenturyGothic')),
+                                      TextSpan(
+                                          text: "awesome power",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                              fontFamily: 'CenturyGothic',
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                          text:
+                                              ", but most of us have never been taught to use it effectively.",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: goalFont,
+                                              fontFamily: 'CenturyGothic')),
+                                    ]),
+                                  ),
                           ),
                         );
                       },
