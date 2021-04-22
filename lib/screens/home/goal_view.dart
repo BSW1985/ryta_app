@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +6,7 @@ import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/models/user_file.dart';
-import 'package:ryta_app/screens/home/home.dart';
+import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
@@ -284,16 +283,18 @@ class _GoalPageState extends State<GoalPage> {
                                                                       .deleteUserGoals(widget
                                                                           .goal
                                                                           .goalID);
-                                                                  Navigator
-                                                                      .push(
-                                                                    _scaffoldKey
-                                                                        .currentContext,
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Home(),
-                                                                    ),
-                                                                  );
+                                                                  if (user !=
+                                                                      null)
+                                                                    Navigator
+                                                                        .push(
+                                                                      _scaffoldKey
+                                                                          .currentContext,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                Wrapper(),
+                                                                      ),
+                                                                    );
                                                                 });
                                                               },
                                                             )

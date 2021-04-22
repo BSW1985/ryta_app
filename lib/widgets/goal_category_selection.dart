@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ryta_app/models/goal.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
-import 'package:ryta_app/screens/home/home.dart';
+import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/shared/loading.dart';
 
@@ -130,12 +130,13 @@ class CategoryButton extends StatelessWidget {
             goal.goalFontColor,
             buttonName,
           );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ),
-          );
+          if (user != null)
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Wrapper(),
+              ),
+            );
         });
   }
 }

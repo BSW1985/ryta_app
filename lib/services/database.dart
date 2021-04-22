@@ -11,6 +11,14 @@ class DatabaseService {
   final CollectionReference rytaUsersCollection =
       FirebaseFirestore.instance.collection('ryta_users');
 
+  // check if a document with the same user uid already exist or not
+  Future getUID() async {
+    return await rytaUsersCollection
+        .doc(uid)
+        .get()
+        .then((variable) => print(variable.data()['email'].toString()));
+  }
+
   // USERFILE - Handling communication with Firestore
   Future initializeUserData(
       String name, String email, bool emailVerified) async {
@@ -61,7 +69,14 @@ class DatabaseService {
 // Stream of USERFILE called in home
 //
   Stream<UserFile> get userfile {
-    return rytaUsersCollection.doc(uid).snapshots().map(_userFileFromSnapshot);
+    try {
+      return rytaUsersCollection
+          .doc(uid)
+          .snapshots()
+          .map(_userFileFromSnapshot);
+    } catch (e) {
+      return null;
+    }
   }
 
   UserFile _userFileFromSnapshot(DocumentSnapshot snapshot) {

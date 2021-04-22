@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
@@ -113,9 +114,9 @@ class _GoalsListState extends State<GoalsList> {
     // return
     //   Center(child: Text('please verify'));
     //   // Loading(Colors.white);
-    else if (goals == null)
-      return Loading(Colors.white, Color(0xFF995C75));
-    else if (goals.length == 0)
+    if (goals == null) return Loading(Colors.white, Color(0xFF995C75));
+    if (userfile == null) return Loading(Colors.white, Color(0xFF995C75));
+    if (goals.length == 0 && userfile.throughIntroduction != false)
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

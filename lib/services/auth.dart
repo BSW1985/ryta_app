@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
@@ -109,28 +108,44 @@ class AuthService {
       UserCredential _res = await _auth.signInWithCredential(credential);
       User user = _res.user;
       //only if the user does not exist yet
+      // try {
+      //   _auth.createUserWithEmailAndPassword(
+      //       email: user.email, password: 'password');
+      // } catch (signUpError) {
+      //   if (signUpError.code == 'email-already-in-use') {
+      //       /// email has already been registered.
+      //     } else {
+      //       // create a new document for the user with the uid
+      //       await DatabaseService(uid: user.uid).initializeUserData(
+      //           user.displayName, user.email, user.emailVerified);
+      //       await DatabaseService(uid: user.uid).addUserGoals(
+      //         "Visualization is powerful",
+      //         "motivation1",
+      //         "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+      //         "dI7vfR1Bqcg",
+      //         "#ff2a2609",
+      //         "#fff7c759",
+      //         "introduction",
+      //       );
+      //     }
+      //   }
       try {
-        _auth.createUserWithEmailAndPassword(
-            email: user.email, password: 'password');
-      } catch (signUpError) {
-        if (signUpError is PlatformException) {
-          if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-            /// email has already been registered.
-          } else {
-            // create a new document for the user with the uid
-            await DatabaseService(uid: user.uid).initializeUserData(
-                user.displayName, user.email, user.emailVerified);
-            await DatabaseService(uid: user.uid).addUserGoals(
-              "Visualization is powerful",
-              "motivation1",
-              "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
-              "dI7vfR1Bqcg",
-              "#ff2a2609",
-              "#fff7c759",
-              "introduction",
-            );
-          }
-        }
+        await DatabaseService(uid: user.uid).getUID();
+      } catch (e) {
+        print(e.toString());
+        await DatabaseService(uid: user.uid).initializeUserData(
+            user.displayName, user.email, user.emailVerified);
+        await DatabaseService(uid: user.uid).addUserGoals(
+          "Visualization is powerful",
+          "motivation1",
+          "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+          "dI7vfR1Bqcg",
+          "#ff2a2609",
+          "#fff7c759",
+          "introduction",
+        );
+        // return null;
+        return _userFromFirebaseUser(user);
       }
 
       return _userFromFirebaseUser(user);
