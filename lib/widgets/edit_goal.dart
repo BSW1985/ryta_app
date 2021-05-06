@@ -110,7 +110,7 @@ class _EditGoalState extends State<EditGoal> {
                       Flexible(flex: 1, child: SizedBox(height: 25.0)),
                       ElevatedButton(
                           child: Text(
-                            "CONTINUE",
+                            "SAVE",
                             //style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
