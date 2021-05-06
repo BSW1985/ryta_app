@@ -10,16 +10,19 @@ import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
 import 'package:ryta_app/shared/loading.dart';
+import 'package:ryta_app/widgets/edit_goal.dart';
 
 /// Screen for showing an individual goal ---> Visualization
 class GoalPage extends StatefulWidget {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final String imageId, imageUrl;
+  final int index;
 
   final Goal goal;
   final UserFile userfile;
   // GoalPage(this.imageId, this.imageUrl, {Key key}) : super(key: key);
-  GoalPage(this.goal, this.imageId, this.imageUrl, this.userfile, {Key key})
+  GoalPage(this.index, this.goal, this.imageId, this.imageUrl, this.userfile,
+      {Key key})
       : super(key: key);
 
   @override
@@ -42,7 +45,6 @@ class _GoalPageState extends State<GoalPage> {
 
   Color goalBackgound;
   Color goalFont;
-
   bool _motivationOn = false;
 
   @override
@@ -80,12 +82,26 @@ class _GoalPageState extends State<GoalPage> {
             // back button
             widget.userfile.throughIntroduction == true
                 ? IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
+                    icon: Icon(Icons.arrow_back,
+                        color: widget.userfile.throughIntroduction == false
+                            ? goalFont
+                            : goalBackgound),
                     onPressed: () => Navigator.pop(context))
                 : null,
+        actions: <Widget>[
+          // show image info
+          IconButton(
+            icon: Icon(Icons.settings,
+                color: widget.userfile.throughIntroduction == false
+                    ? goalFont
+                    : goalBackgound),
+            tooltip: 'Edit your target',
+            onPressed: () async {
+              _scaffoldKey.currentState.showBottomSheet((context) => EditGoal(
+                  widget.index, widget.goal, widget.imageId, widget.imageUrl));
+            },
+          ),
+        ],
       );
 
   /// Returns PhotoView around given [imageId] & [imageUrl].
@@ -106,7 +122,6 @@ class _GoalPageState extends State<GoalPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<RytaUser>(context);
-
     return Scaffold(
       // set the global key
       key: _scaffoldKey,
@@ -144,6 +159,25 @@ class _GoalPageState extends State<GoalPage> {
                 ),
               ),
             ),
+
+          // if (_motivationOn == false)
+          // Align(
+          //   alignment: Alignment.topRight,
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: FloatingActionButton(
+          //       child: Icon(Icons.settings, color:widget.userfile.throughIntroduction == false
+          //                     ? goalFont
+          //                     : goalBackgound),
+          //       backgroundColor: Colors.transparent,
+          //       elevation: 0.0,
+          //       onPressed: () {
+
+          //       },
+          //     ),
+          //   ),
+          // ),
+
           if (_motivationOn == false)
             Align(
               alignment: Alignment.bottomRight,
@@ -476,107 +510,8 @@ class _GoalPageState extends State<GoalPage> {
             ),
         ],
       ),
-
-      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
-
-  /// Shows a BottomSheet containing image info.
-  // PersistentBottomSheetController _showInfoBottomSheet() {
-  //   return _scaffoldKey.currentState.showBottomSheet(
-  //     (context) => Text('ahoj'),
-  //       );
-  //   }
-//         key: _formKey,
-//         backgroundColor: Colors.white,
-//         appBar: AppBar(
-//           leading: new IconButton(
-//             icon: new Icon(Icons.arrow_back),
-//             color: Colors.black,
-//             onPressed: () {
-//               Navigator.pop(context);
-//             },
-//           ),
-//           backgroundColor: Colors.white,
-//           elevation: 0.0,
-//           centerTitle: true,
-//           title: SizedBox(
-//             height: 70,
-//             child: Image.asset("assets/ryta_logo.png"),),
-//         ),
-//         body: ListView (
-//             padding: EdgeInsets.symmetric(horizontal: 25.0),
-//             children: [
-//               Form(
-//                 key: _scaffoldKey,
-//                 child: Column(
-//                   children: <Widget>[
-//                     // Input goal name
-//                   SizedBox(height: 40.0),
-//                   SizedBox(height: 50.0),
-//                   Text(
-//                     "What is your goal/target?",
-//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-//                   ),
-//                   SizedBox(height: 15.0),
-//                   TextFormField(
-//                     initialValue: widget.goal.goalname,
-//                     decoration: textInputDecoration.copyWith(hintText: 'The target'),
-//                     validator: (val) => val.isEmpty ? 'Enter the target title' : null,
-//                     onChanged: (val) {
-//                       setState(() => goalname = val);
-//                     }
-//                   ),
-//                   SizedBox(height: 30.0),
-//                   Text(
-//                     "Why do you want to achieve/reach it?",
-//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-//                   ),
-//                   SizedBox(height: 15.0),
-//                   TextFormField(
-//                     initialValue: widget.goal.goalmotivation,
-//                     keyboardType: TextInputType.multiline,
-//                     maxLines: 3,
-//                     decoration: textInputDecoration.copyWith(hintText: 'Your motivation'),
-//                     validator: (val) => val.isEmpty ? 'Your motivation is important part of the definition!' : null,
-//                     onChanged: (val) {
-//                       setState(() => goalmotivation = val);
-//                     }
-//                   ),
-//                   SizedBox(height: 20.0),
-//                   ElevatedButton(
-//                       child: Text(
-//                         "SAVE",
-//                         //style: TextStyle(color: Colors.white),
-//                       ),
-//                       onPressed: () async {
-//                         if (_formKey.currentState.validate()) {
-//                           goal.goalname = goalname;
-//                           goal.goalmotivation = goalmotivation;
-//                           Navigator.pop(context);
-//                         }
-//                       }
-//                   ),
-//                 ]
-//               ),
-//               ),
-//           ]
-//         ),
-
-  // static Brightness estimateBrightnessForColor(Color color) {
-  //   final double relativeLuminance = color.computeLuminance();
-
-  //   // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
-  //   // The spec says to use kThreshold=0.0525, but Material Design appears to bias
-  //   // more towards using light text than WCAG20 recommends. Material Design spec
-  //   // doesn't say what value to use, but 0.15 seemed close to what the Material
-  //   // Design spec shows for its color palette on
-  //   // <https://material.io/go/design-theming#color-color-palette>.
-  //   const double kThreshold = 0.15;
-  //   if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
-  //     return Brightness.light;
-  //   return Brightness.dark;
-  // }
 
   Color _getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll("#", "");

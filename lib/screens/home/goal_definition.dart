@@ -83,9 +83,8 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                           maxLines: 3,
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Your motivation'),
-                          validator: (val) => val.isEmpty
-                              ? 'Your motivation is important part of the definition!'
-                              : null,
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter your motivation' : null,
                           onChanged: (val) {
                             setState(() => goalmotivation = val);
                           }),

@@ -114,14 +114,37 @@ class DatabaseService {
     });
   }
 
-  // Currenty unused
-  Future updateUserGoals(
-      String goalname, String goalmotivation, String imageUrl) async {
-    return await rytaUsersCollection.doc(uid).collection('goals').doc().update({
-      'goalname': goalname,
-      'goalmotivation': goalmotivation,
-      'imageUrl': imageUrl,
-    });
+  Future editUserGoals(int goalIndex, String goalname, String goalmotivation,
+      String imageUrl) async {
+    //get the coresponding goal from firebase
+    final goalFirestoreId = await getGoalId(goalIndex);
+    try {
+      return await rytaUsersCollection
+          .doc(uid)
+          .collection('goals')
+          .doc(goalFirestoreId)
+          .update({
+        'goalname': goalname,
+        'goalmotivation': goalmotivation,
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //get goal ID
+  Future<String> getGoalId(int goalIndex) async {
+    int i = 0;
+    dynamic goalFirestoreId = '';
+    await rytaUsersCollection.doc(uid).collection('goals').get().then(
+          (QuerySnapshot snapshot) => {
+            snapshot.docs.forEach((f) {
+              if (i == goalIndex) goalFirestoreId = f.reference.id;
+              i = i + 1;
+            }),
+          },
+        );
+    return goalFirestoreId;
   }
 
   Future deleteUserGoals(String goalID) async {

@@ -206,8 +206,12 @@ class _GoalsListState extends State<GoalsList> {
                             MaterialPageRoute(
                               builder: (context) =>
                                   // open [ImagePage] with the given image
-                                  GoalPage(goals[index], goals[index].imageID,
-                                      goals[index].imageUrl, userfile),
+                                  GoalPage(
+                                      index,
+                                      goals[index],
+                                      goals[index].imageID,
+                                      goals[index].imageUrl,
+                                      userfile),
                             ),
                           );
                         },
