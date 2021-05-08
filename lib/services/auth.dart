@@ -94,6 +94,37 @@ class AuthService {
     }
   }
 
+  // delete user
+  Future deleteUser() async {
+    try {
+      await _auth.currentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        //reauthenticate user
+        //google
+        // Step 1
+        try {
+          GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+          // Step 2
+          GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          );
+          await _auth.currentUser.reauthenticateWithCredential(credential);
+          await _auth.currentUser.delete();
+        } catch (f) {
+          print(
+              'The user must reauthenticate before this operation can be executed.');
+          return f;
+          // await _auth.currentUser.reauthenticateWithCredential(credential);
+          // await _auth.currentUser.delete();
+        }
+      }
+    }
+  }
+
   //Log in using google
   Future<dynamic> googleSignIn() async {
     try {

@@ -90,17 +90,21 @@ class _GoalPageState extends State<GoalPage> {
                 : null,
         actions: <Widget>[
           // show image info
-          IconButton(
-            icon: Icon(Icons.settings,
-                color: widget.userfile.throughIntroduction == false
-                    ? goalFont
-                    : goalBackgound),
-            tooltip: 'Edit your target',
-            onPressed: () async {
-              _scaffoldKey.currentState.showBottomSheet((context) => EditGoal(
-                  widget.index, widget.goal, widget.imageId, widget.imageUrl));
-            },
-          ),
+          if (widget.userfile.throughIntroduction == true)
+            IconButton(
+              icon: Icon(Icons.settings,
+                  color: widget.userfile.throughIntroduction == false
+                      ? goalFont
+                      : goalBackgound),
+              tooltip: 'Edit your target',
+              onPressed: () async {
+                _scaffoldKey.currentState.showBottomSheet((context) => EditGoal(
+                    widget.index,
+                    widget.goal,
+                    widget.imageId,
+                    widget.imageUrl));
+              },
+            ),
         ],
       );
 

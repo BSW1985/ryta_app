@@ -90,19 +90,19 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                           obscureText: true,
                           decoration: textInputDecoration.copyWith(
-                              hintText: 'Password'),
+                              errorMaxLines: 3, hintText: 'Password'),
                           validator: (val) {
                             if (val.length < 8) {
-                              return "Enter a password 8+ characters long";
+                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[A-Z]'))) {
-                              return "Use an upper case letter";
+                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[0-9]'))) {
-                              return "Use at least one digit";
+                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[a-z]'))) {
-                              return "Use a lower case letter";
-                            } else if (!val.contains(
-                                new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                              return "Use a special character";
+                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              // } else if (!val.contains(
+                              //     new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                              //   return "Use a special character";
                             }
                             return null;
                           },

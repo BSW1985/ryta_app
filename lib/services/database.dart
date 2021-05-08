@@ -37,6 +37,7 @@ class DatabaseService {
       'price': 0.111,
       'priceInitialized': randomNumber,
       'throughIntroduction': false,
+      'newsletterSubscription': true,
     });
   }
 
@@ -66,6 +67,13 @@ class DatabaseService {
     });
   }
 
+  // Newsletter subscription?
+  Future updateNewsletterSubscription(bool newsletterSubscription) async {
+    return await rytaUsersCollection.doc(uid).update({
+      'newsletterSubscription': newsletterSubscription,
+    });
+  }
+
 // Stream of USERFILE called in home
 //
   Stream<UserFile> get userfile {
@@ -90,6 +98,7 @@ class DatabaseService {
       price: snapshot.data()['price'] ?? '',
       priceInitialized: snapshot.data()['priceInitialized'] ?? '',
       throughIntroduction: snapshot.data()['throughIntroduction'] ?? '',
+      newsletterSubscription: snapshot.data()['newsletterSubscription'] ?? '',
     );
   }
 
