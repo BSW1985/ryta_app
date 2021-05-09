@@ -271,8 +271,8 @@ class _GoalsListState extends State<GoalsList> {
   Future<bool> _onBackPressed(context, RytaUser user, goal) {
     return showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Delete this goal?'),
+      builder: (context) => AlertDialog(
+        title: Text('Delete this goal?', style: TextStyle(fontSize: 17.0)),
         shape: RoundedRectangleBorder(
             // side: BorderSide(color: goalFont, width: 1.0),
             borderRadius: BorderRadius.circular(15.0)),

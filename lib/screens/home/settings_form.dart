@@ -69,20 +69,36 @@ class _SettingsFormState extends State<SettingsForm> {
             Form(
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 30.0, left: 30.0, right: 30.0, bottom: 5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          user.displayName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 55.0, bottom: 20.0, left: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              user.displayName,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0),
+                            ),
+
+                            SizedBox(height: 15.0),
+                            // email
+                            Text(
+                              user.email,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 40.0),
-                        // settings
-                        IconButton(
+                      ),
+                      SizedBox(width: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: IconButton(
                           icon: Icon(
                             Icons.settings,
                             color: Color(0xFF995C75),
@@ -92,20 +108,6 @@ class _SettingsFormState extends State<SettingsForm> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                // title: Row(children: [
-                                //   Padding(
-                                //     padding:
-                                //         const EdgeInsets.only(right: 10.0),
-                                //     child: Icon(
-                                //       Icons.settings,
-                                //       color: Colors.grey,
-                                //       size: 40.0,
-                                //     ),
-                                //   ),
-                                //   // Flexible(
-                                //   //     child: Text(
-                                //   //         'We are doing our best to make these features available!')),
-                                // ]),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0)),
                                 content: Column(
@@ -168,6 +170,28 @@ class _SettingsFormState extends State<SettingsForm> {
                                               EdgeInsets.symmetric(
                                                   horizontal: 30.0,
                                                   vertical: 15.0)),
+                                          // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                                          // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                                          // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                          //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                                          //         borderRadius: BorderRadius.circular(15.0))),
+                                        ),
+                                        child: Text(
+                                          'LOGOUT',
+                                        ),
+                                        onPressed: () async {
+                                          await _auth.signOut();
+                                        }),
+                                    SizedBox(height: 20.0),
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all<double>(
+                                                  0),
+                                          padding: MaterialStateProperty.all(
+                                              EdgeInsets.symmetric(
+                                                  horizontal: 30.0,
+                                                  vertical: 15.0)),
                                           backgroundColor:
                                               MaterialStateProperty.all<Color>(
                                                   Colors.transparent),
@@ -193,7 +217,9 @@ class _SettingsFormState extends State<SettingsForm> {
                                             builder: (context) =>
                                                 new AlertDialog(
                                               title: new Text(
-                                                  'Do you really want to delete your Ryta account?'),
+                                                  'Do you really want to delete your Ryta account?',
+                                                  style: TextStyle(
+                                                      fontSize: 17.0)),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -427,37 +453,10 @@ class _SettingsFormState extends State<SettingsForm> {
                             //delete the acount?
                           },
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // SizedBox(height: 20.0),
-                  // email
-                  Text(
-                    user.email,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17.0),
-                  ),
-                  SizedBox(height: 30.0),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all<double>(0),
-                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 15.0)),
-                        // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                        // foregroundColor: MaterialStateProperty.all<Color>(Color(0xFF995C75)),
-                        // shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        //         // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
-                        //         borderRadius: BorderRadius.circular(15.0))),
                       ),
-                      child: Text(
-                        'LOGOUT',
-                      ),
-                      onPressed: () async {
-                        await _auth.signOut();
-                      }),
-                  SizedBox(height: 10.0),
-
+                      // SizedBox(height: 10.0),
+                    ],
+                  ),
                   Visibility(
                     // visible: (userfile.willToPay!=true),
                     child: Column(
@@ -467,7 +466,7 @@ class _SettingsFormState extends State<SettingsForm> {
                               const EdgeInsets.only(left: 40.0, right: 40.0),
                           child: Divider(
                             color: Colors.black,
-                            height: 50,
+                            height: 40,
                           ),
                         ),
                         SizedBox(height: 10.0),
