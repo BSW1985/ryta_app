@@ -92,14 +92,14 @@ class _RegisterState extends State<Register> {
                           decoration: textInputDecoration.copyWith(
                               errorMaxLines: 3, hintText: 'Password'),
                           validator: (val) {
-                            if (val.length < 8) {
-                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                            if (val.length < 6) {
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[A-Z]'))) {
-                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[0-9]'))) {
-                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
                             } else if (!val.contains(new RegExp(r'[a-z]'))) {
-                              return "Enter a password 8+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
                               // } else if (!val.contains(
                               //     new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
                               //   return "Use a special character";

@@ -3,6 +3,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
+import 'package:ryta_app/widgets/reset_password.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -13,6 +14,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -21,12 +23,14 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
   String error = '';
+  bool forgottenPasswordOption = false;
 
   @override
   Widget build(BuildContext context) {
     return loading
         ? Loading(Colors.white, Color(0xFF995C75))
         : Scaffold(
+            key: _scaffoldKey,
             backgroundColor: Colors.white,
             // appBar: AppBar(
             //   backgroundColor: Colors.blue,
@@ -62,19 +66,50 @@ class _SignInState extends State<SignIn> {
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Password'),
                           validator: (val) => val.length < 6
-                              ? 'Enter a password 8+ characters long'
+                              ? 'Enter a password 6+ characters long'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);
                           }),
+                      //forgotten password?
+                      if (forgottenPasswordOption == true)
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all<double>(0),
+                            padding: MaterialStateProperty.all(
+                                EdgeInsets.symmetric(
+                                    horizontal: 30.0, vertical: 15.0)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.grey),
+                            // shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            //         side: BorderSide(color: Colors.grey, width: 1.0),
+                            //         borderRadius: BorderRadius.circular(15.0))),
+                          ),
+                          child: Text(
+                            'FORGOT PASSWORD?',
+                            //style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            _scaffoldKey.currentState.showBottomSheet(
+                                (context) => ResetPassword(email));
+                          },
+                          //bottom sheet to enter an email..
+                        ),
+
                       // Implementation of the log in button.
-                      SizedBox(height: 20.0),
+                      if (forgottenPasswordOption == false)
+                        SizedBox(height: 20.0),
                       ElevatedButton(
                           child: Text(
                             'LOG IN',
                             //style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
+                            setState(() {
+                              forgottenPasswordOption = true;
+                            });
                             if (_formKey.currentState.validate()) {
                               setState(() => loading = true);
                               dynamic result = await _auth
