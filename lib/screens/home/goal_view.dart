@@ -82,20 +82,14 @@ class _GoalPageState extends State<GoalPage> {
             // back button
             widget.userfile.throughIntroduction == true
                 ? IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: widget.userfile.throughIntroduction == false
-                            ? goalFont
-                            : goalBackgound),
+                    icon: Icon(Icons.arrow_back, color: goalFont),
                     onPressed: () => Navigator.pop(context))
                 : null,
         actions: <Widget>[
           // show image info
           if (widget.userfile.throughIntroduction == true)
             IconButton(
-              icon: Icon(Icons.settings,
-                  color: widget.userfile.throughIntroduction == false
-                      ? goalFont
-                      : goalBackgound),
+              icon: Icon(Icons.settings, color: goalFont),
               tooltip: 'Edit your target',
               onPressed: () async {
                 _scaffoldKey.currentState.showBottomSheet((context) => EditGoal(
@@ -190,20 +184,14 @@ class _GoalPageState extends State<GoalPage> {
                 child: FloatingActionButton.extended(
                   // icon: Icon(Icons.check),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: widget.userfile.throughIntroduction == false
-                              ? goalFont
-                              : goalBackgound,
-                          width: 1.0),
+                      side: BorderSide(color: goalFont, width: 1.0),
                       borderRadius: BorderRadius.circular(15.0)),
                   elevation: 0.0,
                   label: Text('Why?',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25.0,
-                          color: widget.userfile.throughIntroduction == false
-                              ? goalFont
-                              : goalBackgound)),
+                          color: goalFont)),
                   tooltip: 'See the motivation!',
                   onPressed: () {
                     setState(() {

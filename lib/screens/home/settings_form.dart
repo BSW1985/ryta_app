@@ -181,6 +181,7 @@ class _SettingsFormState extends State<SettingsForm> {
                                         ),
                                         onPressed: () async {
                                           await _auth.signOut();
+                                          Navigator.of(context).pop();
                                         }),
                                     SizedBox(height: 20.0),
                                     ElevatedButton(
@@ -651,9 +652,9 @@ class _SettingsFormState extends State<SettingsForm> {
                                         TextSpan(
                                           text:
                                               "We appreciate your interest! If you like our vision, have other ideas or would like to give us personal feedback, please contact us at ",
-                                          style: TextStyle(color: Colors.black,
-                                                                          fontFamily:
-                                                                              'CenturyGothic'),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'CenturyGothic'),
                                         ),
 
                                         // ignore: todo
@@ -663,8 +664,7 @@ class _SettingsFormState extends State<SettingsForm> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
-                                                                          fontFamily:
-                                                                              'CenturyGothic'),
+                                                fontFamily: 'CenturyGothic'),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
                                                 var url =
@@ -677,9 +677,9 @@ class _SettingsFormState extends State<SettingsForm> {
                                               }),
                                         TextSpan(
                                           text: ". Your Ryta team :)",
-                                          style: TextStyle(color: Colors.black,
-                                                                          fontFamily:
-                                                                              'CenturyGothic'),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'CenturyGothic'),
                                         ),
                                       ]),
                                     ),
