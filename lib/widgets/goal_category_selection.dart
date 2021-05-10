@@ -6,7 +6,6 @@ import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/database.dart';
-import 'package:ryta_app/shared/loading.dart';
 
 class FinishFloatingActionButton extends StatefulWidget {
   final String imageId, imageUrl;
@@ -24,6 +23,20 @@ class _FinishFloatingActionButtonState
   /// Displayed image.
   UnsplashImage image;
   bool showFab = true;
+  bool healthVal = false;
+  bool nutritionVal = false;
+  bool sportsVal = false;
+  bool mentalHealthVal = false;
+  bool careerVal = false;
+  bool educationVal = false;
+  bool personalFinanceVal = false;
+  bool networkingVal = false;
+  bool productivityVal = false;
+  bool leisureVal = false;
+  bool personalGrowthVal = false;
+  bool cultureVal = false;
+  bool romanceVal = false;
+  bool socialLifeVal = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,20 +45,23 @@ class _FinishFloatingActionButtonState
             icon: Icon(Icons.check),
             label: Text('FINISH'),
             backgroundColor: Color(0xFF995C75),
-            onPressed: () {
+            onPressed: () async {
               var bottomSheetController = showBottomSheet(
                   context: context,
-                  builder: (context) => Container(
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                        builder: (context, StateSetter setState) {
+                      return Container(
                         color: Colors.transparent,
                         margin:
                             const EdgeInsets.only(top: 5, left: 15, right: 15),
-                        height: 410,
+                        // height: 410,
                         child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                height: 375,
+                                // height: 375,
                                 decoration: BoxDecoration(
                                   color: Colors.white70,
                                   borderRadius:
@@ -53,15 +69,13 @@ class _FinishFloatingActionButtonState
                                 ),
                                 child: Column(children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: SheetButton(
-                                        widget.imageId, widget.imageUrl),
-                                  ),
-                                  Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 15.0, right: 15.0, bottom: 20.0),
+                                        top: 30.0,
+                                        left: 15.0,
+                                        right: 15.0,
+                                        bottom: 5.0),
                                     child: Text(
-                                      'Into which category fits your goal the most?',
+                                      'Where does your target fit the most?',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -69,18 +83,515 @@ class _FinishFloatingActionButtonState
                                       ),
                                     ),
                                   ),
-                                  CategoryButton('Category 1', widget.imageId,
-                                      widget.imageUrl),
-                                  CategoryButton('Category 2', widget.imageId,
-                                      widget.imageUrl),
-                                  CategoryButton('Category 3', widget.imageId,
-                                      widget.imageUrl),
-                                  CategoryButton('Category 4', widget.imageId,
-                                      widget.imageUrl),
+                                  //checktiles of all the categories
+                                  //undercategories open only if the coresponding category selected
+                                  SizedBox(
+                                    height: 40.0,
+                                    child: CheckboxListTile(
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        // checkColor: Color(0xFFF9A825),
+                                        activeColor: Color(0xFFF9A825),
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0, top: 8.0),
+                                          child: Text(
+                                            'Health',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17.0),
+                                          ),
+                                        ),
+                                        // subtitle: Text(
+                                        //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                        //     style: TextStyle(fontSize: 17.0)),
+                                        value: healthVal,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            healthVal = !healthVal;
+                                            nutritionVal = false;
+                                            sportsVal = false;
+                                            mentalHealthVal = false;
+                                          });
+                                        }),
+                                  ),
+
+                                  Visibility(
+                                      visible: (healthVal == true),
+                                      child: Column(children: [
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Nutrition',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: nutritionVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    nutritionVal =
+                                                        !nutritionVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Sports',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: sportsVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    sportsVal = !sportsVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Mental Health',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: mentalHealthVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    mentalHealthVal =
+                                                        !mentalHealthVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                      ])),
+
+                                  SizedBox(
+                                    height: 40.0,
+                                    child: CheckboxListTile(
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        // checkColor: Color(0xFFF9A825),
+                                        activeColor: Color(0xFFF9A825),
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0, top: 8.0),
+                                          child: Text(
+                                            'Career',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17.0),
+                                          ),
+                                        ),
+                                        // subtitle: Text(
+                                        //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                        //     style: TextStyle(fontSize: 17.0)),
+                                        value: careerVal,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            careerVal = !careerVal;
+                                            educationVal = false;
+                                            personalFinanceVal = false;
+                                            networkingVal = false;
+                                            productivityVal = false;
+                                          });
+                                        }),
+                                  ),
+
+                                  Visibility(
+                                      visible: (careerVal == true),
+                                      child: Column(children: [
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Education',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: educationVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    educationVal =
+                                                        !educationVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Personal Finance',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: personalFinanceVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    personalFinanceVal =
+                                                        !personalFinanceVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Networking',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: networkingVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    networkingVal =
+                                                        !networkingVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Productivity',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: productivityVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    productivityVal =
+                                                        !productivityVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                      ])),
+                                  SizedBox(
+                                    height: 40.0,
+                                    child: CheckboxListTile(
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        // checkColor: Color(0xFFF9A825),
+                                        activeColor: Color(0xFFF9A825),
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0, top: 8.0),
+                                          child: Text(
+                                            'Leisure',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17.0),
+                                          ),
+                                        ),
+                                        // subtitle: Text(
+                                        //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                        //     style: TextStyle(fontSize: 17.0)),
+                                        value: leisureVal,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            leisureVal = !leisureVal;
+                                            personalGrowthVal = false;
+                                            cultureVal = false;
+                                            romanceVal = false;
+                                            socialLifeVal = false;
+                                          });
+                                        }),
+                                  ),
+
+                                  Visibility(
+                                      visible: (leisureVal == true),
+                                      child: Column(children: [
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Personal Growth',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: personalGrowthVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    personalGrowthVal =
+                                                        !personalGrowthVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Culture',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: cultureVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    cultureVal = !cultureVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Romance',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: romanceVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    romanceVal = !romanceVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0),
+                                            child: CheckboxListTile(
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                // checkColor: Color(0xFFF9A825),
+                                                activeColor: Color(0xFFF9A825),
+                                                title: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 3.0,
+                                                          top: 3.0),
+                                                  child: Text(
+                                                    'Social Life',
+                                                    style: TextStyle(
+                                                        fontSize: 17.0),
+                                                  ),
+                                                ),
+                                                // subtitle: Text(
+                                                //     'Stay on track with all the new stuff coming soon in Ryta!',
+                                                //     style: TextStyle(fontSize: 17.0)),
+                                                value: socialLifeVal,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    socialLifeVal =
+                                                        !socialLifeVal;
+                                                  });
+                                                }),
+                                          ),
+                                        ),
+                                      ])),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 30.0, bottom: 20.0),
+                                    child: CategoryButton(
+                                        'FINISH',
+                                        widget.imageId,
+                                        widget.imageUrl,
+                                        healthVal,
+                                        nutritionVal,
+                                        sportsVal,
+                                        mentalHealthVal,
+                                        careerVal,
+                                        educationVal,
+                                        personalFinanceVal,
+                                        networkingVal,
+                                        productivityVal,
+                                        leisureVal,
+                                        personalGrowthVal,
+                                        cultureVal,
+                                        romanceVal,
+                                        socialLifeVal),
+                                  ),
                                 ]),
                               )
                             ]),
-                      ));
+                      );
+                    });
+                  });
 
               showFoatingActionButton(false);
 
@@ -99,59 +610,50 @@ class _FinishFloatingActionButtonState
   }
 }
 
-class CategoryButton extends StatelessWidget {
+class CategoryButton extends StatefulWidget {
   final String buttonName;
   final String imageId, imageUrl;
+  final bool healthVal;
+  final bool nutritionVal;
+  final bool sportsVal;
+  final bool mentalHealthVal;
+  final bool careerVal;
+  final bool educationVal;
+  final bool personalFinanceVal;
+  final bool networkingVal;
+  final bool productivityVal;
+  final bool leisureVal;
+  final bool personalGrowthVal;
+  final bool cultureVal;
+  final bool romanceVal;
+  final bool socialLifeVal;
 
-  CategoryButton(this.buttonName, this.imageId, this.imageUrl);
-
-  @override
-  Widget build(BuildContext context) {
-    final goal = Provider.of<Goal>(context);
-    final user = Provider.of<RytaUser>(context);
-
-    return ElevatedButton(
-        child: Text(
-          buttonName,
-        ),
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(0),
-          padding: MaterialStateProperty.all(
-              EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0)),
-          // backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        ),
-        onPressed: () async {
-          DatabaseService(uid: user.uid).addUserGoals(
-            goal.goalname.toString(),
-            goal.goalmotivation.toString(),
-            imageUrl,
-            imageId,
-            goal.goalBackgoundColor,
-            goal.goalFontColor,
-            buttonName,
-          );
-          if (user != null)
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Wrapper(),
-              ),
-            );
-        });
-  }
-}
-
-class SheetButton extends StatefulWidget {
-  final String imageId, imageUrl;
-
-  SheetButton(this.imageId, this.imageUrl, {Key key}) : super(key: key);
+  CategoryButton(
+      this.buttonName,
+      this.imageId,
+      this.imageUrl,
+      this.healthVal,
+      this.nutritionVal,
+      this.sportsVal,
+      this.mentalHealthVal,
+      this.careerVal,
+      this.educationVal,
+      this.personalFinanceVal,
+      this.networkingVal,
+      this.productivityVal,
+      this.leisureVal,
+      this.personalGrowthVal,
+      this.cultureVal,
+      this.romanceVal,
+      this.socialLifeVal,
+      {Key key})
+      : super(key: key);
 
   @override
-  _SheetButtonState createState() => _SheetButtonState();
+  _CategoryButtonState createState() => _CategoryButtonState();
 }
 
-class _SheetButtonState extends State<SheetButton> {
-  /// Displayed image.
+class _CategoryButtonState extends State<CategoryButton> {
   UnsplashImage image;
 
   String goalBackgoundColor;
@@ -160,30 +662,85 @@ class _SheetButtonState extends State<SheetButton> {
   bool generatingPalette = true;
 
   @override
-  Widget build(BuildContext context) {
-    final goal = Provider.of<Goal>(context);
+  Widget build(
+    BuildContext context,
+  ) {
+    return StatefulBuilder(builder: (context, StateSetter setState) {
+      final goal = Provider.of<Goal>(context);
+      final user = Provider.of<RytaUser>(context);
 
-    if (generatingPalette == true) _getColor(goal, generatingPalette);
+      return ElevatedButton(
+          child: Text(
+            widget.buttonName,
+          ),
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all<double>(0),
+          ),
+          onPressed: () async {
+            showDialog(
+                barrierColor: Colors.white.withOpacity(0.8),
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (context, StateSetter setState) {
+                    return AlertDialog(
+                      elevation: 0.0,
+                      backgroundColor: Colors.white.withOpacity(0),
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/ryta_logo.png",
+                            height: 150,
+                            // width: 100,
+                          ),
+                          Text(
+                            'Your visualization is getting ready!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0),
+                          )
+                        ],
+                      ),
+                    );
+                  });
+                });
 
-    return generatingPalette
-        ? Center(
-            child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Text('Your visualization is getting ready!'),
+            await _getColor(goal, generatingPalette);
+
+            await DatabaseService(uid: user.uid).addUserGoals(
+              goal.goalname.toString(),
+              goal.goalmotivation.toString(),
+              widget.imageUrl,
+              widget.imageId,
+              goal.goalBackgoundColor,
+              goal.goalFontColor,
+              widget.healthVal,
+              widget.nutritionVal,
+              widget.sportsVal,
+              widget.mentalHealthVal,
+              widget.careerVal,
+              widget.educationVal,
+              widget.personalFinanceVal,
+              widget.networkingVal,
+              widget.productivityVal,
+              widget.leisureVal,
+              widget.personalGrowthVal,
+              widget.cultureVal,
+              widget.romanceVal,
+              widget.socialLifeVal,
+              //array of categories selected by user
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Wrapper(),
               ),
-              Loading(Colors.transparent, Color(0xFF995C75)),
-            ],
-          ))
-        : Padding(
-            padding: const EdgeInsets.all(7.5),
-            child: Icon(
-              Icons.check,
-              color: Colors.black,
-              size: 40.0,
-            ),
-          );
+            );
+          });
+    });
   }
 
   Future<PaletteGenerator> getImagePalette(ImageProvider imageProvider) async {

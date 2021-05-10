@@ -105,13 +105,27 @@ class DatabaseService {
   // GOALS - Handling communication with Firestore
 
   Future addUserGoals(
-      String goalname,
-      String goalmotivation,
-      String imageUrl,
-      String imageID,
-      String goalBackgoundColor,
-      String goalFontColor,
-      String goalCategory) async {
+    String goalname,
+    String goalmotivation,
+    String imageUrl,
+    String imageID,
+    String goalBackgoundColor,
+    String goalFontColor,
+    bool healthVal,
+    bool nutritionVal,
+    bool sportsVal,
+    bool mentalHealthVal,
+    bool careerVal,
+    bool educationVal,
+    bool personalFinanceVal,
+    bool networkingVal,
+    bool productivityVal,
+    bool leisureVal,
+    bool personalGrowthVal,
+    bool cultureVal,
+    bool romanceVal,
+    bool socialLifeVal,
+  ) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
       'goalname': goalname,
       'goalmotivation': goalmotivation,
@@ -119,7 +133,22 @@ class DatabaseService {
       'imageID': imageID,
       'goalBackgoundColor': goalBackgoundColor,
       'goalFontColor': goalFontColor,
-      'goalCategory': goalCategory,
+      "goalCategory": {
+        "health": healthVal,
+        "nutrition": nutritionVal,
+        "sports": sportsVal,
+        "mentalHealth": mentalHealthVal,
+        "career": careerVal,
+        "education": educationVal,
+        "personalFinance": personalFinanceVal,
+        "networking": networkingVal,
+        "productivity": productivityVal,
+        "leisure": leisureVal,
+        "personalGrowth": personalGrowthVal,
+        "culture": cultureVal,
+        "romance": romanceVal,
+        "socialLife": socialLifeVal
+      }
     });
   }
 
@@ -176,7 +205,6 @@ class DatabaseService {
         imageID: doc.data()['imageID'] ?? '',
         goalBackgoundColor: doc.data()['goalBackgoundColor'] ?? '',
         goalFontColor: doc.data()['goalFontColor'] ?? '',
-        goalCategory: doc.data()['goalCategory'] ?? '',
       );
     }).toList();
   }
