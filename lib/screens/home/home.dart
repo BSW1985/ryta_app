@@ -25,107 +25,126 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<RytaUser>(context);
+    // final userfile = Provider.of<UserFile>(context);
     final width = MediaQuery.of(context).size.width;
     final iconLocation = width / 4 - 22;
 
     // Homescreen
-    return MultiProvider(
-      providers: [
-        // Stream of data in USERFILE
-        if (user.uid != null)
-          StreamProvider<UserFile>.value(
-            value: DatabaseService(uid: user.uid).userfile,
-            initialData: null,
-          ),
+    if (user != null)
+      return MultiProvider(
+          providers: [
+            // Stream of data in USERFILE
+            StreamProvider<UserFile>.value(
+              catchError: (_, __) => null,
+              value: DatabaseService(uid: user.uid).userfile,
+              initialData: null,
+            ),
 
-        // Strean of GOALS
-        StreamProvider<List<Goal>>.value(
-          value: DatabaseService(uid: user.uid).goals,
-          initialData: null,
-        )
-      ],
-      child: Scaffold(
-        extendBody: true,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1.0,
-          centerTitle: true,
-          title: SizedBox(
-            height: 70,
-            child: Image.asset("assets/ryta_logo.png"),
-          ),
+            // Strean of GOALS
+            StreamProvider<List<Goal>>.value(
+              value: DatabaseService(uid: user.uid).goals,
+              initialData: null,
+            )
+          ],
+          // child: Builder(
+          builder: (context, child) {
+            final userfile = Provider.of<UserFile>(context);
+            return Scaffold(
+              extendBody: true,
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 1.0,
+                centerTitle: true,
+                title: SizedBox(
+                  height: 70,
+                  child: Image.asset("assets/ryta_logo.png"),
+                ),
 
-          //    /* TextButton.icon(
-          //       icon: Icon(Icons.settings),
-          //       label: Text('settings'),
-          //       onPressed: () => _showSettingsPanel(),
-          //     ) */
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-
-        // Implementing the toolbar
-        bottomNavigationBar: BottomAppBar(
-          // elevation: 2.0,
-          shape: CircularNotchedRectangle(),
-          notchMargin: 5.0,
-          color: Colors.white,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                color: Colors.grey[400],
-                icon: Icon(Icons.home_filled,
-                    color: _selectedIndex == 0
-                        ? Color(0xFF995C75)
-                        : Colors.grey[400]),
-                padding: EdgeInsets.only(left: iconLocation),
-                onPressed: () {
-                  if (user.emailVerified == true)
-                    setState(() {
-                      _selectedIndex = 0;
-                    });
-                },
+                //    /* TextButton.icon(
+                //       icon: Icon(Icons.settings),
+                //       label: Text('settings'),
+                //       onPressed: () => _showSettingsPanel(),
+                //     ) */
               ),
-              IconButton(
-                color: Colors.grey[400],
-                icon: Icon(Icons.person,
-                    color: _selectedIndex == 1
-                        ? Color(0xFF995C75)
-                        : Colors.grey[400]),
-                padding: EdgeInsets.only(right: iconLocation),
-                onPressed: () {
-                  DatabaseService(uid: user.uid)
-                      .updateEmailVerified(user.emailVerified);
-                  if (user.emailVerified == true)
-                    setState(() {
-                      _selectedIndex = 1;
-                    });
-                },
+              body: Center(
+                child: _widgetOptions.elementAt(_selectedIndex),
               ),
-            ],
-          ),
-        ),
 
-        // Start a definition of a new goal
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              // Implementing the toolbar
+              bottomNavigationBar: BottomAppBar(
+                // elevation: 2.0,
+                shape: CircularNotchedRectangle(),
+                notchMargin: 5.0,
+                color: Colors.white,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      color: Colors.grey[400],
+                      icon: Icon(Icons.home_filled,
+                          color: _selectedIndex == 0
+                              ? Color(0xFF995C75)
+                              : Colors.grey[400]),
+                      padding: EdgeInsets.only(left: iconLocation),
+                      onPressed: () {
+                        if (user.emailVerified == true)
+                          setState(() {
+                            _selectedIndex = 0;
+                          });
+                      },
+                    ),
+                    IconButton(
+                      color: Colors.grey[400],
+                      icon: Icon(Icons.person,
+                          color: _selectedIndex == 1
+                              ? Color(0xFF995C75)
+                              : Colors.grey[400]),
+                      padding: EdgeInsets.only(right: iconLocation),
+                      onPressed: () {
+                        DatabaseService(uid: user.uid)
+                            .updateEmailVerified(user.emailVerified);
+                        if (user.emailVerified == true)
+                          setState(() {
+                            _selectedIndex = 1;
+                          });
+                      },
+                    ),
+                  ],
+                ),
+              ),
 
-        floatingActionButton: FloatingActionButton(
-          elevation: 0.0,
-          clipBehavior: Clip.none,
-          onPressed: () async {
-            if (user.emailVerified == true)
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => GoalDefinition()));
-          },
-          tooltip: 'Add a new goal',
-          child: Icon(Icons.add),
-          backgroundColor: Color(0xFF995C75),
-        ),
-      ),
-    );
+              // Start a definition of a new goal
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+
+              floatingActionButton: FloatingActionButton(
+                elevation: 0.0,
+                clipBehavior: Clip.none,
+                onPressed: () async {
+                  if (user.emailVerified == true) {
+                    if (userfile.throughIntroduction == false) {
+                      final goalFirestoreId =
+                          await DatabaseService(uid: user.uid).getGoalId(0);
+                      DatabaseService(uid: user.uid)
+                          .updateThroughIntroduction(true);
+                      DatabaseService(uid: user.uid)
+                          .deleteUserGoals(goalFirestoreId);
+                    }
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => GoalDefinition()));
+                  }
+                },
+                tooltip: 'Add a new goal',
+                child: Icon(Icons.add),
+                backgroundColor: Color(0xFF995C75),
+              ),
+            );
+          });
+    // );
+    else {
+      return Container(width: 0.0, height: 0.0);
+    }
   }
 }

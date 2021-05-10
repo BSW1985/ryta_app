@@ -9,6 +9,7 @@ class UserFile {
   final double price;
   final double priceInitialized;
   final bool throughIntroduction;
+  final bool newsletterSubscription;
 
   UserFile(
       {this.name,
@@ -19,5 +20,6 @@ class UserFile {
       this.package3,
       this.price,
       this.priceInitialized,
-      this.throughIntroduction});
+      this.throughIntroduction,
+      this.newsletterSubscription});
 }

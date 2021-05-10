@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
@@ -113,9 +114,9 @@ class _GoalsListState extends State<GoalsList> {
     // return
     //   Center(child: Text('please verify'));
     //   // Loading(Colors.white);
-    else if (goals == null)
-      return Loading(Colors.white, Color(0xFF995C75));
-    else if (goals.length == 0)
+    if (goals == null) return Loading(Colors.white, Color(0xFF995C75));
+    if (userfile == null) return Loading(Colors.white, Color(0xFF995C75));
+    if (goals.length == 0 && userfile.throughIntroduction != false)
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -204,8 +205,12 @@ class _GoalsListState extends State<GoalsList> {
                             MaterialPageRoute(
                               builder: (context) =>
                                   // open [ImagePage] with the given image
-                                  GoalPage(goals[index], goals[index].imageID,
-                                      goals[index].imageUrl, userfile),
+                                  GoalPage(
+                                      index,
+                                      goals[index],
+                                      goals[index].imageID,
+                                      goals[index].imageUrl,
+                                      userfile),
                             ),
                           );
                         },
@@ -265,8 +270,8 @@ class _GoalsListState extends State<GoalsList> {
   Future<bool> _onBackPressed(context, RytaUser user, goal) {
     return showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Delete this goal?'),
+      builder: (context) => AlertDialog(
+        title: Text('Delete this goal?', style: TextStyle(fontSize: 17.0)),
         shape: RoundedRectangleBorder(
             // side: BorderSide(color: goalFont, width: 1.0),
             borderRadius: BorderRadius.circular(15.0)),

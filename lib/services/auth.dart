@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
@@ -57,6 +56,17 @@ class AuthService {
     }
   }
 
+  //reset password
+  Future passwordReset(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return "success";
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   // register with email and password
   Future registerWithEmailAndPassword(
       String email, String password, String username) async {
@@ -68,12 +78,25 @@ class AuthService {
       await user.sendEmailVerification();
       await DatabaseService(uid: user.uid).addUserGoals(
         "Visualization is powerful",
-        "motivation1",
+        "Visualization techniques have been used by successful people for ages, helping them create their dream lives. We all have this awesome power, but most of us have never been taught to use it effectively.",
         "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
         "dI7vfR1Bqcg",
         "#ff2a2609",
         "#fff7c759",
-        "introduction",
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
       );
       // create a new document for the user with the uid
       await DatabaseService(uid: user.uid).initializeUserData(username, email,
@@ -95,6 +118,37 @@ class AuthService {
     }
   }
 
+  // delete user
+  Future deleteUser() async {
+    try {
+      await _auth.currentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        //reauthenticate user
+        //google
+        // Step 1
+        try {
+          GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+          // Step 2
+          GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          );
+          await _auth.currentUser.reauthenticateWithCredential(credential);
+          await _auth.currentUser.delete();
+        } catch (f) {
+          print(
+              'The user must reauthenticate before this operation can be executed.');
+          return f;
+          // await _auth.currentUser.reauthenticateWithCredential(credential);
+          // await _auth.currentUser.delete();
+        }
+      }
+    }
+  }
+
   //Log in using google
   Future<dynamic> googleSignIn() async {
     try {
@@ -109,28 +163,57 @@ class AuthService {
       UserCredential _res = await _auth.signInWithCredential(credential);
       User user = _res.user;
       //only if the user does not exist yet
+      // try {
+      //   _auth.createUserWithEmailAndPassword(
+      //       email: user.email, password: 'password');
+      // } catch (signUpError) {
+      //   if (signUpError.code == 'email-already-in-use') {
+      //       /// email has already been registered.
+      //     } else {
+      //       // create a new document for the user with the uid
+      //       await DatabaseService(uid: user.uid).initializeUserData(
+      //           user.displayName, user.email, user.emailVerified);
+      //       await DatabaseService(uid: user.uid).addUserGoals(
+      //         "Visualization is powerful",
+      //         "motivation1",
+      //         "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+      //         "dI7vfR1Bqcg",
+      //         "#ff2a2609",
+      //         "#fff7c759",
+      //         "introduction",
+      //       );
+      //     }
+      //   }
       try {
-        _auth.createUserWithEmailAndPassword(
-            email: user.email, password: 'password');
-      } catch (signUpError) {
-        if (signUpError is PlatformException) {
-          if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-            /// email has already been registered.
-          } else {
-            // create a new document for the user with the uid
-            await DatabaseService(uid: user.uid).initializeUserData(
-                user.displayName, user.email, user.emailVerified);
-            await DatabaseService(uid: user.uid).addUserGoals(
-              "Visualization is powerful",
-              "motivation1",
-              "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
-              "dI7vfR1Bqcg",
-              "#ff2a2609",
-              "#fff7c759",
-              "introduction",
-            );
-          }
-        }
+        await DatabaseService(uid: user.uid).getUID();
+      } catch (e) {
+        print(e.toString());
+        await DatabaseService(uid: user.uid).initializeUserData(
+            user.displayName, user.email, user.emailVerified);
+        await DatabaseService(uid: user.uid).addUserGoals(
+          "Visualization is powerful",
+          "motivation1",
+          "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+          "dI7vfR1Bqcg",
+          "#ff2a2609",
+          "#fff7c759",
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+        );
+        // return null;
+        return _userFromFirebaseUser(user);
       }
 
       return _userFromFirebaseUser(user);
