@@ -37,7 +37,7 @@ dependencies:
   # Imported from Unsplash_Master
   flutter_staggered_grid_view: ^0.3.3
   url_launcher: ^5.0.2
-  cached_network_image: ^2.5.0
+  cached_network_image: ^3.0.0
   photo_view: ^0.10.3
   date_format: ^1.0.9
   parallax_image: 0.3.1+1
@@ -46,6 +46,7 @@ dependencies:
   palette_generator: ^0.3.0
   google_sign_in: ^5.0.0
   email_validator: ^2.0.1
+  flutter_cache_manager: ^3.0.2
 
 
 dev_dependencies:

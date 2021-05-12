@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,13 @@ class _FinishFloatingActionButtonState
 
   @override
   Widget build(BuildContext context) {
+    //cache image
+    CachedNetworkImage(
+      imageUrl: widget.imageUrl,
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
+
     return showFab
         ? FloatingActionButton.extended(
             icon: Icon(Icons.check),
@@ -777,7 +785,7 @@ class _CategoryButtonState extends State<CategoryButton> {
   }
 
   _getColor(Goal goal, bool generatingPalette) async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    // await Future.delayed(Duration(milliseconds: 200));
 
     Brightness brightnessDominant;
     Brightness brightnessVibrant;
@@ -788,7 +796,8 @@ class _CategoryButtonState extends State<CategoryButton> {
 
     // get the whole palette
     PaletteGenerator paletteGenerator =
-        await getImagePalette(NetworkImage(widget.imageUrl));
+        await getImagePalette(CachedNetworkImageProvider(widget.imageUrl));
+    // await getImagePalette(NetworkImage(widget.imageUrl));
 
     // get brightness of each color
     if (paletteGenerator.dominantColor?.color != null)

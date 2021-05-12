@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/shared/constants.dart';
@@ -52,10 +53,16 @@ class _SignInState extends State<SignIn> {
                       // Input email (panel)
                       SizedBox(height: 10.0),
                       TextFormField(
+                          initialValue: email,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]'))
+                          ],
+                          keyboardType: TextInputType.text,
                           decoration:
                               textInputDecoration.copyWith(hintText: 'Email'),
                           validator: (val) =>
-                              val.isEmpty ? 'Enter an Email' : null,
+                              val.isEmpty ? 'Enter an email address' : null,
                           onChanged: (val) {
                             setState(() => email = val);
                           }),
@@ -66,7 +73,7 @@ class _SignInState extends State<SignIn> {
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Password'),
                           validator: (val) => val.length < 6
-                              ? 'Enter a password 6+ characters long'
+                              ? 'Enter a password 6+ characters long, with at least letter and one digit'
                               : null,
                           onChanged: (val) {
                             setState(() => password = val);

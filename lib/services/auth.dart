@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
@@ -98,6 +100,14 @@ class AuthService {
         false,
         false,
       );
+
+      // cache the intro image
+      CachedNetworkImage(
+        imageUrl:
+            "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
       // create a new document for the user with the uid
       await DatabaseService(uid: user.uid).initializeUserData(username, email,
           user.emailVerified); //pass the name from registration form
@@ -188,6 +198,14 @@ class AuthService {
         await DatabaseService(uid: user.uid).getUID();
       } catch (e) {
         print(e.toString());
+
+        // cache the intro image
+        CachedNetworkImage(
+          imageUrl:
+              "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
         await DatabaseService(uid: user.uid).initializeUserData(
             user.displayName, user.email, user.emailVerified);
         await DatabaseService(uid: user.uid).addUserGoals(

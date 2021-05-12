@@ -97,6 +97,9 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
       images = res[1];
     }
 
+    print("LOADING IMAGES");
+    if (images.isEmpty) print("NEFUNGUJE TO");
+
     // ignore: todo
     // TODO: handle errors
 

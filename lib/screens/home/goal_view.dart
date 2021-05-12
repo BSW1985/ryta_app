@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +107,7 @@ class _GoalPageState extends State<GoalPage> {
   Widget _buildPhotoView(String imageId, String imageUrl) => Hero(
         tag: imageId,
         child: PhotoView(
-          imageProvider: NetworkImage(imageUrl),
+          imageProvider: CachedNetworkImageProvider(imageUrl),
           initialScale: PhotoViewComputedScale.covered,
           minScale: PhotoViewComputedScale.covered,
           maxScale: PhotoViewComputedScale.covered,
@@ -301,7 +302,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                 Timer(
                                                                     Duration(
                                                                         seconds:
-                                                                            2),
+                                                                            1),
                                                                     () {
                                                                   DatabaseService(
                                                                           uid: user

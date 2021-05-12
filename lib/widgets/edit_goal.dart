@@ -78,10 +78,13 @@ class _EditGoalState extends State<EditGoal> {
 
                       Flexible(flex: 1, child: SizedBox(height: 15.0)),
                       TextFormField(
+                          initialValue: widget.goal.goalname,
                           maxLength: 50,
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           decoration: textInputDecoration.copyWith(
                               hintText: widget.goal.goalname),
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter the target title' : null,
                           onChanged: (val) {
                             setState(() => goalname = val);
                           }),
@@ -96,12 +99,15 @@ class _EditGoalState extends State<EditGoal> {
 
                       Flexible(flex: 1, child: SizedBox(height: 15.0)),
                       TextFormField(
+                          initialValue: widget.goal.goalmotivation,
                           maxLength: 150,
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           keyboardType: TextInputType.multiline,
                           maxLines: 3,
                           decoration: textInputDecoration.copyWith(
                               hintText: widget.goal.goalmotivation),
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter your motivation' : null,
                           onChanged: (val) {
                             setState(() => goalmotivation = val);
                           }),
@@ -114,19 +120,19 @@ class _EditGoalState extends State<EditGoal> {
                             //style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
-                            //// Edit the goal in Firestore
-                            await DatabaseService(uid: user.uid).editUserGoals(
-                                widget.index,
-                                goalname,
-                                goalmotivation,
-                                widget
-                                    .imageUrl); // widget.goal.goalname = goalname;
-
-                            Navigator.of(context).pop();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Home()));
+                            if (_formKey.currentState.validate()) {
+                              //// Edit the goal in Firestore
+                              await DatabaseService(uid: user.uid).editUserGoals(
+                                  widget.index,
+                                  goalname,
+                                  goalmotivation,
+                                  widget
+                                      .imageUrl); // widget.goal.goalname = goalname;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home()));
+                            }
                           }),
                     ]),
                   ),

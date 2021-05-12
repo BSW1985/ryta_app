@@ -110,7 +110,13 @@ class _GoalsListState extends State<GoalsList> {
         ],
       ));
     // print(user.emailVerified);
-
+// // cache the intro image
+//   if (userfile!= null && userfile.throughIntroduction != true)
+//     CachedNetworkImage(
+//         imageUrl: "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+//         placeholder: (context, url) => CircularProgressIndicator(),
+//         errorWidget: (context, url, error) => Icon(Icons.error),
+//     );
     // return
     //   Center(child: Text('please verify'));
     //   // Loading(Colors.white);
