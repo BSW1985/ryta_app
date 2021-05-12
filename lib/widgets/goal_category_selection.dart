@@ -10,8 +10,11 @@ import 'package:ryta_app/services/database.dart';
 
 class FinishFloatingActionButton extends StatefulWidget {
   final String imageId, imageUrl;
+  final bool throughIntroduction;
 
-  FinishFloatingActionButton(this.imageId, this.imageUrl, {Key key})
+  FinishFloatingActionButton(
+      this.imageId, this.imageUrl, this.throughIntroduction,
+      {Key key})
       : super(key: key);
 
   @override
@@ -577,6 +580,7 @@ class _FinishFloatingActionButtonState
                                         top: 30.0, bottom: 20.0),
                                     child: CategoryButton(
                                         'FINISH',
+                                        widget.throughIntroduction,
                                         widget.imageId,
                                         widget.imageUrl,
                                         healthVal,
@@ -620,6 +624,7 @@ class _FinishFloatingActionButtonState
 
 class CategoryButton extends StatefulWidget {
   final String buttonName;
+  final bool throughIntroduction;
   final String imageId, imageUrl;
   final bool healthVal;
   final bool nutritionVal;
@@ -638,6 +643,7 @@ class CategoryButton extends StatefulWidget {
 
   CategoryButton(
       this.buttonName,
+      this.throughIntroduction,
       this.imageId,
       this.imageUrl,
       this.healthVal,
@@ -715,7 +721,12 @@ class _CategoryButtonState extends State<CategoryButton> {
                     );
                   });
                 });
-
+            if (widget.throughIntroduction == false) {
+              final goalFirestoreId =
+                  await DatabaseService(uid: user.uid).getGoalId(0);
+              DatabaseService(uid: user.uid).updateThroughIntroduction(true);
+              DatabaseService(uid: user.uid).deleteUserGoals(goalFirestoreId);
+            }
             await _getColor(goal, generatingPalette);
 
             await DatabaseService(uid: user.uid).addUserGoals(

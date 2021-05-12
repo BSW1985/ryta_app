@@ -14,8 +14,10 @@ import 'package:ryta_app/widgets/info_sheet.dart';
 /// Screen for showing an individual [UnsplashImage].
 class ImagePage extends StatefulWidget {
   final String imageId, imageUrl;
+  final bool throughIntroduction;
 
-  ImagePage(this.imageId, this.imageUrl, {Key key}) : super(key: key);
+  ImagePage(this.imageId, this.imageUrl, this.throughIntroduction, {Key key})
+      : super(key: key);
 
   @override
   _ImagePageState createState() => _ImagePageState();
@@ -289,8 +291,8 @@ class _ImagePageState extends State<ImagePage> {
           //     ),
         ],
       ),
-      floatingActionButton:
-          FinishFloatingActionButton(widget.imageId, widget.imageUrl),
+      floatingActionButton: FinishFloatingActionButton(
+          widget.imageId, widget.imageUrl, widget.throughIntroduction),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

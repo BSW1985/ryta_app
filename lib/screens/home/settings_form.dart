@@ -15,7 +15,6 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
-
   double price = 0;
 
   double oneThird = 0;

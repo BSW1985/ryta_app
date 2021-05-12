@@ -8,6 +8,8 @@ import 'package:ryta_app/shared/loading.dart';
 
 // first screen of the goal definition process
 class GoalDefinition extends StatefulWidget {
+  final bool throughIntroduction;
+  GoalDefinition(this.throughIntroduction);
   @override
   _GoalDefinitionState createState() => _GoalDefinitionState();
 }
@@ -102,8 +104,9 @@ class _GoalDefinitionState extends State<GoalDefinition> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          GoalImageSearch(goalname)));
+                                      builder: (context) => GoalImageSearch(
+                                          goalname,
+                                          widget.throughIntroduction)));
                             }
                           }),
                     ],

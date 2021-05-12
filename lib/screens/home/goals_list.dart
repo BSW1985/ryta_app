@@ -62,8 +62,13 @@ class _GoalsListState extends State<GoalsList> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Please verify your email to continue.',
-              style: TextStyle(color: Colors.black, fontSize: 17.0)),
+          Padding(
+            padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+            child: Text(
+                'An email has been sent to ${user.email}. Please verify your email to continue.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black, fontSize: 17.0)),
+          ),
           SizedBox(height: 20.0),
           Loading(Colors.white, Color(0xFF995C75)),
           SizedBox(height: 20.0),

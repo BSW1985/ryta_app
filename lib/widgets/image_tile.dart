@@ -6,8 +6,9 @@ import 'package:ryta_app/screens/home/image_preview.dart';
 /// ImageTile displayed in StaggeredGridView.
 class ImageTile extends StatelessWidget {
   final UnsplashImage image;
+  final bool throughIntroduction;
 
-  const ImageTile(this.image);
+  const ImageTile(this.image, this.throughIntroduction);
 
   /// Adds rounded corners to a given [widget].
   Widget _addRoundedCorners(Widget widget) =>
@@ -35,7 +36,8 @@ class ImageTile extends StatelessWidget {
             MaterialPageRoute<Null>(
               builder: (BuildContext context) =>
                   // open [ImagePage] with the given image
-                  ImagePage(image.getId(), image.getFullUrl()),
+                  ImagePage(
+                      image.getId(), image.getFullUrl(), throughIntroduction),
             ),
           );
         },

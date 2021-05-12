@@ -17,6 +17,7 @@ class _ChangeSettingsState extends State<ChangeSettings> {
   String goalname = '';
   String goalmotivation = '';
   String error = '';
+  bool throughIntroduction = true;
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +113,8 @@ class _ChangeSettingsState extends State<ChangeSettings> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          GoalImageSearch(goalname)));
+                                      builder: (context) => GoalImageSearch(
+                                          goalname, throughIntroduction)));
                             }
                           }),
                     ],
