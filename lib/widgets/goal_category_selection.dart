@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -725,10 +726,11 @@ class _CategoryButtonState extends State<CategoryButton> {
               final goalFirestoreId =
                   await DatabaseService(uid: user.uid).getGoalId(0);
               DatabaseService(uid: user.uid).updateThroughIntroduction(true);
-              DatabaseService(uid: user.uid).deleteUserGoals(goalFirestoreId);
+              DatabaseService(uid: user.uid).deleteUserGoals(goalFirestoreId, true);
             }
             await _getColor(goal, generatingPalette);
-
+            DateTime currentPhoneDate = DateTime.now(); //DateTime
+            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
             await DatabaseService(uid: user.uid).addUserGoals(
               goal.goalname.toString(),
               goal.goalmotivation.toString(),
@@ -750,6 +752,7 @@ class _CategoryButtonState extends State<CategoryButton> {
               widget.cultureVal,
               widget.romanceVal,
               widget.socialLifeVal,
+              eventTimeStamp
               //array of categories selected by user
             );
             Navigator.push(

@@ -121,6 +121,11 @@ class _GoalPageState extends State<GoalPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<RytaUser>(context);
+    CachedNetworkImage(
+      imageUrl: widget.imageUrl,
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
     return Scaffold(
       // set the global key
       key: _scaffoldKey,
@@ -309,7 +314,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                               .uid)
                                                                       .deleteUserGoals(widget
                                                                           .goal
-                                                                          .goalID);
+                                                                          .goalID, true);
                                                                   if (user !=
                                                                       null)
                                                                     Navigator

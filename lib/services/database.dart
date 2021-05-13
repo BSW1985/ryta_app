@@ -21,7 +21,7 @@ class DatabaseService {
 
   // USERFILE - Handling communication with Firestore
   Future initializeUserData(
-      String name, String email, bool emailVerified) async {
+      String name, String email, bool emailVerified, Timestamp eventTimeStamp) async {
     // initialize the price between 2.99 and 7.99
     double randomNumber = 0.99 + 2 + Random().nextInt(5);
 
@@ -38,6 +38,7 @@ class DatabaseService {
       'priceInitialized': randomNumber,
       'throughIntroduction': false,
       'newsletterSubscription': true,
+      "timeRegistered": eventTimeStamp,
     });
   }
 
@@ -126,6 +127,7 @@ class DatabaseService {
     bool cultureVal,
     bool romanceVal,
     bool socialLifeVal,
+    Timestamp eventTimeStamp,
   ) async {
     return await rytaUsersCollection.doc(uid).collection('goals').doc().set({
       'goalname': goalname,
@@ -134,6 +136,7 @@ class DatabaseService {
       'imageID': imageID,
       'goalBackgoundColor': goalBackgoundColor,
       'goalFontColor': goalFontColor,
+      "timeDefined": eventTimeStamp,
       "goalCategory": {
         "health": healthVal,
         "nutrition": nutritionVal,
@@ -157,6 +160,16 @@ class DatabaseService {
       String imageUrl) async {
     //get the coresponding goal from firebase
     final goalFirestoreId = await getGoalId(goalIndex);
+            DateTime currentPhoneDate = DateTime.now(); //DateTime
+            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+
+    await rytaUsersCollection
+          .doc(uid)
+          .collection('goals')
+          .doc(goalFirestoreId)
+          .collection('goalEdited').add({
+            "opened": eventTimeStamp,});
+
     try {
       return await rytaUsersCollection
           .doc(uid)
@@ -165,6 +178,24 @@ class DatabaseService {
           .update({
         'goalname': goalname,
         'goalmotivation': goalmotivation,
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future writeGoalOpenedTime(int goalIndex) async {
+    //get the coresponding goal from firebase
+    final goalFirestoreId = await getGoalId(goalIndex);
+            DateTime currentPhoneDate = DateTime.now(); //DateTime
+            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+    try {
+      return await rytaUsersCollection
+          .doc(uid)
+          .collection('goals')
+          .doc(goalFirestoreId)
+          .collection('goalOpened').add({
+            "opened": eventTimeStamp,
       });
     } catch (e) {
       print(e);
@@ -186,7 +217,79 @@ class DatabaseService {
     return goalFirestoreId;
   }
 
-  Future deleteUserGoals(String goalID) async {
+  Future deleteUserGoals(String goalID, bool wasReached) async {
+
+            DateTime currentPhoneDate = DateTime.now(); //DateTime
+            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+
+    DocumentReference copyFrom = rytaUsersCollection
+        .doc(uid)
+        .collection('goals')
+        .doc(goalID);
+
+    DocumentReference copyTo = rytaUsersCollection
+        .doc(uid)
+        .collection('goals_archive')
+        .doc(goalID);
+
+    //copy goal
+    await copyFrom.get().then((value) => {
+        copyTo.set(Map.fromEntries(value.data().entries))
+      });
+    try {
+    //copy opened times
+    await copyFrom.collection('goalOpened').get().then((querySnapshot) {
+    querySnapshot.docs.forEach((result) {
+
+    copyTo.collection('goalOpened')
+    .doc()
+    .set(result.data());
+        });
+    });} catch (e) {}
+
+    //copy edited times
+    try {
+    await copyFrom.collection('goalEdited').get().then((querySnapshot) {
+    querySnapshot.docs.forEach((result) {
+
+    copyTo.collection('goalEdited')
+    .doc()
+    .set(result.data());
+        });
+      
+    });} catch (e) {}
+
+    //add deleted time & reached bool?
+    try {
+      await copyTo.update({
+            "TimeDeleted": eventTimeStamp,
+            "wasReached": wasReached
+      });
+    } catch (e) {}
+
+
+    //delete subcollections
+    try {
+        await copyFrom.collection('goalOpened').get().then((querySnapshot) {
+    querySnapshot.docs.forEach((result) {
+
+    copyFrom.collection('goalOpened')
+    .doc(result.id)
+    .delete();
+        });
+    });} catch (e) {}
+
+    try {
+    await copyFrom.collection('goalEdited').get().then((querySnapshot) {
+    querySnapshot.docs.forEach((result) {
+
+    copyFrom.collection('goalEdited')
+    .doc(result.id)
+    .delete();
+        });
+    });} catch (e) {}
+
+    //delete goal
     return await rytaUsersCollection
         .doc(uid)
         .collection('goals')
