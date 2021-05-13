@@ -90,6 +90,7 @@ class DatabaseService {
   UserFile _userFileFromSnapshot(DocumentSnapshot snapshot) {
     return UserFile(
       name: snapshot.data()['name'] ?? '',
+      email: snapshot.data()['email'] ?? '',
       willToPay: snapshot.data()['willToPay'] ?? '',
       package1: snapshot.data()['package1'] ?? '',
       package2: snapshot.data()['package2'] ?? '',

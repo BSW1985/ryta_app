@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/shared/constants.dart';
@@ -71,6 +72,12 @@ class _ResetPasswordState extends State<ResetPassword> {
 
                           SizedBox(height: 15.0),
                           TextFormField(
+                              initialValue: _email,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]'))
+                              ],
+                              keyboardType: TextInputType.text,
                               validator: (value) =>
                                   EmailValidator.validate(value)
                                       ? null

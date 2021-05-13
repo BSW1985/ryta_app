@@ -59,45 +59,57 @@ class _SettingsFormState extends State<SettingsForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 55.0, bottom: 20.0, left: 15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user.displayName,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0),
-                            ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(
+                      //       top: 55.0, bottom: 20.0, left: 15.0),
+                      //   child:
+                      Expanded(
+                        flex: 7,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 30.0, bottom: 15.0, left: 35.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user.displayName,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.0),
+                              ),
 
-                            SizedBox(height: 15.0),
-                            // email
-                            Text(
-                              user.email,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 17.0),
-                            ),
-                          ],
+                              SizedBox(height: 15.0),
+                              // email
+                              Text(
+                                userfile.email,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(fontSize: 17.0),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(width: 20.0),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.settings,
-                            color: Color(0xFF995C75),
+                      // ),
+                      // Expanded(flex:1,child: SizedBox()),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 15.0, right: 35),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.settings,
+                              color: Color(0xFF995C75),
+                            ),
+                            tooltip: 'Settings',
+                            onPressed: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Settings(userfile),
+                                ),
+                              );
+                            },
                           ),
-                          tooltip: 'Settings',
-                          onPressed: () async {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Settings(userfile),
-                              ),
-                            );
-                          },
                         ),
                       ),
                       // SizedBox(height: 10.0),
