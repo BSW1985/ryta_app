@@ -174,7 +174,9 @@ class _SettingsState extends State<Settings> {
                             TextButton(
                               onPressed: () async {
                                 //more user to archive and delete all the personal data...
-                                dynamic f = await _auth.deleteUser();
+                                dynamic f = await _auth.deleteUser(
+                                    user.uid, user.displayName, user.email);
+
                                 //is reauthentication needed?
                                 if (f != null)
                                   showDialog(
@@ -234,8 +236,32 @@ class _SettingsState extends State<Settings> {
                                               }
                                             }
                                             //more user to archive and delete all the personal data...
-                                            await _auth.deleteUser();
-
+                                            dynamic g = await _auth.deleteUser(
+                                                user.uid,
+                                                user.displayName,
+                                                user.email);
+                                            if (g == null)
+                                              //show popup
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    Future.delayed(
+                                                        Duration(seconds: 5),
+                                                        () {
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    });
+                                                    return AlertDialog(
+                                                      title: new Text(
+                                                          'Your account and personal data have been successfully deleted.'),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15.0)),
+                                                    );
+                                                  });
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -281,7 +307,23 @@ class _SettingsState extends State<Settings> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Wrapper()));
-                                //Navigator.of(context).pop();
+                                if (f == null)
+                                  //show popup
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 5),
+                                            () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          title: new Text(
+                                              'Your account and personal data have been successfully deleted.'),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0)),
+                                        );
+                                      });
                               },
                               style: ButtonStyle(
                                 elevation: MaterialStateProperty.all<double>(0),

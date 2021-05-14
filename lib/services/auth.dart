@@ -137,8 +137,14 @@ class AuthService {
   }
 
   // delete user
-  Future deleteUser() async {
+  Future deleteUser(String uid, String name, String email) async {
+    // String uid=_auth.currentUser.uid;
+    bool deleted;
     try {
+      //delete user data
+      deleted = true;
+      await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
+
       await _auth.currentUser.delete();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
@@ -155,10 +161,17 @@ class AuthService {
             idToken: googleAuth.idToken,
           );
           await _auth.currentUser.reauthenticateWithCredential(credential);
+
+          //delete user data
+          deleted = true;
+          await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
+
           await _auth.currentUser.delete();
         } catch (f) {
           print(
               'The user must reauthenticate before this operation can be executed.');
+          deleted = false;
+          await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
           return f;
           // await _auth.currentUser.reauthenticateWithCredential(credential);
           // await _auth.currentUser.delete();

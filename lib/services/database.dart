@@ -186,6 +186,25 @@ class DatabaseService {
     }
   }
 
+  Future deleteUserData(bool deleted, String name, String email) async {
+    DateTime currentPhoneDate = DateTime.now(); //DateTime
+    Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+    //delete personal data from firebase
+    //add dead instead
+    //ad time accountDeleted
+    if (deleted == true) {
+      return await rytaUsersCollection.doc(uid).update({
+        'name': "accountDeleted",
+        'email': "accountDeleted",
+        "timeAccountDeleted": eventTimeStamp
+      });
+    } else {
+      return await rytaUsersCollection
+          .doc(uid)
+          .update({'name': name, 'email': email});
+    }
+  }
+
   Future writeGoalOpenedTime(int goalIndex) async {
     //get the coresponding goal from firebase
     final goalFirestoreId = await getGoalId(goalIndex);

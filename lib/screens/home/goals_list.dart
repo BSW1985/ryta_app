@@ -142,7 +142,7 @@ class _GoalsListState extends State<GoalsList> {
             ),
             SizedBox(height: 20.0),
             Text(
-              "Let's define your first goal.",
+              "Let's define your first target.",
               style: TextStyle(color: Colors.black, fontSize: 17.0),
             ),
             SizedBox(height: 100.0),

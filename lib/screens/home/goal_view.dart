@@ -299,24 +299,24 @@ class _GoalPageState extends State<GoalPage> {
                                                                   },
                                                                 );
                                                                 //Delete the introduction set through introduction to true, get back to home screen
-                                                                DatabaseService(
+                                                                await DatabaseService(
                                                                         uid: user
                                                                             .uid)
                                                                     .updateThroughIntroduction(
+                                                                        true);
+                                                                await DatabaseService(
+                                                                        uid: user
+                                                                            .uid)
+                                                                    .deleteUserGoals(
+                                                                        widget
+                                                                            .goal
+                                                                            .goalID,
                                                                         true);
                                                                 Timer(
                                                                     Duration(
                                                                         seconds:
                                                                             1),
                                                                     () {
-                                                                  DatabaseService(
-                                                                          uid: user
-                                                                              .uid)
-                                                                      .deleteUserGoals(
-                                                                          widget
-                                                                              .goal
-                                                                              .goalID,
-                                                                          true);
                                                                   if (user !=
                                                                       null)
                                                                     Navigator
