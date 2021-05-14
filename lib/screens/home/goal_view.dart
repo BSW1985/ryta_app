@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -82,20 +83,14 @@ class _GoalPageState extends State<GoalPage> {
             // back button
             widget.userfile.throughIntroduction == true
                 ? IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: widget.userfile.throughIntroduction == false
-                            ? goalFont
-                            : goalBackgound),
+                    icon: Icon(Icons.arrow_back, color: goalFont),
                     onPressed: () => Navigator.pop(context))
                 : null,
         actions: <Widget>[
           // show image info
           if (widget.userfile.throughIntroduction == true)
             IconButton(
-              icon: Icon(Icons.settings,
-                  color: widget.userfile.throughIntroduction == false
-                      ? goalFont
-                      : goalBackgound),
+              icon: Icon(Icons.settings, color: goalFont),
               tooltip: 'Edit your target',
               onPressed: () async {
                 _scaffoldKey.currentState.showBottomSheet((context) => EditGoal(
@@ -112,7 +107,7 @@ class _GoalPageState extends State<GoalPage> {
   Widget _buildPhotoView(String imageId, String imageUrl) => Hero(
         tag: imageId,
         child: PhotoView(
-          imageProvider: NetworkImage(imageUrl),
+          imageProvider: CachedNetworkImageProvider(imageUrl),
           initialScale: PhotoViewComputedScale.covered,
           minScale: PhotoViewComputedScale.covered,
           maxScale: PhotoViewComputedScale.covered,
@@ -126,6 +121,11 @@ class _GoalPageState extends State<GoalPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<RytaUser>(context);
+    CachedNetworkImage(
+      imageUrl: widget.imageUrl,
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
     return Scaffold(
       // set the global key
       key: _scaffoldKey,
@@ -190,20 +190,14 @@ class _GoalPageState extends State<GoalPage> {
                 child: FloatingActionButton.extended(
                   // icon: Icon(Icons.check),
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: widget.userfile.throughIntroduction == false
-                              ? goalFont
-                              : goalBackgound,
-                          width: 1.0),
+                      side: BorderSide(color: goalFont, width: 1.0),
                       borderRadius: BorderRadius.circular(15.0)),
                   elevation: 0.0,
                   label: Text('Why?',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 25.0,
-                          color: widget.userfile.throughIntroduction == false
-                              ? goalFont
-                              : goalBackgound)),
+                          color: goalFont)),
                   tooltip: 'See the motivation!',
                   onPressed: () {
                     setState(() {
@@ -305,22 +299,24 @@ class _GoalPageState extends State<GoalPage> {
                                                                   },
                                                                 );
                                                                 //Delete the introduction set through introduction to true, get back to home screen
-                                                                DatabaseService(
+                                                                await DatabaseService(
                                                                         uid: user
                                                                             .uid)
                                                                     .updateThroughIntroduction(
                                                                         true);
+                                                                await DatabaseService(
+                                                                        uid: user
+                                                                            .uid)
+                                                                    .deleteUserGoals(
+                                                                        widget
+                                                                            .goal
+                                                                            .goalID,
+                                                                        true);
                                                                 Timer(
                                                                     Duration(
                                                                         seconds:
-                                                                            2),
+                                                                            1),
                                                                     () {
-                                                                  DatabaseService(
-                                                                          uid: user
-                                                                              .uid)
-                                                                      .deleteUserGoals(widget
-                                                                          .goal
-                                                                          .goalID);
                                                                   if (user !=
                                                                       null)
                                                                     Navigator

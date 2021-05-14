@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/services/database.dart';
@@ -76,6 +79,9 @@ class AuthService {
       User user = result.user;
       user.updateProfile(displayName: username);
       await user.sendEmailVerification();
+      //initialize timestamp
+      DateTime currentPhoneDate = DateTime.now(); //DateTime
+      Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
       await DatabaseService(uid: user.uid).addUserGoals(
         "Visualization is powerful",
         "Visualization techniques have been used by successful people for ages, helping them create their dream lives. We all have this awesome power, but most of us have never been taught to use it effectively.",
@@ -97,10 +103,22 @@ class AuthService {
         false,
         false,
         false,
+        eventTimeStamp,
+      );
+
+      // cache the intro image
+      CachedNetworkImage(
+        imageUrl:
+            "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       );
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).initializeUserData(username, email,
-          user.emailVerified); //pass the name from registration form
+      await DatabaseService(uid: user.uid).initializeUserData(
+          username,
+          email,
+          user.emailVerified,
+          eventTimeStamp); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -119,8 +137,14 @@ class AuthService {
   }
 
   // delete user
-  Future deleteUser() async {
+  Future deleteUser(String uid, String name, String email) async {
+    // String uid=_auth.currentUser.uid;
+    bool deleted;
     try {
+      //delete user data
+      deleted = true;
+      await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
+
       await _auth.currentUser.delete();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
@@ -137,10 +161,17 @@ class AuthService {
             idToken: googleAuth.idToken,
           );
           await _auth.currentUser.reauthenticateWithCredential(credential);
+
+          //delete user data
+          deleted = true;
+          await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
+
           await _auth.currentUser.delete();
         } catch (f) {
           print(
               'The user must reauthenticate before this operation can be executed.');
+          deleted = false;
+          await DatabaseService(uid: uid).deleteUserData(deleted, name, email);
           return f;
           // await _auth.currentUser.reauthenticateWithCredential(credential);
           // await _auth.currentUser.delete();
@@ -188,8 +219,19 @@ class AuthService {
         await DatabaseService(uid: user.uid).getUID();
       } catch (e) {
         print(e.toString());
+
+        // cache the intro image
+        CachedNetworkImage(
+          imageUrl:
+              "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
+        //initialize timestamp
+        DateTime currentPhoneDate = DateTime.now(); //DateTime
+        Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
         await DatabaseService(uid: user.uid).initializeUserData(
-            user.displayName, user.email, user.emailVerified);
+            user.displayName, user.email, user.emailVerified, eventTimeStamp);
         await DatabaseService(uid: user.uid).addUserGoals(
           "Visualization is powerful",
           "motivation1",
@@ -211,6 +253,7 @@ class AuthService {
           false,
           false,
           false,
+          eventTimeStamp,
         );
         // return null;
         return _userFromFirebaseUser(user);

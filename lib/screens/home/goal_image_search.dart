@@ -11,7 +11,8 @@ import 'package:ryta_app/widgets/image_tile.dart';
 // second screen of the goal definition process - unsplash image search
 class GoalImageSearch extends StatefulWidget {
   final String goalname;
-  GoalImageSearch(this.goalname);
+  final bool throughIntroduction;
+  GoalImageSearch(this.goalname, this.throughIntroduction);
 
   @override
   _GoalImageSearchState createState() => _GoalImageSearchState();
@@ -29,8 +30,9 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
 
   /// Stored the currently searched keyword.
   String keyword;
+  String error = "";
 
-  TextEditingController nameHolder = TextEditingController();
+  final nameHolder = TextEditingController();
 
   @override
   initState() {
@@ -97,6 +99,12 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
       images = res[1];
     }
 
+    if (images.isEmpty) {
+      error = "No images found";
+    } else {
+      error = "";
+    }
+
     // ignore: todo
     // TODO: handle errors
 
@@ -153,8 +161,10 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
                 _buildTitle(),
 
                 //App bar
+
                 _buildSearchAppBar(goal),
 
+                _buildError(),
                 //Grid view with all the images
                 _buildImageGrid(orientation: orientation),
 
@@ -184,6 +194,19 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
           ),
         ),
       );
+  Widget _buildError() => SliverPadding(
+        padding: (error.isNotEmpty) ? EdgeInsets.all(16.0) : EdgeInsets.all(0),
+        sliver: SliverToBoxAdapter(
+          child: (error.isNotEmpty)
+              ? Center(
+                  child: Text(
+                    error,
+                    style: TextStyle(fontSize: 17.0),
+                  ),
+                )
+              : Container(),
+        ),
+      );
 
   Widget _buildSearchAppBar(goal) => SliverAppBar(
         backgroundColor: Colors.white,
@@ -193,13 +216,24 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
             // either search-field or just the title
             TextField(
           keyboardType: TextInputType.text,
-          decoration: textInputDecoration.copyWith(hintText: 'Search...'),
+          decoration: textInputDecoration.copyWith(
+            hintText: 'Search...',
+            suffixIcon: (keyword != null)
+                ? IconButton(
+                    onPressed: () {
+                      _resetImages();
+                      nameHolder.clear();
+                    },
+                    icon: Icon(Icons.clear),
+                    color: Colors.grey,
+                  )
+                : null,
+          ),
           // decoration: InputDecoration(hintText: 'Search...', border: InputBorder.none),
           onSubmitted: (String keyword) =>
 
               // search and display images associated to the keyword
               _loadImages(keyword: keyword),
-
           controller: nameHolder,
           // autofocus: true,
         ),
@@ -207,6 +241,19 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
         // const Text('Define Your Goal', style: TextStyle(color: Colors.black87)),
 
         //Appbar actions
+        // actions: <Widget>[
+        //   //Search
+        //   (keyword != null)
+        //       ? IconButton(
+        //           icon: Icon(Icons.clear),
+        //           color: Colors.black87,
+        //           onPressed: () {
+        //             // reset the state
+        //             _resetImages();
+        //           },
+        //         )
+        //       : Container(),
+        //         ],
         // leading: new Container(),
         automaticallyImplyLeading: false,
       );
@@ -241,7 +288,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
         future: _loadImage(index),
         builder: (context, snapshot) =>
             // image loaded return [_ImageTile]
-            ImageTile(snapshot.data),
+            ImageTile(snapshot.data, widget.throughIntroduction),
       );
 
   /// Asynchronously loads a [UnsplashImage] for a given [index].

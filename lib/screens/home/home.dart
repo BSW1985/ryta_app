@@ -124,16 +124,9 @@ class _Home extends State<Home> {
                 clipBehavior: Clip.none,
                 onPressed: () async {
                   if (user.emailVerified == true) {
-                    if (userfile.throughIntroduction == false) {
-                      final goalFirestoreId =
-                          await DatabaseService(uid: user.uid).getGoalId(0);
-                      DatabaseService(uid: user.uid)
-                          .updateThroughIntroduction(true);
-                      DatabaseService(uid: user.uid)
-                          .deleteUserGoals(goalFirestoreId);
-                    }
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GoalDefinition()));
+                        builder: (context) =>
+                            GoalDefinition(userfile.throughIntroduction)));
                   }
                 },
                 tooltip: 'Add a new goal',

@@ -22,6 +22,7 @@ class GoalsList extends StatefulWidget {
 
 /// Provide a state for [GoalsList].
 class _GoalsListState extends State<GoalsList> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final AuthService _auth = AuthService();
 
   @override
@@ -62,8 +63,13 @@ class _GoalsListState extends State<GoalsList> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Please verify your email to continue.',
-              style: TextStyle(color: Colors.black, fontSize: 17.0)),
+          Padding(
+            padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+            child: Text(
+                'An email has been sent to ${user.email}. Please verify your email to continue.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black, fontSize: 17.0)),
+          ),
           SizedBox(height: 20.0),
           Loading(Colors.white, Color(0xFF995C75)),
           SizedBox(height: 20.0),
@@ -110,7 +116,13 @@ class _GoalsListState extends State<GoalsList> {
         ],
       ));
     // print(user.emailVerified);
-
+// // cache the intro image
+//   if (userfile!= null && userfile.throughIntroduction != true)
+//     CachedNetworkImage(
+//         imageUrl: "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTc1MzV8MHwxfHNlYXJjaHwxOHx8bW91bnRhaW5zfGVufDB8fDF8fDE2MTkwMjkyMTg&ixlib=rb-1.2.1&q=85",
+//         placeholder: (context, url) => CircularProgressIndicator(),
+//         errorWidget: (context, url, error) => Icon(Icons.error),
+//     );
     // return
     //   Center(child: Text('please verify'));
     //   // Loading(Colors.white);
@@ -130,7 +142,7 @@ class _GoalsListState extends State<GoalsList> {
             ),
             SizedBox(height: 20.0),
             Text(
-              "Let's define your first goal.",
+              "Let's define your first target.",
               style: TextStyle(color: Colors.black, fontSize: 17.0),
             ),
             SizedBox(height: 100.0),
@@ -140,6 +152,7 @@ class _GoalsListState extends State<GoalsList> {
       );
     else
       return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: NotificationListener<OverscrollIndicatorNotification>(
           // disabling a scroll glow
@@ -201,6 +214,10 @@ class _GoalsListState extends State<GoalsList> {
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         onTap: () async {
+//write timestamp to firestore
+                          await DatabaseService(uid: user.uid)
+                              .writeGoalOpenedTime(index);
+
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) =>
@@ -293,8 +310,65 @@ class _GoalsListState extends State<GoalsList> {
           SizedBox(height: 16),
           TextButton(
             onPressed: () async {
-              Navigator.of(context).pop();
-              DatabaseService(uid: user.uid).deleteUserGoals(goal.goalID);
+              //was reached pop-up
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Did you reach the target?',
+                      style: TextStyle(fontSize: 17.0)),
+                  shape: RoundedRectangleBorder(
+                      // side: BorderSide(color: goalFont, width: 1.0),
+                      borderRadius: BorderRadius.circular(15.0)),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () async {
+                        //was reached pop-up
+
+                        await DatabaseService(uid: user.uid)
+                            .deleteUserGoals(goal.goalID, false);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("No"),
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Color(0xFF995C75), width: 1.0),
+                            borderRadius: BorderRadius.circular(15.0))),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () async {
+                        await DatabaseService(uid: user.uid)
+                            .deleteUserGoals(goal.goalID, true);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                            borderRadius: BorderRadius.circular(15.0))),
+                      ),
+                      child: Text("Yes"),
+                    ),
+                  ],
+                ),
+              );
             },
             style: ButtonStyle(
               elevation: MaterialStateProperty.all<double>(0),

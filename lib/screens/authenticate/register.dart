@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/shared/constants.dart';
 import 'package:ryta_app/shared/loading.dart';
@@ -67,6 +68,7 @@ class _RegisterState extends State<Register> {
                       // Input email (panel)
                       SizedBox(height: 30.0),
                       TextFormField(
+                          initialValue: username,
                           decoration: textInputDecoration.copyWith(
                               hintText: 'Firstname/Nickname'),
                           validator: (val) => val.isEmpty
@@ -78,10 +80,16 @@ class _RegisterState extends State<Register> {
                       // Input password (panel)
                       SizedBox(height: 10.0),
                       TextFormField(
+                          initialValue: email,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]'))
+                          ],
+                          keyboardType: TextInputType.text,
                           decoration:
                               textInputDecoration.copyWith(hintText: 'Email'),
                           validator: (val) =>
-                              val.isEmpty ? 'Enter an Email' : null,
+                              val.isEmpty ? 'Enter an email address' : null,
                           onChanged: (val) {
                             setState(() => email = val);
                           }),
@@ -93,13 +101,13 @@ class _RegisterState extends State<Register> {
                               errorMaxLines: 3, hintText: 'Password'),
                           validator: (val) {
                             if (val.length < 6) {
-                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit";
                             } else if (!val.contains(new RegExp(r'[A-Z]'))) {
-                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit";
                             } else if (!val.contains(new RegExp(r'[0-9]'))) {
-                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit";
                             } else if (!val.contains(new RegExp(r'[a-z]'))) {
-                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit.";
+                              return "Enter a password 6+ characters long, with at least one upper case letter, lower case letter and one digit";
                               // } else if (!val.contains(
                               //     new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
                               //   return "Use a special character";
@@ -144,7 +152,8 @@ class _RegisterState extends State<Register> {
                                       email, password, username);
                               if (result == null) {
                                 setState(() {
-                                  error = 'please supply a valid email';
+                                  error =
+                                      'Email adress already exists or is not valid';
                                   loading = false;
                                 });
                               }
@@ -175,7 +184,7 @@ class _RegisterState extends State<Register> {
                           onPressed: () {
                             widget.toggleView();
                           }),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 5.0),
                       Text(
                         error,
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
