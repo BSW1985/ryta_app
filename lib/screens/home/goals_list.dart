@@ -9,8 +9,6 @@ import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/models/user_file.dart';
 import 'package:ryta_app/screens/home/goal_view.dart';
-import 'package:ryta_app/screens/home/home.dart';
-import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/auth.dart';
 import 'package:ryta_app/services/database.dart';
 import 'package:ryta_app/services/unsplash_image_provider.dart';
@@ -217,10 +215,9 @@ class _GoalsListState extends State<GoalsList> {
                       borderRadius: BorderRadius.circular(12),
                       child: InkWell(
                         onTap: () async {
-
 //write timestamp to firestore
-await DatabaseService(uid: user.uid).writeGoalOpenedTime(
-                                  index);
+                          await DatabaseService(uid: user.uid)
+                              .writeGoalOpenedTime(index);
 
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -314,62 +311,65 @@ await DatabaseService(uid: user.uid).writeGoalOpenedTime(
           SizedBox(height: 16),
           TextButton(
             onPressed: () async {
-
               //was reached pop-up
-showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Did you reach the target?', style: TextStyle(fontSize: 17.0)),
-        shape: RoundedRectangleBorder(
-            // side: BorderSide(color: goalFont, width: 1.0),
-            borderRadius: BorderRadius.circular(15.0)),
-        actions: <Widget>[
-          TextButton(
-              onPressed: () async {
-              //was reached pop-up
-              
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Did you reach the target?',
+                      style: TextStyle(fontSize: 17.0)),
+                  shape: RoundedRectangleBorder(
+                      // side: BorderSide(color: goalFont, width: 1.0),
+                      borderRadius: BorderRadius.circular(15.0)),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () async {
+                        //was reached pop-up
 
-             await DatabaseService(uid: user.uid).deleteUserGoals(goal.goalID, false);
-Navigator.of(context).pop();
-Navigator.of(context).pop();
-                                                                    
-                                                                    },
-            child: Text("No"),
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all<double>(0),
-              padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xFF995C75)),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  side: BorderSide(color: Color(0xFF995C75), width: 1.0),
-                  borderRadius: BorderRadius.circular(15.0))),
-            ),
-          ),
-          SizedBox(height: 16),
-          TextButton(
-            onPressed: () async {
-              await DatabaseService(uid: user.uid).deleteUserGoals(goal.goalID, true);
-Navigator.of(context).pop();
-Navigator.of(context).pop();
-              
-            },
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all<double>(0),
-              padding: MaterialStateProperty.all(EdgeInsets.all(10.0)),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xFF995C75)),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
-                  borderRadius: BorderRadius.circular(15.0))),
-            ),
-            child: Text("Yes"),
-          ),
-        ],
-      ),
-    );
+                        await DatabaseService(uid: user.uid)
+                            .deleteUserGoals(goal.goalID, false);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("No"),
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Color(0xFF995C75), width: 1.0),
+                            borderRadius: BorderRadius.circular(15.0))),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () async {
+                        await DatabaseService(uid: user.uid)
+                            .deleteUserGoals(goal.goalID, true);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding:
+                            MaterialStateProperty.all(EdgeInsets.all(10.0)),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xFF995C75)),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            // side: BorderSide(color: Color(0xFF995C75), width: 1.0),
+                            borderRadius: BorderRadius.circular(15.0))),
+                      ),
+                      child: Text("Yes"),
+                    ),
+                  ],
+                ),
+              );
             },
             style: ButtonStyle(
               elevation: MaterialStateProperty.all<double>(0),

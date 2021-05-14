@@ -80,8 +80,8 @@ class AuthService {
       user.updateProfile(displayName: username);
       await user.sendEmailVerification();
       //initialize timestamp
-            DateTime currentPhoneDate = DateTime.now(); //DateTime
-            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+      DateTime currentPhoneDate = DateTime.now(); //DateTime
+      Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
       await DatabaseService(uid: user.uid).addUserGoals(
         "Visualization is powerful",
         "Visualization techniques have been used by successful people for ages, helping them create their dream lives. We all have this awesome power, but most of us have never been taught to use it effectively.",
@@ -114,8 +114,11 @@ class AuthService {
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
       // create a new document for the user with the uid
-      await DatabaseService(uid: user.uid).initializeUserData(username, email,
-          user.emailVerified, eventTimeStamp); //pass the name from registration form
+      await DatabaseService(uid: user.uid).initializeUserData(
+          username,
+          email,
+          user.emailVerified,
+          eventTimeStamp); //pass the name from registration form
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -211,9 +214,9 @@ class AuthService {
           placeholder: (context, url) => CircularProgressIndicator(),
           errorWidget: (context, url, error) => Icon(Icons.error),
         );
-              //initialize timestamp
-            DateTime currentPhoneDate = DateTime.now(); //DateTime
-            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+        //initialize timestamp
+        DateTime currentPhoneDate = DateTime.now(); //DateTime
+        Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
         await DatabaseService(uid: user.uid).initializeUserData(
             user.displayName, user.email, user.emailVerified, eventTimeStamp);
         await DatabaseService(uid: user.uid).addUserGoals(

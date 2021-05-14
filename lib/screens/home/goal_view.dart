@@ -312,9 +312,11 @@ class _GoalPageState extends State<GoalPage> {
                                                                   DatabaseService(
                                                                           uid: user
                                                                               .uid)
-                                                                      .deleteUserGoals(widget
-                                                                          .goal
-                                                                          .goalID, true);
+                                                                      .deleteUserGoals(
+                                                                          widget
+                                                                              .goal
+                                                                              .goalID,
+                                                                          true);
                                                                   if (user !=
                                                                       null)
                                                                     Navigator
