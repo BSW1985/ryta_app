@@ -100,4 +100,8 @@ class UnsplashImage {
   String getDownloadLink() {
     return getLinks()['download'];
   }
+
+  String getDownloadLocationLink() {
+    return getLinks()['download_location'];
+  }
 }

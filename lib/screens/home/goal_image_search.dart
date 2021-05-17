@@ -262,7 +262,8 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   /// [orientation] can be used to adjust the grid column count.
   Widget _buildImageGrid({orientation = Orientation.portrait}) {
     // calc columnCount based on orientation
-    int columnCount = orientation == Orientation.portrait ? 2 : 3;
+    // int columnCount = orientation == Orientation.portrait ? 2 : 3;
+    int columnCount = 2;
     // return staggered grid
 
     return SliverPadding(

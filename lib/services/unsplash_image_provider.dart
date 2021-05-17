@@ -79,4 +79,25 @@ class UnsplashImageProvider {
       return [];
     }
   }
+
+  static Future triggerDownload(String downloadLocationLink) async {
+    // setup http client
+    HttpClient httpClient = HttpClient();
+    // setup http request
+    HttpClientRequest request =
+        await httpClient.getUrl(Uri.parse(downloadLocationLink));
+    // pass the client_id in the header
+    request.headers
+        .add('Authorization', 'Client-ID ${Keys.UNSPLASH_API_CLIENT_ID}');
+
+    // wait for response
+    HttpClientResponse response = await request.close();
+    // Process the response
+    if (response.statusCode == 200) {
+      // response: OK
+    } else {
+      // something went wrong :(
+      print("Http error: ${response.statusCode}");
+    }
+  }
 }
