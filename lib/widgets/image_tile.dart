@@ -36,8 +36,8 @@ class ImageTile extends StatelessWidget {
             MaterialPageRoute<Null>(
               builder: (BuildContext context) =>
                   // open [ImagePage] with the given image
-                  ImagePage(
-                      image.getId(), image.getFullUrl(), throughIntroduction),
+                  ImagePage(image.getId(), image.getFullUrl(),
+                      throughIntroduction, image.getDownloadLocationLink()),
             ),
           );
         },

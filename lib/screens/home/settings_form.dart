@@ -262,7 +262,10 @@ class _SettingsFormState extends State<SettingsForm> {
                         Text(
                           (num.parse((price).toStringAsFixed(2))).abs() == 1.0
                               ? "0.99 EUR per month"
-                              : "${(num.parse((price).toStringAsFixed(2))).abs()} EUR per month",
+                              : (num.parse((price).toStringAsFixed(2))).abs() ==
+                                      2.0
+                                  ? "1.99 EUR per month"
+                                  : "${(num.parse((price).toStringAsFixed(2))).abs()} EUR per month",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 20.0),
                         ),

@@ -60,6 +60,7 @@ class _Home extends State<Home> {
                   height: 70,
                   child: Image.asset("assets/ryta_logo.png"),
                 ),
+                leading: null,
 
                 //    /* TextButton.icon(
                 //       icon: Icon(Icons.settings),

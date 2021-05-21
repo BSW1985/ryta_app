@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ryta_app/models/image_location.dart';
 import 'package:ryta_app/models/unsplash_image.dart';
@@ -29,10 +30,10 @@ class InfoSheet extends StatelessWidget {
                           _buildUserProfileImage(
                               image?.getUser()?.getMediumProfileImage()),
                           Text(
-                            '${image.getUser().getFirstName()} ${image?.getUser()?.getLastName()}',
+                            '${image.getUser().getFirstName()} ${image.getUser().getLastName() == null ? "" : image.getUser().getLastName()}',
                             style: TextStyle(
                                 color: Colors.black87,
-                                fontSize: 18.0,
+                                fontSize: 15.0,
                                 fontWeight: FontWeight.bold),
                           ),
                           Spacer(),
@@ -53,7 +54,39 @@ class InfoSheet extends StatelessWidget {
                     _buildDescriptionWidget(image.getDescription()),
                     // show location
                     _buildLocationWidget(image.getLocation()),
-
+                    // attribute Unsplash
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                            text: "from ",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'CenturyGothic',
+                                fontSize: 12.0),
+                          ),
+                          TextSpan(
+                              text: "Unsplash",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'CenturyGothic',
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  var url =
+                                      'https://unsplash.com/?utm_source=Ryta_App&utm_medium=referral';
+                                  if (await canLaunch(url)) {
+                                    await launch(url.toString());
+                                  } else {
+                                    throw 'Could not launch $url';
+                                  }
+                                }),
+                        ])),
+                      ),
+                    ),
                     // filter null views
                   ].where((w) => w != null).toList()
                 : <Widget>[Loading(Colors.white, Color(0xFF995C75))]),
@@ -83,7 +116,7 @@ class InfoSheet extends StatelessWidget {
             '$description',
             style: TextStyle(
               color: Colors.black38,
-              fontSize: 16.0,
+              fontSize: 15.0,
               letterSpacing: 0.1,
             ),
           ),

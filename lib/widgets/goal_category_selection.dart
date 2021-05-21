@@ -8,13 +8,14 @@ import 'package:ryta_app/models/unsplash_image.dart';
 import 'package:ryta_app/models/user.dart';
 import 'package:ryta_app/screens/wrapper.dart';
 import 'package:ryta_app/services/database.dart';
+import 'package:ryta_app/services/unsplash_image_provider.dart';
 
 class FinishFloatingActionButton extends StatefulWidget {
-  final String imageId, imageUrl;
+  final String imageId, imageUrl, downloadLocationLink;
   final bool throughIntroduction;
 
-  FinishFloatingActionButton(
-      this.imageId, this.imageUrl, this.throughIntroduction,
+  FinishFloatingActionButton(this.imageId, this.imageUrl,
+      this.throughIntroduction, this.downloadLocationLink,
       {Key key})
       : super(key: key);
 
@@ -634,6 +635,7 @@ class _FinishFloatingActionButtonState
                                               widget.throughIntroduction,
                                               widget.imageId,
                                               widget.imageUrl,
+                                              widget.downloadLocationLink,
                                               healthVal,
                                               nutritionVal,
                                               sportsVal,
@@ -679,7 +681,7 @@ class _FinishFloatingActionButtonState
 class CategoryButton extends StatefulWidget {
   final String buttonName;
   final bool throughIntroduction;
-  final String imageId, imageUrl;
+  final String imageId, imageUrl, downloadLocationLink;
   final bool healthVal;
   final bool nutritionVal;
   final bool sportsVal;
@@ -700,6 +702,7 @@ class CategoryButton extends StatefulWidget {
       this.throughIntroduction,
       this.imageId,
       this.imageUrl,
+      this.downloadLocationLink,
       this.healthVal,
       this.nutritionVal,
       this.sportsVal,
@@ -782,6 +785,10 @@ class _CategoryButtonState extends State<CategoryButton> {
               DatabaseService(uid: user.uid)
                   .deleteUserGoals(goalFirestoreId, true);
             }
+            //trigger unsplash download
+            await UnsplashImageProvider.triggerDownload(
+                widget.downloadLocationLink);
+
             await _getColor(goal, generatingPalette);
             DateTime currentPhoneDate = DateTime.now(); //DateTime
             Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);

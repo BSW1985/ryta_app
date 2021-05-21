@@ -13,10 +13,12 @@ import 'package:ryta_app/widgets/info_sheet.dart';
 
 /// Screen for showing an individual [UnsplashImage].
 class ImagePage extends StatefulWidget {
-  final String imageId, imageUrl;
+  final String imageId, imageUrl, downloadLocationLink;
   final bool throughIntroduction;
 
-  ImagePage(this.imageId, this.imageUrl, this.throughIntroduction, {Key key})
+  ImagePage(this.imageId, this.imageUrl, this.throughIntroduction,
+      this.downloadLocationLink,
+      {Key key})
       : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class _ImagePageState extends State<ImagePage> {
 
   /// Bottomsheet controller
   PersistentBottomSheetController infoBottomSheetController;
+  bool showFab = true;
 
   /// Displayed image.
   UnsplashImage image;
@@ -80,13 +83,20 @@ class _ImagePageState extends State<ImagePage> {
         actions: <Widget>[
           // show image info
           IconButton(
-            icon: Icon(
-              Icons.info_outline,
-              color: Colors.white,
-            ),
-            tooltip: 'Image Info',
-            onPressed: () => infoBottomSheetController = _showInfoBottomSheet(),
-          ),
+              icon: Icon(
+                Icons.info_outline,
+                color: Colors.white,
+              ),
+              tooltip: 'Image Info',
+              onPressed: () {
+                infoBottomSheetController = _showInfoBottomSheet();
+
+                showFoatingActionButton(false);
+
+                infoBottomSheetController.closed.then((value) {
+                  showFoatingActionButton(true);
+                });
+              }),
         ],
       );
 
@@ -291,8 +301,10 @@ class _ImagePageState extends State<ImagePage> {
           //     ),
         ],
       ),
-      floatingActionButton: FinishFloatingActionButton(
-          widget.imageId, widget.imageUrl, widget.throughIntroduction),
+      floatingActionButton: showFab
+          ? FinishFloatingActionButton(widget.imageId, widget.imageUrl,
+              widget.throughIntroduction, widget.downloadLocationLink)
+          : Container(),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -302,6 +314,12 @@ class _ImagePageState extends State<ImagePage> {
   PersistentBottomSheetController _showInfoBottomSheet() {
     return _scaffoldKey.currentState
         .showBottomSheet((context) => InfoSheet(image));
+  }
+
+  void showFoatingActionButton(bool value) {
+    setState(() {
+      showFab = value;
+    });
   }
 
   // Future<PaletteGenerator> getImagePalette(ImageProvider imageProvider) async {
