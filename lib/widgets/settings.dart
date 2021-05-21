@@ -21,6 +21,7 @@ class _SettingsState extends State<Settings> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool _newsletterSubscription = true;
+  bool _newsletterSubscriptionSet = false;
   String password = '';
   String error = '';
 
@@ -29,7 +30,7 @@ class _SettingsState extends State<Settings> {
     final user = Provider.of<RytaUser>(context);
     // final userfile = Provider.of<UserFile>(context);
 
-    if (widget.userfile == null)
+    if (_newsletterSubscriptionSet == false)
       _newsletterSubscription = widget.userfile.newsletterSubscription;
 
     return Scaffold(
@@ -38,7 +39,10 @@ class _SettingsState extends State<Settings> {
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back),
           color: Colors.black,
-          onPressed: () {
+          onPressed: () async {
+            await DatabaseService(uid: user.uid).updateNewsletterSubscription(
+              _newsletterSubscription,
+            );
             Navigator.pop(context);
           },
         ),
@@ -89,6 +93,7 @@ class _SettingsState extends State<Settings> {
                   onChanged: (value) async {
                     setState(() {
                       _newsletterSubscription = !_newsletterSubscription;
+                      _newsletterSubscriptionSet = true;
                     });
 
                     await DatabaseService(uid: user.uid)
@@ -119,6 +124,10 @@ class _SettingsState extends State<Settings> {
                       'LOGOUT',
                     ),
                     onPressed: () async {
+                      await DatabaseService(uid: user.uid)
+                          .updateNewsletterSubscription(
+                        _newsletterSubscription,
+                      );
                       await _auth.signOut();
                       Navigator.of(context).pop();
                     }),
@@ -140,6 +149,10 @@ class _SettingsState extends State<Settings> {
                       'DELETE ACCOUNT',
                     ),
                     onPressed: () async {
+                      await DatabaseService(uid: user.uid)
+                          .updateNewsletterSubscription(
+                        _newsletterSubscription,
+                      );
                       //Ask if the user is sure?
                       showDialog(
                         context: context,

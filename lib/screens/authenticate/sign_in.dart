@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
                           TextFormField(
                               obscureText: true,
                               decoration: textInputDecoration.copyWith(
-                                  hintText: 'Password'),
+                                  errorMaxLines: 3, hintText: 'Password'),
                               validator: (val) => val.length < 6
                                   ? 'Enter a password 6+ characters long, with at least letter and one digit'
                                   : null,
