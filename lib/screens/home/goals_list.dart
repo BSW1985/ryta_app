@@ -265,8 +265,15 @@ class _GoalsListState extends State<GoalsList> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 34.0,
-                                    color: Colors
-                                        .white), // _getColorFromHex(goals[index].goalFontColor)
+                                    //check if goalBackgoundColor is bright or dark
+                                    //if bright than color is black otherwise white
+                                    color: estimateBrightnessForColor(
+                                                _getColorFromHex(goals[index]
+                                                    .goalBackgoundColor)) ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors
+                                            .black), // _getColorFromHex(goals[index].goalFontColor)
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -282,6 +289,21 @@ class _GoalsListState extends State<GoalsList> {
           ),
         ),
       );
+  }
+
+  static Brightness estimateBrightnessForColor(Color color) {
+    final double relativeLuminance = color.computeLuminance();
+
+    // See <https://www.w3.org/TR/WCAG20/#contrast-ratiodef>
+    // The spec says to use kThreshold=0.0525, but Material Design appears to bias
+    // more towards using light text than WCAG20 recommends. Material Design spec
+    // doesn't say what value to use, but 0.15 seemed close to what the Material
+    // Design spec shows for its color palette on
+    // <https://material.io/go/design-theming#color-color-palette>.
+    const double kThreshold = 0.55;
+    if ((relativeLuminance + 0.05) * (relativeLuminance + 0.05) > kThreshold)
+      return Brightness.light;
+    return Brightness.dark;
   }
 
   // delet the goal on long press dialog
@@ -388,15 +410,18 @@ class _GoalsListState extends State<GoalsList> {
       ),
     );
   }
-  //   Color _getColorFromHex(String hexColor) {
-  //   hexColor = hexColor.replaceAll("#", "");
-  //   if (hexColor.length == 6) {
-  //     hexColor = "FF" + hexColor;
-  //   }
-  //   if (hexColor.length == 8) {
-  //     return Color(int.parse("0x$hexColor"));
-  //   }
-  // }
+
+  Color _getColorFromHex(String hexColor) {
+    hexColor = hexColor.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+      return Color(int.parse("0x$hexColor"));
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse("0x$hexColor"));
+    } else
+      return null;
+  }
 }
 
 ///// OLD GoalsList using GoalTile

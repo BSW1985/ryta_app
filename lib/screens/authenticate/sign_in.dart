@@ -64,8 +64,8 @@ class _SignInState extends State<SignIn> {
                           TextFormField(
                               initialValue: email,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>/_/-]'))
+                                FilteringTextInputFormatter.allow(RegExp(
+                                    r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>/_/-]'))
                               ],
                               keyboardType: TextInputType.text,
                               decoration: textInputDecoration.copyWith(
