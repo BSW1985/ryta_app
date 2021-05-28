@@ -217,7 +217,6 @@ class _GoalsListState extends State<GoalsList> {
                       // ],
                     );
                   }
-
                   return Padding(
                     padding: userfile.throughIntroduction == true
                         ? EdgeInsets.all(8.0)
@@ -435,6 +434,7 @@ class _GoalsListState extends State<GoalsList> {
     } else
       return null;
   }
+
 }
 
 ///// OLD GoalsList using GoalTile
