@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -778,50 +780,60 @@ class _CategoryButtonState extends State<CategoryButton> {
                     );
                   });
                 });
-            if (widget.throughIntroduction == false) {
-              final goalFirestoreId =
-                  await DatabaseService(uid: user.uid).getGoalId(0);
-              DatabaseService(uid: user.uid).updateThroughIntroduction(true);
-              DatabaseService(uid: user.uid)
-                  .deleteUserGoals(goalFirestoreId, true);
-            }
-            //trigger unsplash download
-            await UnsplashImageProvider.triggerDownload(
-                widget.downloadLocationLink);
+            //wait for the dialog to show properly
+            await Future.delayed(Duration(milliseconds: 500));
+            var res = await _getColor(goal, generatingPalette);
 
-            await _getColor(goal, generatingPalette);
-            DateTime currentPhoneDate = DateTime.now(); //DateTime
-            Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
-            await DatabaseService(uid: user.uid).addUserGoals(
-                goal.goalname.toString(),
-                goal.goalmotivation.toString(),
-                widget.imageUrl,
-                widget.imageId,
-                goal.goalBackgoundColor,
-                goal.goalFontColor,
-                widget.healthVal,
-                widget.nutritionVal,
-                widget.sportsVal,
-                widget.mentalHealthVal,
-                widget.careerVal,
-                widget.educationVal,
-                widget.personalFinanceVal,
-                widget.networkingVal,
-                widget.productivityVal,
-                widget.leisureVal,
-                widget.personalGrowthVal,
-                widget.cultureVal,
-                widget.romanceVal,
-                widget.socialLifeVal,
-                eventTimeStamp
-                //array of categories selected by user
-                );
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Wrapper(),
-              ),
-            );
+            if (res != null) {
+              if (widget.throughIntroduction == false) {
+                final goalFirestoreId =
+                    await DatabaseService(uid: user.uid).getGoalId(0);
+                DatabaseService(uid: user.uid).updateThroughIntroduction(true);
+                DatabaseService(uid: user.uid)
+                    .deleteUserGoals(goalFirestoreId, true);
+              }
+              //trigger unsplash download
+              await UnsplashImageProvider.triggerDownload(
+                  widget.downloadLocationLink);
+
+              DateTime currentPhoneDate = DateTime.now(); //DateTime
+              Timestamp eventTimeStamp = Timestamp.fromDate(currentPhoneDate);
+              await DatabaseService(uid: user.uid).addUserGoals(
+                  goal.goalname.toString(),
+                  goal.goalmotivation.toString(),
+                  widget.imageUrl,
+                  widget.imageId,
+                  goal.goalBackgoundColor,
+                  goal.goalFontColor,
+                  widget.healthVal,
+                  widget.nutritionVal,
+                  widget.sportsVal,
+                  widget.mentalHealthVal,
+                  widget.careerVal,
+                  widget.educationVal,
+                  widget.personalFinanceVal,
+                  widget.networkingVal,
+                  widget.productivityVal,
+                  widget.leisureVal,
+                  widget.personalGrowthVal,
+                  widget.cultureVal,
+                  widget.romanceVal,
+                  widget.socialLifeVal,
+                  eventTimeStamp
+                  //array of categories selected by user
+                  );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Wrapper(),
+                ),
+              );
+            } else {
+              final snackBar = SnackBar(
+                  content: Text('Something went wrong... Please try again!'));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              Navigator.pop(context);
+            }
           });
     });
   }
@@ -861,154 +873,161 @@ class _CategoryButtonState extends State<CategoryButton> {
 
   _getColor(Goal goal, bool generatingPalette) async {
     // await Future.delayed(Duration(milliseconds: 200));
+    try {
+      Brightness brightnessDominant;
+      Brightness brightnessVibrant;
+      Brightness brightnessMuted;
+      Brightness brightnessDarkVibrant;
+      Brightness brightnessLightVibrant;
+      Brightness brightnessLightMuted;
 
-    Brightness brightnessDominant;
-    Brightness brightnessVibrant;
-    Brightness brightnessMuted;
-    Brightness brightnessDarkVibrant;
-    Brightness brightnessLightVibrant;
-    Brightness brightnessLightMuted;
+      // get the whole palette
+      PaletteGenerator paletteGenerator = await getImagePalette(
+              CachedNetworkImageProvider(widget.imageUrl,
+                  maxHeight: 1200, maxWidth: 1200))
+          .timeout(const Duration(seconds: 5));
+      // await getImagePalette(NetworkImage(widget.imageUrl));
 
-    // get the whole palette
-    PaletteGenerator paletteGenerator =
-        await getImagePalette(CachedNetworkImageProvider(widget.imageUrl));
-    // await getImagePalette(NetworkImage(widget.imageUrl));
+      // get brightness of each color
+      if (paletteGenerator.dominantColor?.color != null)
+        brightnessDominant = estimateBrightnessForDominantColor(
+            paletteGenerator.dominantColor?.color);
+      // print(brightnessDominant);
+      if (paletteGenerator.vibrantColor?.color != null)
+        brightnessVibrant =
+            estimateBrightnessForColor(paletteGenerator.vibrantColor?.color);
+      // print(brightnessVibrant);
+      if (paletteGenerator.mutedColor?.color != null)
+        brightnessMuted =
+            estimateBrightnessForColor(paletteGenerator.mutedColor?.color);
+      // print(brightnessMuted);
+      if (paletteGenerator.darkVibrantColor?.color != null)
+        brightnessDarkVibrant = estimateBrightnessForColor(
+            paletteGenerator.darkVibrantColor?.color);
+      // print(brightnessDarkVibrant);
+      if (paletteGenerator.lightVibrantColor?.color != null)
+        brightnessLightVibrant = estimateBrightnessForColor(
+            paletteGenerator.lightVibrantColor?.color);
+      // print(brightnessLightVibrant);
+      if (paletteGenerator.lightMutedColor?.color != null)
+        brightnessLightMuted =
+            estimateBrightnessForColor(paletteGenerator.lightMutedColor?.color);
+      // print(brightnessLightMuted);
 
-    // get brightness of each color
-    if (paletteGenerator.dominantColor?.color != null)
-      brightnessDominant = estimateBrightnessForDominantColor(
-          paletteGenerator.dominantColor?.color);
-    // print(brightnessDominant);
-    if (paletteGenerator.vibrantColor?.color != null)
-      brightnessVibrant =
-          estimateBrightnessForColor(paletteGenerator.vibrantColor?.color);
-    // print(brightnessVibrant);
-    if (paletteGenerator.mutedColor?.color != null)
-      brightnessMuted =
-          estimateBrightnessForColor(paletteGenerator.mutedColor?.color);
-    // print(brightnessMuted);
-    if (paletteGenerator.darkVibrantColor?.color != null)
-      brightnessDarkVibrant =
-          estimateBrightnessForColor(paletteGenerator.darkVibrantColor?.color);
-    // print(brightnessDarkVibrant);
-    if (paletteGenerator.lightVibrantColor?.color != null)
-      brightnessLightVibrant =
-          estimateBrightnessForColor(paletteGenerator.lightVibrantColor?.color);
-    // print(brightnessLightVibrant);
-    if (paletteGenerator.lightMutedColor?.color != null)
-      brightnessLightMuted =
-          estimateBrightnessForColor(paletteGenerator.lightMutedColor?.color);
-    // print(brightnessLightMuted);
+      // color picker algorithm
+      // dominant color is dark and exists
+      if (paletteGenerator.dominantColor?.color != null &&
+          brightnessDominant == Brightness.dark)
+        // vibrant color is dark and exists
+        (paletteGenerator.vibrantColor?.color != null &&
+                brightnessVibrant == Brightness.light)
+            // (paletteGenerator.vibrantColor?.color!=null)
+            ?
+            // take it
+            goal.goalFontColor =
+                '#${paletteGenerator.vibrantColor.color.value.toRadixString(16)}'
+            :
+            // is not light, look at dark vibrant color
+            // dark vibrant color is light and exists
+            (paletteGenerator.darkVibrantColor?.color != null &&
+                    brightnessDarkVibrant == Brightness.light)
+                ?
+                // take it
+                goal.goalFontColor =
+                    '#${paletteGenerator.darkVibrantColor.color.value.toRadixString(16)}'
+                :
+                // is not light, look at light vibrant color
+                // light vibrant color exists
+                (paletteGenerator.lightVibrantColor?.color != null &&
+                        brightnessLightVibrant == Brightness.light)
+                    ?
+                    // take it
+                    goal.goalFontColor =
+                        '#${paletteGenerator.lightVibrantColor.color.value.toRadixString(16)}'
+                    :
+                    // does not exist, look at muted color
+                    // muted color is light and exists
+                    (paletteGenerator.mutedColor?.color != null &&
+                            brightnessMuted == Brightness.light)
+                        ?
+                        // take it
+                        goal.goalFontColor =
+                            '#${paletteGenerator.mutedColor.color.value.toRadixString(16)}'
+                        :
+                        // does not exist, look at light muted color
+                        // light muted color exists
+                        (paletteGenerator.lightMutedColor?.color != null &&
+                                brightnessLightMuted == Brightness.light)
+                            ?
+                            // take it
+                            goal.goalFontColor =
+                                '#${paletteGenerator.lightMutedColor.color.value.toRadixString(16)}'
+                            :
+                            // does not exist, take white
+                            goal.goalFontColor = '#FFFFFF';
 
-    // color picker algorithm
-    // dominant color is dark and exists
-    if (paletteGenerator.dominantColor?.color != null &&
-        brightnessDominant == Brightness.dark)
-      // vibrant color is dark and exists
-      (paletteGenerator.vibrantColor?.color != null &&
-              brightnessVibrant == Brightness.light)
-          // (paletteGenerator.vibrantColor?.color!=null)
-          ?
-          // take it
-          goal.goalFontColor =
-              '#${paletteGenerator.vibrantColor.color.value.toRadixString(16)}'
-          :
-          // is not light, look at dark vibrant color
-          // dark vibrant color is light and exists
-          (paletteGenerator.darkVibrantColor?.color != null &&
-                  brightnessDarkVibrant == Brightness.light)
-              ?
-              // take it
-              goal.goalFontColor =
-                  '#${paletteGenerator.darkVibrantColor.color.value.toRadixString(16)}'
-              :
-              // is not light, look at light vibrant color
-              // light vibrant color exists
-              (paletteGenerator.lightVibrantColor?.color != null &&
-                      brightnessLightVibrant == Brightness.light)
-                  ?
-                  // take it
-                  goal.goalFontColor =
-                      '#${paletteGenerator.lightVibrantColor.color.value.toRadixString(16)}'
-                  :
-                  // does not exist, look at muted color
-                  // muted color is light and exists
-                  (paletteGenerator.mutedColor?.color != null &&
-                          brightnessMuted == Brightness.light)
-                      ?
-                      // take it
-                      goal.goalFontColor =
-                          '#${paletteGenerator.mutedColor.color.value.toRadixString(16)}'
-                      :
-                      // does not exist, look at light muted color
-                      // light muted color exists
-                      (paletteGenerator.lightMutedColor?.color != null &&
-                              brightnessLightMuted == Brightness.light)
-                          ?
-                          // take it
-                          goal.goalFontColor =
-                              '#${paletteGenerator.lightMutedColor.color.value.toRadixString(16)}'
-                          :
-                          // does not exist, take white
-                          goal.goalFontColor = '#FFFFFF';
+      // dominant color is light
+      else
+        // vibrant color exists
+        (paletteGenerator.vibrantColor?.color != null &&
+                brightnessVibrant == Brightness.dark)
+            ?
+            // take it
+            goal.goalFontColor =
+                '#${paletteGenerator.vibrantColor.color.value.toRadixString(16)}'
+            :
+            // is not dark, look at dark vibrant color
+            // dark vibrant color is dark and exists
+            (paletteGenerator.darkVibrantColor?.color != null &&
+                    brightnessDarkVibrant == Brightness.dark)
+                ?
+                // take it
+                goal.goalFontColor =
+                    '#${paletteGenerator.darkVibrantColor.color.value.toRadixString(16)}'
+                :
+                // is not dark, look at light vibrant color
+                // light vibrant color in dark and exists
+                (paletteGenerator.lightVibrantColor?.color != null &&
+                        brightnessLightVibrant == Brightness.dark)
+                    ?
+                    // take it
+                    goal.goalFontColor =
+                        '#${paletteGenerator.lightVibrantColor.color.value.toRadixString(16)}'
+                    :
+                    // is not dark, look at muted color
+                    // muted color is dark and exists
+                    (paletteGenerator.mutedColor?.color != null &&
+                            brightnessMuted == Brightness.dark)
+                        ?
+                        // take it
+                        goal.goalFontColor =
+                            '#${paletteGenerator.mutedColor.color.value.toRadixString(16)}'
+                        :
+                        // does not exist, look at dark muted color
+                        // dark muted color exists
+                        (paletteGenerator.darkMutedColor?.color != null)
+                            ?
+                            // take it
+                            goal.goalFontColor =
+                                '#${paletteGenerator.darkMutedColor.color.value.toRadixString(16)}'
+                            :
+                            // does not exist, take black
+                            goal.goalFontColor = '#000000';
 
-    // dominant color is light
-    else
-      // vibrant color exists
-      (paletteGenerator.vibrantColor?.color != null &&
-              brightnessVibrant == Brightness.dark)
-          ?
-          // take it
-          goal.goalFontColor =
-              '#${paletteGenerator.vibrantColor.color.value.toRadixString(16)}'
-          :
-          // is not dark, look at dark vibrant color
-          // dark vibrant color is dark and exists
-          (paletteGenerator.darkVibrantColor?.color != null &&
-                  brightnessDarkVibrant == Brightness.dark)
-              ?
-              // take it
-              goal.goalFontColor =
-                  '#${paletteGenerator.darkVibrantColor.color.value.toRadixString(16)}'
-              :
-              // is not dark, look at light vibrant color
-              // light vibrant color in dark and exists
-              (paletteGenerator.lightVibrantColor?.color != null &&
-                      brightnessLightVibrant == Brightness.dark)
-                  ?
-                  // take it
-                  goal.goalFontColor =
-                      '#${paletteGenerator.lightVibrantColor.color.value.toRadixString(16)}'
-                  :
-                  // is not dark, look at muted color
-                  // muted color is dark and exists
-                  (paletteGenerator.mutedColor?.color != null &&
-                          brightnessMuted == Brightness.dark)
-                      ?
-                      // take it
-                      goal.goalFontColor =
-                          '#${paletteGenerator.mutedColor.color.value.toRadixString(16)}'
-                      :
-                      // does not exist, look at dark muted color
-                      // dark muted color exists
-                      (paletteGenerator.darkMutedColor?.color != null)
-                          ?
-                          // take it
-                          goal.goalFontColor =
-                              '#${paletteGenerator.darkMutedColor.color.value.toRadixString(16)}'
-                          :
-                          // does not exist, take black
-                          goal.goalFontColor = '#000000';
-
-    // convert to hex string
-    goalBackgoundColor =
-        '#${paletteGenerator.dominantColor.color.value.toRadixString(16)}';
-    // print('FERTIG');
-    setState(() {
-      goal.goalBackgoundColor = goalBackgoundColor;
-      this.paletteGenerator = paletteGenerator;
-      this.generatingPalette = false;
-    });
+      // convert to hex string
+      goalBackgoundColor =
+          '#${paletteGenerator.dominantColor.color.value.toRadixString(16)}';
+      // print('FERTIG');
+      setState(() {
+        goal.goalBackgoundColor = goalBackgoundColor;
+        this.paletteGenerator = paletteGenerator;
+        this.generatingPalette = false;
+      });
+      return "success";
+    } on TimeoutException catch (_) {
+      print(_);
+      return null;
+    }
   }
 
   // Color _getColorFromHex(String hexColor) {

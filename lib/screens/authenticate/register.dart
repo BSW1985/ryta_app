@@ -91,8 +91,8 @@ class _RegisterState extends State<Register> {
                           TextFormField(
                               initialValue: email,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]'))
+                                FilteringTextInputFormatter.allow(RegExp(
+                                    r'[a-zA-Z0-9!@#$%^&*(),.?":{}|<>/_/-]'))
                               ],
                               keyboardType: TextInputType.text,
                               decoration: textInputDecoration.copyWith(
