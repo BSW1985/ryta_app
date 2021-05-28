@@ -121,6 +121,8 @@ class _GoalPageState extends State<GoalPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<RytaUser>(context);
+    double screenwidth = MediaQuery.of(context).size.width;
+
     CachedNetworkImage(
       imageUrl: widget.imageUrl,
       placeholder: (context, url) => CircularProgressIndicator(),
@@ -148,7 +150,8 @@ class _GoalPageState extends State<GoalPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: SizedBox(
-                      width: 220.0,
+                      width: screenwidth -
+                          100 / 320 * screenwidth, //not hardcoded!! 220
                       child: Text(
                         widget.goal.goalname,
                         softWrap: true,

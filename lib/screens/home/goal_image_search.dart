@@ -38,7 +38,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
   initState() {
     super.initState();
     // initial image Request
-    _loadImages();
+    _loadImages(keyword: widget.goalname);
   }
 
   /// Resets the state to the initial state.
@@ -51,7 +51,7 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
     // reset keyword
     keyword = null;
     // show regular images
-    _loadImages();
+    // _loadImages();
   }
 
   /// Requests a list of [UnsplashImage] for a given [keyword].
@@ -101,9 +101,21 @@ class _GoalImageSearchState extends State<GoalImageSearch> {
 
     if (images.isEmpty) {
       error = "No images found";
+      // clear image list
+      images = [];
+      // reset page counter
+      page = 0;
+      totalPages = -1;
+      // reset keyword
+      keyword = null;
     } else {
       error = "";
     }
+
+    if (keyword == widget.goalname)
+      setState(() {
+        this.keyword = null;
+      });
 
     // ignore: todo
     // TODO: handle errors

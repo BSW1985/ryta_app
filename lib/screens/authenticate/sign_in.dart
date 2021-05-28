@@ -198,8 +198,7 @@ class _SignInState extends State<SignIn> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                                 side: BorderSide(color: Colors.grey)),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 5.0),
+                            padding: EdgeInsets.fromLTRB(10, 5, 15, 5),
                             text: "CONTINUE WITH GOOGLE",
                             onPressed: () {
                               //LOGIN USING GOOGLE HERE
